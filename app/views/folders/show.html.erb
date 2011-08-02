@@ -1,0 +1,10 @@
+<p><%= breadcrumbs_for(@folder) %></p>
+<p id="notice"><%= notice %></p>
+<p><%= link_to "Create folder", new_folder_folder_path(@folder) %></p>
+<div id="container"></div>
+
+<script type="text/javascript">
+var Pip = Pip || {};
+Pip.data = <%= raw(@data) %>;
+Pip.data.containerId = 'container';
+</script>

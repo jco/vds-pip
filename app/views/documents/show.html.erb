@@ -1,0 +1,28 @@
+<%= div_for @document do %>
+<%= image_tag @document.icon_path %>
+<h1 data-in-place-edit="document[name]"><%= @document.name %></h1>
+<p class="description"><%= @document.description %></p>
+<div class="actions">
+  <%= link_to "Download", @document.latest_version %>
+  <%= link_to "Update", new_document_version_path(@document) %>
+  <%= link_to "Delete", @document, :confirm => 'Are you sure?', :method => :delete %>
+  <h2>Status:</h2>
+  <ul>
+    <li><label for="up_to_date"><input type="radio" checked="checked" />Up to date</label></li>
+    <li><label for="being_worked_on"><input type="radio" />Being worked on</label></li>
+    <li><label for="out_of_date"><input type="radio" />Out of date</label></li>
+  </ul>
+</div>
+<table class="versions">
+  <caption>All versions:</caption>
+<% @document.versions.each do |version| %>
+  <tr>
+    <td><%= image_tag version.icon_path, :size => '15x15' %></td>
+    <td><%= link_to version.name, version %></td>
+    <td>[author]</td>
+    <td><%= time_ago_in_words(version.created_at) %> ago</td>
+  </tr>
+<% end %>
+</table>
+
+<% end %>

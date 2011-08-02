@@ -1,4 +1,17 @@
 VdsPip::Application.routes.draw do
+  resources :dependencies
+
+  resources :projects
+  resources :versions
+  resources :folders do
+    resources :documents
+    resources :dependencies
+    resources :folders
+  end
+  resources :documents do
+    resources :versions
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

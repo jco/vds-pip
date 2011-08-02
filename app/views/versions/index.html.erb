@@ -1,0 +1,27 @@
+<h1>Listing versions</h1>
+
+<table>
+  <tr>
+    <th>Document</th>
+    <th>External url</th>
+    <th>File</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @versions.each do |version| %>
+  <tr>
+    <td><%= version.document %></td>
+    <td><%= version.external_url %></td>
+    <td><%= version.file %></td>
+    <td><%= link_to 'Show', version %></td>
+    <td><%= link_to 'Edit', edit_version_path(version) %></td>
+    <td><%= link_to 'Destroy', version, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Version', new_version_path %>

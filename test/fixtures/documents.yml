@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  folder: 
+  name: MyString
+  description: MyText
+
+two:
+  folder: 
+  name: MyString
+  description: MyText
