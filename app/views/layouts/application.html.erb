@@ -7,8 +7,14 @@
 </head>
 <body>
 
+<p>[[[ <%= link_to 'See all projects', projects_path %> ]]]</p>
 <%= yield %>
 
+<h1>NOTES</h1>
+<p>If you don't see something that you just changed, try reloading (right-click -&gt; reload).</p>
+<p>You should be able to edit the name of a document. Double-click to bring up
+a more detailed view of that document, then click its name to edit it. Click
+on some other white space on the screen to save your change.</p>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/1.5.2/raphael-min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js"></script>
   <%= javascript_include_tag :all %>

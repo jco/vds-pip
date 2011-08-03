@@ -1,16 +1,18 @@
 module FoldersHelper
   def breadcrumbs_for(folder)
-    folders = badly_named_recursive_function(folder)
-    folders.map {|f| link_to(f.name, f) }.join(h(' --> ')).html_safe
+    items = folder_hierarchy_array(folder)
+    items.map {|i| link_to(i.name, i) }.join(h(' --> ')).html_safe
   end
 
-  def badly_named_recursive_function(folder)
-    badly_named_recursive_function_helper([folder])
+  def folder_hierarchy_array(folder)
+    hierarchy = folder_hierarchy_array_helper([folder])
+    project = hierarchy.first.project
+    [project] + hierarchy
   end
 
-  def badly_named_recursive_function_helper(folders)
+  def folder_hierarchy_array_helper(folders)
     if folders.first.parent_folder
-      badly_named_recursive_function_helper([folders.first.parent_folder] + folders)
+      folder_hierarchy_array_helper([folders.first.parent_folder] + folders)
     else
       folders
     end

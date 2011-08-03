@@ -20,7 +20,6 @@ class FoldersController < ApplicationController
       :this_folder => dom_id(@folder),
       :dependencies => @folder.dependencies
     }.to_json
-    logger.debug(@data)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -31,8 +30,15 @@ class FoldersController < ApplicationController
   # GET /folders/new
   # GET /folders/new.xml
   def new
-    @parent_folder = Folder.find(params[:folder_id])
-    @folder = @parent_folder.folders.build
+    if params[:folder_id]
+      @parent = Folder.find(params[:folder_id])
+    elsif params[:project_id]
+      @parent = Project.find(params[:project_id])
+    else
+      raise "Can't make a folder without knowing its parent"
+    end
+    # duck typing
+    @folder = @parent.folders.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -48,12 +54,19 @@ class FoldersController < ApplicationController
   # POST /folders
   # POST /folders.xml
   def create
-    @parent_folder = Folder.find(params[:folder_id])
-    @folder = @parent_folder.folders.build(params[:folder])
+    if params[:folder_id]
+      @parent = Folder.find(params[:folder_id])
+    elsif params[:project_id]
+      @parent = Project.find(params[:project_id])
+    else
+      raise "Can't make a folder without knowing its parent"
+    end
+    @folder = @parent.folders.build(params[:folder])
 
     respond_to do |format|
       if @folder.save
-        format.html { redirect_to(@folder, :notice => 'Folder was successfully created.') }
+        dest = (@parent.is_a?(Project) ? @parent : @folder)
+        format.html { redirect_to(dest, :notice => 'Folder was successfully created.') }
         format.xml  { render :xml => @folder, :status => :created, :location => @folder }
       else
         format.html { render :action => "new" }

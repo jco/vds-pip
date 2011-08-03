@@ -1,7 +1,9 @@
 VdsPip::Application.routes.draw do
   resources :dependencies
 
-  resources :projects
+  resources :projects do
+    resources :folders
+  end
   resources :versions
   resources :folders do
     resources :documents
@@ -11,6 +13,8 @@ VdsPip::Application.routes.draw do
   resources :documents do
     resources :versions
   end
+
+  root :to => "projects#index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

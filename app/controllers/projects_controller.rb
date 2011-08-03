@@ -14,6 +14,10 @@ class ProjectsController < ApplicationController
   # GET /projects/1.xml
   def show
     @project = Project.find(params[:id])
+    @data = {
+      :project => @project,
+      :dependencies => [] #TODO: @project.dependencies
+    }.to_json
 
     respond_to do |format|
       format.html # show.html.erb

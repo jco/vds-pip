@@ -15,7 +15,7 @@ var Pip = Pip || {};
           // set up the container
           if (P.data.containerId) {
             P.container = document.getElementById(P.data.containerId);
-            P.paper = Raphael(P.container ,'100%','100%');//http://jsfiddle.net/6x4bR/
+            P.paper = Raphael(P.container ,'100%','500px');//http://jsfiddle.net/6x4bR/
             P.container.addEventListener('dblclick', documentCreationHandler, false);
           }
 
@@ -23,6 +23,9 @@ var Pip = Pip || {};
           if (P.data.this_folder) {
             P.thisFolder = P.index[P.data.this_folder]
             P.thisFolder.folders.concat(P.thisFolder.documents).forEach(P.ItemDrawer.drawItem);
+          } else {
+            // assume we are in a project
+            P.data.project.folders.forEach(P.ItemDrawer.drawItem);
           }
 
           // draw dependencies

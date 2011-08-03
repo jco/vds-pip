@@ -47,7 +47,7 @@ class DocumentsController < ApplicationController
 
     respond_to do |format|
       if @document.save
-        format.html { redirect_to([@folder, @document], :notice => 'Document was successfully created.') }
+        format.html { redirect_to(@document, :notice => 'Document was successfully created.') }
         format.xml  { render :xml => @document, :status => :created, :location => @document }
       else
         format.html { render :action => "new" }
