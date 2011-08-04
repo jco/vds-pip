@@ -22,8 +22,16 @@ var Pip = Pip || {};
     }).join('');
   };
 
-  P.resourcePath = function (resource, kind) {
-    return '/' + P.plural(kind) + '/' + resource.id.toString();
+  // like rails, but returns a DOM node instead of an html string
+  P.linkTo = function (text, url) {
+    var link = document.createElement('a');
+    link.href = url;
+    link.appendChild(document.createTextNode(text));
+    return link;
+  };
+
+  P.testEvent = function (ev) {
+    console.log('The event fired: ', ev);
   };
 
   // mimic rails routing helpers

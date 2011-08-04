@@ -1,3 +1,15 @@
 #container {
   outline: 1px solid black;
 }
+
+#pane {
+  background: #AAA;
+  width: 300px;
+  height: 500px;
+  position: absolute;
+  left: -290px;
+}
+
+#pane:hover {
+  left: 0;
+}

@@ -17,21 +17,14 @@ Pip.ItemDrawer = (function(P) {
           assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
 
           // double click opens an overlay
-          var href = P.resourcePath(item, 'document');
-          icon.dblclick(function (ev) {
-            $.colorbox({
-              href: href,
-              iframe: true,
-              width: 500,
-              height: 500
-            });
-          });
+          icon.dblclick(documentOverlay(item));
 
         }
         else {
           // kind == 'folder'
           icon.dblclick(function (ev) {
-            location = P.resourcePath(item, 'folder');
+            // redirect
+            location = P.folderPath(item);
           });
         }
 
@@ -48,19 +41,31 @@ Pip.ItemDrawer = (function(P) {
             Pip.DependencyDrawer.redrawDependencies();
 
             // part 2: ping server
-              console.log('PUT new coords of item ', item, x, y, ' original coords were ', item.coords);
+              console.log('PUT new coords of item ', item, [x, y], '...');
               var url = '/' + kind(item) + 's/' + String(item.id);
               var data = {}; data[kind(item)] = {"x": x, "y": y};
               jQuery.ajax({
                 type: 'PUT',
                 url: url,
                 data: data,
-                complete: function() { console.log('complete callback was called'); }
+                complete: function() { console.log('Server responded'); }
               });
           }
         }});
 
     };
+
+    var documentOverlay = ItemDrawer.documentOverlay = function (doc) {
+      return function (ev) {
+        $.colorbox({
+          href: P.documentPath(doc),
+          iframe: true,
+          width: 500,
+          height: 500
+        });
+      };
+    };
+
 
     var setIconCoords = function (item, coords) {
     };
@@ -73,7 +78,7 @@ Pip.ItemDrawer = (function(P) {
       //
     };
 
-    var kind = function (item) {
+    var kind = P.kind = function (item) {
       return item.documents ? 'folder' : 'document';
     };
 
@@ -146,7 +151,7 @@ Pip.ItemDrawer = (function(P) {
         return [ item.coords[0] + 30, item.coords[1] + 17 ];
     };
 
-    var iconFor = function (item) {
+    var iconFor = P.iconFor = function (item) {
         return item.icon || '/images/icons/folder.gif';
     };
 
