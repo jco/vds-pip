@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110727191656) do
+ActiveRecord::Schema.define(:version => 20110805132602) do
 
   create_table "dependencies", :force => true do |t|
     t.integer  "upstream_document_id"
@@ -29,6 +29,13 @@ ActiveRecord::Schema.define(:version => 20110727191656) do
     t.integer  "y",           :default => 0, :null => false
   end
 
+  create_table "factors", :force => true do |t|
+    t.string   "name"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "folders", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -40,6 +47,23 @@ ActiveRecord::Schema.define(:version => 20110727191656) do
   end
 
   create_table "projects", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "stages", :force => true do |t|
+    t.string   "name"
+    t.integer  "project_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tasks", :force => true do |t|
+    t.integer  "parent_task_id"
+    t.integer  "stage_id"
+    t.integer  "factor_id"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"

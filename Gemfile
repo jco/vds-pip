@@ -10,6 +10,7 @@ gem 'mysql2', '~>0.2.0'
 gem 'rake', '0.8.7' # http://twitter.com/#!/dhh/status/71966528744071169
 gem 'carrierwave'
 gem 'jquery-rails'
+gem "acts_as_list", "~> 0.1.4"
 
 # Use unicorn as the web server
 # gem 'unicorn'
