@@ -1,11 +1,12 @@
 class Dependency < ActiveRecord::Base
   self.include_root_in_json = false
-  belongs_to :downstream_document, :class_name => "Document"
-  belongs_to :upstream_document, :class_name => "Document"
-  validates_presence_of :upstream_document
-  validates_presence_of :downstream_document
+  belongs_to :upstream_item, :polymorphic => true
+  belongs_to :downstream_item, :polymorphic => true
+
+  validates_presence_of :upstream_item
+  validates_presence_of :downstream_item
 
   def serializable_hash(options = nil)
-    [ActionController::RecordIdentifier.dom_id(upstream_document), ActionController::RecordIdentifier.dom_id(downstream_document)]
+    [ActionController::RecordIdentifier.dom_id(upstream_item), ActionController::RecordIdentifier.dom_id(downstream_item)]
   end
 end

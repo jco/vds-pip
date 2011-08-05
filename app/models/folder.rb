@@ -5,6 +5,8 @@ class Folder < ActiveRecord::Base
   # ONLY ONE of the above two pointers should be defined
   has_many :documents
   has_many :folders, :foreign_key => 'parent_folder_id'
+  has_many :downstream_dependencies, :as => :upstream_item, :class_name => "Dependency", :dependent => :destroy
+  has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
 
   def parent
     task || parent_folder
@@ -21,7 +23,7 @@ class Folder < ActiveRecord::Base
 
   # returns a list of every dependency that touches this folder
   def dependencies
-    Dependency.where("upstream_document_id IN (?) OR downstream_document_id IN (?)", document_ids, document_ids)
+    [] # TODO:
   end
 
   # returns all the documents that need to be ghosts in order to illustrate the deps

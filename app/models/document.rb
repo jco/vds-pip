@@ -6,8 +6,8 @@ class Document < ActiveRecord::Base
   has_many :versions, :dependent => :destroy, :order => 'created_at DESC'
   validate :has_at_least_one_version
   accepts_nested_attributes_for :versions
-  has_many :downstream_dependencies, :foreign_key => 'upstream_document_id', :class_name => "Dependency", :dependent => :destroy
-  has_many :upstream_dependencies, :foreign_key => 'downstream_document_id', :class_name => "Dependency", :dependent => :destroy
+  has_many :downstream_dependencies, :as => :upstream_item, :class_name => "Dependency", :dependent => :destroy
+  has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
 
   def has_at_least_one_version
     if versions.empty?
