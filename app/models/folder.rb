@@ -1,15 +1,18 @@
 class Folder < ActiveRecord::Base
   self.include_root_in_json = false
   belongs_to :parent_folder, :class_name => "Folder"
-  belongs_to :project
+  belongs_to :task
   # ONLY ONE of the above two pointers should be defined
   has_many :documents
   has_many :folders, :foreign_key => 'parent_folder_id'
 
-  alias_method :original_project_pointer, :project
+  def parent
+    task || parent_folder
+  end
+
   # return which project this folder is in
   def project
-    original_project_pointer || parent_folder.project
+    parent.project
   end
   
   def coords

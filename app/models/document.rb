@@ -1,9 +1,10 @@
 class Document < ActiveRecord::Base
   self.include_root_in_json = false
   belongs_to :folder
+  belongs_to :task
+  # should have only one of the above defined at any one time
   has_many :versions, :dependent => :destroy, :order => 'created_at DESC'
   validate :has_at_least_one_version
-  validates_presence_of :folder_id
   accepts_nested_attributes_for :versions
   has_many :downstream_dependencies, :foreign_key => 'upstream_document_id', :class_name => "Dependency", :dependent => :destroy
   has_many :upstream_dependencies, :foreign_key => 'downstream_document_id', :class_name => "Dependency", :dependent => :destroy
