@@ -64,17 +64,17 @@ class DocumentsController < ApplicationController
     end
   end
 
-  # PUT /documents/1
-  # PUT /documents/1.xml
+  # this is sometimes called with coords, sometimes with in-place edits
   def update
     @document = Document.find(params[:id])
 
     respond_to do |format|
       if @document.update_attributes(params[:document])
+        format.json { render :json => nil }
         format.html { redirect_to(@document, :notice => 'Document was successfully updated.') }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.json { render :json => @document.errors, :status => :unprocessable_entity }
         format.xml  { render :xml => @document.errors, :status => :unprocessable_entity }
       end
     end

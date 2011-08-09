@@ -1,5 +1,7 @@
 class Document < ActiveRecord::Base
   self.include_root_in_json = false
+  STATUSES = %w(up_to_date being_worked_on not_updated)
+
   belongs_to :folder
   belongs_to :task
   # should have only one of the above defined at any one time
@@ -8,6 +10,12 @@ class Document < ActiveRecord::Base
   accepts_nested_attributes_for :versions
   has_many :downstream_dependencies, :as => :upstream_item, :class_name => "Dependency", :dependent => :destroy
   has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
+  validates_inclusion_of :status, :in => STATUSES
+  after_initialize :init
+
+  def init
+    self.status ||= 'up_to_date'
+  end
 
   def has_at_least_one_version
     if versions.empty?
@@ -34,7 +42,7 @@ class Document < ActiveRecord::Base
     {
       :name => name,
       :id => id,
-      :status => 1,
+      :status => status,
       :coords => coords,
       :icon => icon_path
     }

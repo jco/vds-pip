@@ -10,7 +10,7 @@ var Pip = Pip || {};
  *   where fieldname is similar to the [name] attribute in a rails generated
  *   <input> element.
  */
-(function(P) {
+(function(P, $) {
     var InPlace = {};
 
     InPlace.init = function () {
@@ -21,19 +21,20 @@ var Pip = Pip || {};
     };
 
     var process = function (element) {
-      // assume element has text
-      element.contentEditable = true;
-      element.addEventListener('blur', submitChange, false);
-
+      element.addEventListener('change', submitChange, false);
     };
 
+    // Event handler registered on in-place-editing elements.
     var submitChange = function (ev) {
-      console.log('changing ' + this.getAttribute('data-in-place-edit') + ' to ' + this.innerHTML);
+      var data = toData(this);
+      console.log('submiting data ', data, '...');
       $.ajax({
         type: 'PUT',
         url: desiredUrl(this),
-        data: toData(this),
-        complete: function () { console.log('complete') }
+        data: data,
+        dataType: 'json', // tells rails not to serve back html
+        success: function () { console.log('...complete.') },
+        error: P.error
       });
 
     };
@@ -46,17 +47,18 @@ var Pip = Pip || {};
       return '/' + P.plural(resourceType(element)) + '/' + id.toString();
     };
 
+    // e.g. given <element data-i-p-e="document[name]">New contents...</element>,
+    // generate {"document[name]": "New contents..."}
+    // OR the appropriate params object for a radio button
     var toData = function (element) {
-      // e.g. given <element data-i-p-e="document[name]">New contents...</element>,
-      // generate {"document[name]": "New contents..."}
       var data = {};
-      data[element.getAttribute('data-in-place-edit')] = element.innerHTML;
+      data[element.name] = element.value;
       return data;
     };
 
     var resourceType = function (element) {
-      return element.getAttribute('data-in-place-edit').split('[')[0];
+      return element.name.split('[')[0];
     };
 
     P.InPlace = InPlace;
-})(Pip);
+})(Pip, jQuery);

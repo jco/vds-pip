@@ -13,3 +13,16 @@
 #pane:hover {
   left: 0;
 }
+
+ul.radio {
+  list-style-type: none;
+}
+
+[data-in-place-edit][type=text] {
+  font: inherit;
+  border-style: none;
+}
+
+[data-in-place-edit][type=text]:hover {
+  outline: medium inset #BBB;
+}

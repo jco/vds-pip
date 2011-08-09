@@ -1,16 +1,18 @@
 <%= div_for @document do %>
 <%= image_tag @document.icon_path %>
-<h1 data-in-place-edit="document[name]"><%= @document.name %></h1>
+<h1><input data-in-place-edit="true" id="document_name" name="document[name]" size="30" type="text" value="<%= @document.name %>" /></h1>
 <p class="description"><%= @document.description %></p>
 <div class="actions">
   <%= link_to "Download", @document.latest_version %>
   <%= link_to "Update", new_document_version_path(@document) %>
   <%= link_to "Delete", @document, :confirm => 'Are you sure?', :method => :delete %>
   <h2>Status:</h2>
-  <ul>
-    <li><label for="up_to_date"><input type="radio" checked="checked" />Up to date</label></li>
-    <li><label for="being_worked_on"><input type="radio" />Being worked on</label></li>
-    <li><label for="out_of_date"><input type="radio" />Out of date</label></li>
+  <ul class="radio">
+    <% Document::STATUSES.each do |status| %>
+      <li>
+        <%= label_tag("document_status_#{status}", radio_button(:document, :status, status, "data-in-place-edit" => true) + status) %>
+      </li>
+    <% end %>
   </ul>
 </div>
 <table class="versions">

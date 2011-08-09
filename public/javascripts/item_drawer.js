@@ -1,18 +1,36 @@
 var Pip = Pip || {};
 
-Pip.ItemDrawer = (function(P) {
+Pip.ItemDrawer = (function(P, $) {
     var ItemDrawer = {};
 
     ItemDrawer.drawItem = function(item) {
-        // draw everything and wrap it in a set
-        var st          = Pip.paper.set(),
-            icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34),
-            iconLabel   = Pip.paper.text(item.coords[0] + 34 + 5, item.coords[1] + 17, item.name).attr('text-anchor', 'start');
-        st.push(icon, iconLabel);
+      var stuff = [];
+
+      // order is important (z-index)
+      // first: optional color highlight to indicate status
+      var m = P.HIGHLIGHT_MARGIN; // for convenience
+      if (kind(item) == 'document') {
+        switch (item.status) {
+          case "not_updated":
+            var color = P.paper.rect(item.coords[0] - m, item.coords[1] - m, 34 + (2 * m), 34 + (2 * m));
+            color.attr({"stroke": "none", fill: 'red'});
+            stuff.push(color);
+            break;
+          case 'being_worked_on':
+            var color = P.paper.rect(item.coords[0] - m, item.coords[1] - m, 34 + (2 * m), 34 + (2 * m));
+            color.attr({"stroke": "none", fill: 'yellow'});
+            stuff.push(color);
+            break;
+        }
+      }
+
+        var icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34);
+        var iconLabel   = Pip.paper.text(item.coords[0] + 34 + 5, item.coords[1] + 17, item.name).attr('text-anchor', 'start');
+        stuff.push(icon, iconLabel);
 
         // create arrow drawing handle
         var handle = Pip.paper.path(dragHandlePath(item)).attr('fill', 'white');
-        st.push(handle);
+        stuff.push(handle);
         assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
 
         if (kind(item) == 'document') {
@@ -27,6 +45,12 @@ Pip.ItemDrawer = (function(P) {
             location = P.folderPath(item);
           });
         }
+
+      var st = Pip.paper.set();
+        stuff.forEach(function (thing) {
+          thing.toFront();
+          st.push(thing);
+        });
 
 
 
@@ -44,11 +68,12 @@ Pip.ItemDrawer = (function(P) {
               console.log('PUT new coords of item ', item, [x, y], '...');
               var url = '/' + kind(item) + 's/' + String(item.id);
               var data = {}; data[kind(item)] = {"x": x, "y": y};
-              jQuery.ajax({
+              $.ajax({
                 type: 'PUT',
                 url: url,
                 data: data,
-                complete: function() { console.log('Server responded'); }
+                complete: function() { console.log('...complete.'); },
+                error: P.error
               });
           }
         }});
@@ -155,5 +180,5 @@ Pip.ItemDrawer = (function(P) {
     };
 
     return ItemDrawer;
-})(Pip);
+})(Pip, jQuery);
 

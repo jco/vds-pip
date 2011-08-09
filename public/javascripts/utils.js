@@ -1,6 +1,15 @@
 var Pip = Pip || {};
 (function (P) {
 
+  P.error = function() {
+    if (P.DEVELOPMENT) {
+      console.log(arguments);
+      throw "look";
+    }
+    else
+      alert('Error');
+  };
+
   P.inspect = function (obj) {
     if (_.isObject(obj))
       return "{" + _.map(obj, function (v, k) {
