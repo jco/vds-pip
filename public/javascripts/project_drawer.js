@@ -4,11 +4,17 @@ var Pip = Pip || {};
     var ProjectDrawer = {};
 
     ProjectDrawer.init = function () {
-      this.drawProject();
+      if (P.project)
+        this.drawProject(P.project);
+      else
+        console.log("Alert: no project but ProjectDrawer.init() was called");
     }
 
     // Draws a tree/pane type view for the project
-    ProjectDrawer.drawProject = function () {
+    ProjectDrawer.drawProject = function (project) {
+      if (! (project instanceof P.Model.Project))
+        throw "Can't draw something that isn't a Project";
+
       // assume the place to draw
       var pane = document.getElementById('pane');
       if (!pane) return;
@@ -16,9 +22,7 @@ var Pip = Pip || {};
       var ul = document.createElement('ul');
       pane.appendChild(ul);
       
-      P.data.project.folders.forEach(function (folder) {
-        recursiveDrawItem(folder, ul);
-      });
+      recursiveDrawItem(project, ul);
 
       $(ul).simpleTreeMenu();
 
@@ -30,7 +34,7 @@ var Pip = Pip || {};
         var span = document.createElement('span');
 
         var icon = document.createElement('img');
-        icon.src = P.iconFor(item);
+        icon.src = P.iconFor(item); //TODO:
         icon.width = icon.height = P.SMALL_ICON_SIZE;
         span.appendChild(icon);
 
@@ -39,17 +43,23 @@ var Pip = Pip || {};
 
         li.appendChild(span);
 
-        if (P.kind(item) == 'document') {
-          // double-clicking opens the document
-          span.addEventListener('click', P.ItemDrawer.documentOverlay(item), false);
-        }
+        // following the link does what, if not burrowing deeper?
+        if (item instanceof P.Model.Document)
+          span.addEventListener('dblclick', P.ItemDrawer.documentOverlay(item), false);
 
-        if (item.folders && (item.folders.length > 0 || item.documents.length > 0)) {
-          var ul = document.createElement('ul')
-          item.folders.forEach(function (folder) { recursiveDrawItem(folder, ul) });
-          item.documents.forEach(function (doc) { recursiveDrawItem(doc, ul) });
-          li.appendChild(ul);
-        }
+        if (item instanceof P.Model.Folder)
+          span.addEventListener('dblclick', function() { location = P.folderPath(item); }, false);
+
+        if (item instanceof P.Model.Task)
+          span.addEventListener('dblclick', function() { location = P.taskPath(item); }, false);
+
+        var ul = document.createElement('ul')
+        P.COLLECTION_TYPES.forEach(function (type) {
+          if (item[type])
+            item[type].forEach(function (subItem) { recursiveDrawItem(subItem, ul); });
+        });
+        li.appendChild(ul);
+
         container.appendChild(li);
     };
 

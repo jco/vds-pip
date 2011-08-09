@@ -1,12 +1,11 @@
 VdsPip::Application.routes.draw do
   resources :factors
-
   resources :stages
-
-  resources :tasks
-
+  resources :tasks do
+    resources :folders
+    resources :documents
+  end
   resources :dependencies
-
   resources :projects do
     resources :folders
   end

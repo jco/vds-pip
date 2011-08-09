@@ -18,7 +18,7 @@ class FoldersController < ApplicationController
     @data = {
       :project => @project,
       :this_folder => dom_id(@folder),
-      :dependencies => @folder.dependencies
+      :dependencies => @folder.contained_dependencies
     }.to_json
 
     respond_to do |format|
@@ -30,14 +30,7 @@ class FoldersController < ApplicationController
   # GET /folders/new
   # GET /folders/new.xml
   def new
-    if params[:folder_id]
-      @parent = Folder.find(params[:folder_id])
-    elsif params[:project_id]
-      @parent = Project.find(params[:project_id])
-    else
-      raise "Can't make a folder without knowing its parent"
-    end
-    # duck typing
+    @parent = get_folder_parent_from_params
     @folder = @parent.folders.build
 
     respond_to do |format|
@@ -54,19 +47,12 @@ class FoldersController < ApplicationController
   # POST /folders
   # POST /folders.xml
   def create
-    if params[:folder_id]
-      @parent = Folder.find(params[:folder_id])
-    elsif params[:project_id]
-      @parent = Project.find(params[:project_id])
-    else
-      raise "Can't make a folder without knowing its parent"
-    end
+    @parent = get_folder_parent_from_params
     @folder = @parent.folders.build(params[:folder])
 
     respond_to do |format|
       if @folder.save
-        dest = (@parent.is_a?(Project) ? @parent : @folder)
-        format.html { redirect_to(dest, :notice => 'Folder was successfully created.') }
+        format.html { redirect_to(@parent, :notice => 'Folder was successfully created.') }
         format.xml  { render :xml => @folder, :status => :created, :location => @folder }
       else
         format.html { render :action => "new" }
@@ -102,4 +88,17 @@ class FoldersController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+private
+
+  def get_folder_parent_from_params
+    if params[:folder_id]
+      Folder.find(params[:folder_id])
+    elsif params[:task_id]
+      Task.find(params[:task_id])
+    else
+      raise "No parent given for folder"
+    end
+  end
+
 end

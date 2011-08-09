@@ -22,5 +22,6 @@ class MakeDependenciesPolymorphic < ActiveRecord::Migration
 
       t.integer :downstream_document_id
       t.integer :upstream_document_id
+    end
   end
 end

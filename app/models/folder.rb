@@ -1,4 +1,5 @@
 class Folder < ActiveRecord::Base
+  include Container
   self.include_root_in_json = false
   belongs_to :parent_folder, :class_name => "Folder"
   belongs_to :task
@@ -19,17 +20,6 @@ class Folder < ActiveRecord::Base
   
   def coords
     [x, y]
-  end
-
-  # returns a list of every dependency that touches this folder
-  def dependencies
-    [] # TODO:
-  end
-
-  # returns all the documents that need to be ghosts in order to illustrate the deps
-  def ghosts
-    [] #Document.where("folder_id != ? AND 
-#actually, easier for client? when referencing a doc that doesn't exist, look it up from the index and draw it
   end
 
   def serializable_hash(options = nil)

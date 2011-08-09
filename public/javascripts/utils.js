@@ -1,6 +1,23 @@
 var Pip = Pip || {};
 (function (P) {
 
+  P.inspect = function (obj) {
+    if (_.isObject(obj))
+      return "{" + _.map(obj, function (v, k) {
+        return P.inspect(k) + ": " + P.inspect(v);
+      }).join(", ") + "}";
+    else
+      return '"' + String(obj) + '"';
+  };
+
+  P.domId = function (item, kind) {
+    if (item instanceof P.Model.Base)
+      var kind = item.type;
+    if (!_.isNumber(item.id))
+      throw "Item " + P.inspect(item) + " doesn't have a valid id.";
+    return [kind, item.id].join('_');
+  }
+
   // The inverse function of rails's dom_id(model_instance).
   // For instance, given 'document_4', returns 4.
   P.inverseDomId = function (str) {
@@ -9,6 +26,8 @@ var Pip = Pip || {};
   };
 
   P.plural = function (str) {
+    if (!_.isString(str))
+      throw "Tried to pluralize something that wasn't a string (" + String(str) + ")";
     return str + 's';
   }
 
@@ -36,7 +55,13 @@ var Pip = Pip || {};
 
   // mimic rails routing helpers
 
-  var kinds = ['folder', 'document', ['folder', 'document']];
+  var kinds = [
+    'task',
+    'folder',
+    'document',
+    ['task', 'document'],
+    ['folder', 'document']
+  ];
   var helperName;
 
   var refactoredSimpleResource = function (kind) {

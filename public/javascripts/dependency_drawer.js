@@ -1,24 +1,34 @@
 var Pip = Pip || {};
 
-Pip.DependencyDrawer = (function() {
-    var DependencyDrawer = {}
+(function(P) {
+    var DependencyDrawer = P.DependencyDrawer = {};
         
+    // does not fetch new deps from server
     var redrawDependencies = DependencyDrawer.redrawDependencies = function () {
-        Pip.ArrowDrawer.clearArrows('global');
-        Pip.data.dependencies.forEach(drawDependency);
+        P.ArrowDrawer.clearArrows('global');
+        P.data.dependencies.forEach(drawDependency);
     };
 
-    DependencyDrawer.createDependency = function (upstream_document, downstream_document) {
+    DependencyDrawer.createDependency = function (upstream_item, downstream_item) {
+      console.log('create dep from ', upstream_item, 'to', downstream_item);
       $.ajax({
         type: 'POST',
         url: '/dependencies',
-        data: {"dependency": {"upstream_document_id": upstream_document.id, "downstream_document_id": downstream_document.id}},
+        data: {
+          "dependency": {
+            "upstream_item_id": upstream_item.id,
+            "upstream_item_type": upstream_item.type.capitalize(),
+            "downstream_item_id": downstream_item.id,
+            "downstream_item_type": downstream_item.type.capitalize()
+          }
+        },
         complete: function () {
-          // pre emptively draw arrow
-          Pip.data.dependencies.push(['document_' + upstream_document.id, 'document_' + downstream_document.id]);
+          console.log('server responded');
+          // preemptively draw arrow
+          P.data.dependencies.push([P.domId(upstream_item), P.domId(downstream_item)]);
           redrawDependencies();
           // actually query for newly created dependencies
-          reloadDependencies();
+          //reloadDependencies();
         }
       });
     };
@@ -26,26 +36,25 @@ Pip.DependencyDrawer = (function() {
     var reloadDependencies = function() {
       $.ajax({
         type: 'GET',
-        url: '/folders/' + Pip.thisFolder.id + '/dependencies',
+        url: '/folders/' + P.thisFolder.id + '/dependencies',
         success: function(data, textStatus, jqXHR) {
           console.log('fetched new dependency data');
           // data should be a new array of deps
-          Pip.data.dependencies = data;
+          P.data.dependencies = data;
           DependencyDrawer.redrawDependencies();
         }
       });
     };
 
     var drawDependency = function(dep) {
-      var upstreamItem = Pip.index[dep[0]];
-      var downstreamItem = Pip.index[dep[1]];
-      Pip.ArrowDrawer.addArrows('global', [[arrowEndpoint(upstreamItem), arrowEndpoint(downstreamItem)]]);
+      var upstreamItem = P.index[dep[0]];
+      var downstreamItem = P.index[dep[1]];
+      P.ArrowDrawer.addArrows('global', [[arrowEndpoint(upstreamItem), arrowEndpoint(downstreamItem)]]);
     };
     
     var arrowEndpoint = function(item) {
       return [ item.coords[0] + 17, item.coords[1] + 17 ];
     };
 
-    return DependencyDrawer;
-})();
+})(Pip);
 

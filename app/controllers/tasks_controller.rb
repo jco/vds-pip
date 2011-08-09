@@ -14,6 +14,12 @@ class TasksController < ApplicationController
   # GET /tasks/1.xml
   def show
     @task = Task.find(params[:id])
+    project = @task.project
+    @data = {
+      :project => project,
+      :this_task => dom_id(@task),
+      :dependencies => @task.contained_dependencies
+    }.to_json.html_safe
 
     respond_to do |format|
       format.html # show.html.erb

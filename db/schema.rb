@@ -10,13 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110805143716) do
+ActiveRecord::Schema.define(:version => 20110805145848) do
 
   create_table "dependencies", :force => true do |t|
-    t.integer  "upstream_document_id"
-    t.integer  "downstream_document_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "upstream_item_id"
+    t.string   "upstream_item_type"
+    t.integer  "downstream_item_id"
+    t.string   "downstream_item_type"
   end
 
   create_table "documents", :force => true do |t|

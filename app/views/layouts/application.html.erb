@@ -17,8 +17,10 @@ a more detailed view of that document, then click its name to edit it. Click
 on some other white space on the screen to save your change.</p>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/1.5.2/raphael-min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js"></script>
+  <script src="/javascripts/slang.js"></script>
   <%= javascript_include_tag :all %>
   <script type="text/javascript">
+  slang.addToPrototype();
   Pip.initModules();
   </script>
 </body>

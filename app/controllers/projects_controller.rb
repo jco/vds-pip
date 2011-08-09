@@ -15,8 +15,7 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find(params[:id])
     @data = {
-      :project => @project,
-      :dependencies => [] #TODO: @project.dependencies
+      :project => @project
     }.to_json
 
     respond_to do |format|

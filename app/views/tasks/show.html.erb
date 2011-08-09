@@ -1,5 +1,14 @@
+<p>Breadcrumbs: <%= breadcrumbs_for(@task) %></p>
 <p id="notice"><%= notice %></p>
+<p>
+  <%= link_to "Create folder", new_task_folder_path(@task) %> &bull;
+  To upload a document, double-click anywhere in the box.
+</p>
+<div id="pane"></div>
+<div id="container"></div>
 
-
-<%= link_to 'Edit', edit_task_path(@task) %> |
-<%= link_to 'Back', tasks_path %>
+<script type="text/javascript">
+var Pip = Pip || {};
+Pip.data = <%= @data %>;
+Pip.data.containerId = 'container';
+</script>

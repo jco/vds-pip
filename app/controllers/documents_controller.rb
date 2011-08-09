@@ -24,8 +24,12 @@ class DocumentsController < ApplicationController
   # GET /documents/new
   # GET /documents/new.xml
   def new
-    @folder = Folder.find(params[:folder_id])
-    @document = @folder.documents.build
+    begin
+      @parent = Folder.find(params[:folder_id])
+    rescue ActiveRecord::RecordNotFound 
+      @parent = Task.find(params[:task_id])
+    end
+    @document = @parent.documents.build
     @document.versions.build
 
     respond_to do |format|
@@ -42,8 +46,12 @@ class DocumentsController < ApplicationController
   # POST /documents
   # POST /documents.xml
   def create
-    @folder = Folder.find(params[:folder_id])
-    @document = @folder.documents.build(params[:document])
+    begin
+      @parent = Folder.find(params[:folder_id])
+    rescue ActiveRecord::RecordNotFound 
+      @parent = Task.find(params[:task_id])
+    end
+    @document = @parent.documents.build(params[:document])
 
     respond_to do |format|
       if @document.save

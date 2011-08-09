@@ -10,12 +10,12 @@ Pip.ItemDrawer = (function(P) {
             iconLabel   = Pip.paper.text(item.coords[0] + 34 + 5, item.coords[1] + 17, item.name).attr('text-anchor', 'start');
         st.push(icon, iconLabel);
 
-        if (kind(item) == 'document') {
-          // create arrow drawing handle
-          var handle = Pip.paper.path(dragHandlePath(item)).attr('fill', 'white');
-          st.push(handle);
-          assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
+        // create arrow drawing handle
+        var handle = Pip.paper.path(dragHandlePath(item)).attr('fill', 'white');
+        st.push(handle);
+        assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
 
+        if (kind(item) == 'document') {
           // double click opens an overlay
           icon.dblclick(documentOverlay(item));
 
@@ -130,7 +130,6 @@ Pip.ItemDrawer = (function(P) {
        ops.handle.drag(dragMove, dragStart, dragUp);
        ops.dropZone.mouseup(function (ev) {
            if (Pip.someGlobal && Pip.someGlobal.draggingArrow) {
-               console.log('create dep from ' + Pip.someGlobal.originItem.name + ' to ' + ops.item.name);
                Pip.DependencyDrawer.createDependency(Pip.someGlobal.originItem, ops.item);
            }
        });

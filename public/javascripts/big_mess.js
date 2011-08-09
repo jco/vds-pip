@@ -6,10 +6,11 @@ var Pip = Pip || {};
     BigMess.init = function() {
         // somehow determine whether we should be drawing a canvas
         if (P.data) {
-          // build a lookup table for folders and documents
+          // build a lookup table
           if (P.data.project) {
+            P.project = new P.Model.Project(P.data.project);
             P.index = {};
-            buildIndex(P.data.project, P.index);
+            buildIndex(P.project, P.index);
           }
 
           // set up the container
@@ -21,17 +22,21 @@ var Pip = Pip || {};
 
           // draw items in this folder
           if (P.data.this_folder) {
-            P.thisFolder = P.index[P.data.this_folder]
-            P.thisFolder.folders.concat(P.thisFolder.documents).forEach(P.ItemDrawer.drawItem);
-          } else {
-            // assume we are in a project
-            P.data.project.folders.forEach(P.ItemDrawer.drawItem);
-          }
+            P.thisFolder = P.index[P.data.this_folder];
+            drawItemsFor(P.thisFolder);
+          } else if (P.data.this_task) {
+            P.thisTask = P.index[P.data.this_task];
+            drawItemsFor(P.thisTask);
+          } // don't do anything for a project
 
           // draw dependencies
           if (P.data.dependencies)
             P.DependencyDrawer.redrawDependencies();
         }
+    };
+
+    var drawItemsFor = function (container) {
+      container.folders.concat(container.documents).forEach(P.ItemDrawer.drawItem);
     };
 
     var documentCreationHandler = function (ev) {
@@ -41,8 +46,17 @@ var Pip = Pip || {};
           ev.target != P.container)
         return;
 
+      // documents can be created under either a folder or a task directly
+      var href;
+      if (P.thisFolder)
+        href = P.newFolderDocumentPath(P.thisFolder);
+      else if (P.thisTask)
+        href = P.newTaskDocumentPath(P.thisTask);
+      else
+        throw "No references to the parent, can't create document without any";
+
       $.colorbox({
-        href: P.newFolderDocumentPath(P.thisFolder),
+        href: href,
         iframe: true,
         width: 500,
         height: 500
@@ -50,15 +64,18 @@ var Pip = Pip || {};
     };
 
 
-    // container is a folder or a project: something that has an array of docs and folders
+    // container is anything with collections
     var buildIndex = function(container, index) {
-        container.folders.forEach(function(folder){
-            index['folder_' + folder.id] = folder;
-            buildIndex(folder, index);
-        });
-        container.documents.forEach(function(doc) {
-            index['document_' + doc.id] = doc;
-        });
+      P.COLLECTION_TYPES_SINGULAR.forEach(function (kind) {
+        var plural_kind = P.plural(kind);
+        if (container[plural_kind]) {
+          container[plural_kind].forEach(function (item) {
+            index[P.domId(item)] = item;
+            // recursive for any collections
+            buildIndex(item, index);
+          });
+        }
+      });
     };
 
     P.BigMess = BigMess;
