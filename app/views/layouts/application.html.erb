@@ -10,17 +10,26 @@
 <p>[[[ <%= link_to 'See all projects', projects_path %> ]]]</p>
 <%= yield %>
 
-<h1>NOTES</h1>
-<p>If you don't see something that you just changed, try reloading (right-click -&gt; reload).</p>
-<p>You should be able to edit the name of a document. Double-click to bring up
-a more detailed view of that document, then click its name to edit it. Click
-on some other white space on the screen to save your change.</p>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/1.5.2/raphael-min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js"></script>
   <script src="/javascripts/slang.js"></script>
-  <%= javascript_include_tag :all %>
-  <script type="text/javascript">
-  slang.addToPrototype();
+  <script src="/javascripts/jquery.js"></script> 
+  <script src="/javascripts/jquery_ujs.js"></script> 
+  <script src="/javascripts/arrow_drawer.js"></script> 
+  <script src="/javascripts/constants.js"></script> 
+  <script src="/javascripts/dependency_drawer.js"></script> 
+  <script src="/javascripts/drawing.js"></script> 
+  <script src="/javascripts/in_place.js"></script> 
+  <script src="/javascripts/item_drawer.js"></script> 
+  <script src="/javascripts/jquery-simpleTreeMenu-1.1.0.js"></script> 
+  <script src="/javascripts/jquery.colorbox.js"></script> 
+  <script src="/javascripts/model.js"></script> 
+  <script src="/javascripts/pip.js"></script> 
+  <script src="/javascripts/project_drawer.js"></script> 
+  <script src="/javascripts/slang.js"></script> 
+  <script src="/javascripts/utils.js"></script> 
+  <script src="/javascripts/application.js"></script>
+  <script>
   Pip.initModules();
   </script>
 </body>

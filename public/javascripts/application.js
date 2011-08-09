@@ -4,6 +4,7 @@ var Pip = Pip || {};
     var Application = {};
     
     Application.init = function() {
+        slang.addToPrototype();
         // somehow determine whether we should be drawing a canvas
         if (P.data) {
           // build a lookup table
