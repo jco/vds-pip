@@ -12,31 +12,19 @@ class FoldersController < ApplicationController
 
   # GET /tasks/1/folders/new OR /folders/1/folders/new
   def new
-    @parent = get_folder_parent_from_params
+    @parent = get_parent_from_params
     @folder = @parent.folders.build
   end
 
   # POST /tasks/1/folders OR /folders/1/folders
   def create
-    @parent = get_folder_parent_from_params
+    @parent = get_parent_from_params
     @folder = @parent.folders.build(params[:folder])
 
     if @folder.save
       redirect_to(@parent, :notice => 'Folder was successfully created.')
     else
       render :action => "new"
-    end
-  end
-
-private
-
-  def get_folder_parent_from_params
-    if params[:folder_id]
-      Folder.find(params[:folder_id])
-    elsif params[:task_id]
-      Task.find(params[:task_id])
-    else
-      raise "No parent given for folder"
     end
   end
 

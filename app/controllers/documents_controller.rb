@@ -6,22 +6,14 @@ class DocumentsController < ApplicationController
 
   # GET /folders/1/documents/new OR /tasks/1/documents/new
   def new
-    begin
-      @parent = Folder.find(params[:folder_id])
-    rescue ActiveRecord::RecordNotFound 
-      @parent = Task.find(params[:task_id])
-    end
+    @parent = get_parent_from_params
     @document = @parent.documents.build
     @document.versions.build
   end
 
   # POST /folders/1/documents OR /tasks/1/documents
   def create
-    begin
-      @parent = Folder.find(params[:folder_id])
-    rescue ActiveRecord::RecordNotFound 
-      @parent = Task.find(params[:task_id])
-    end
+    @parent = get_parent_from_params
     @document = @parent.documents.build(params[:document])
 
     if @document.save
@@ -53,4 +45,5 @@ class DocumentsController < ApplicationController
 
     head :ok
   end
+
 end
