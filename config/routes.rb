@@ -1,23 +1,22 @@
 VdsPip::Application.routes.draw do
-  resources :factors
-  resources :stages
-  resources :tasks do
-    resources :folders
-    resources :documents
+  resources :projects, :only => [:index, :show, :new, :create]
+
+  resources :tasks, :only => [:show, :new, :create] do
+    resources :documents, :only => [:new, :create]
+    resources :folders, :only => [:new, :create]
   end
-  resources :dependencies
-  resources :projects do
-    resources :folders
+
+  resources :folders, :only => :show do
+    resources :documents, :only => [:new, :create]
+    resources :folders, :only => [:new, :create]
+    resources :dependencies, :only => :index
   end
-  resources :versions
-  resources :folders do
-    resources :documents
-    resources :dependencies
-    resources :folders
+
+  resources :documents, :only => [:show, :update, :destroy] do
+    resources :versions, :only => [:new, :create]
   end
-  resources :documents do
-    resources :versions
-  end
+
+  resources :versions, :only => :show
 
   root :to => "projects#index"
 
