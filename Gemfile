@@ -11,6 +11,7 @@ gem 'rake', '0.8.7' # http://twitter.com/#!/dhh/status/71966528744071169
 gem 'carrierwave'
 gem 'jquery-rails'
 gem "acts_as_list", "~> 0.1.4"
+gem 'sqlite3-ruby', :require => 'sqlite3'
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -25,7 +26,6 @@ gem "acts_as_list", "~> 0.1.4"
 # Bundle the extra gems:
 # gem 'bj'
 # gem 'nokogiri'
-# gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'aws-s3', :require => 'aws/s3'
 
 # Bundle gems for the local environment. Make sure to
