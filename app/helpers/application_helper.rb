@@ -1,7 +1,13 @@
 module ApplicationHelper
   def breadcrumbs_for(hierarchical_thing)
     items = hierarchical_array_for(hierarchical_thing)
-    items.map {|i| link_to(i.name, i) }.join(h(' --> ')).html_safe
+    items.map do |item|
+      begin
+        link_to(item.name, item)
+      rescue NoMethodError
+        item.name
+      end
+    end.join(h(' --> ')).html_safe
   end
 
 private

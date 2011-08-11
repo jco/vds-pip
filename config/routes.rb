@@ -16,6 +16,8 @@ VdsPip::Application.routes.draw do
     resources :versions, :only => [:new, :create]
   end
 
+  resources :dependencies, :only => [:create]
+
   resources :versions, :only => :show
 
   root :to => "projects#index"
