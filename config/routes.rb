@@ -26,6 +26,8 @@ VdsPip::Application.routes.draw do
 
   resources :versions, :only => :show
 
+  match 'api/createuser' => "users#create"
+
   root :to => "projects#index"
 
   # The priority is based upon order of creation:

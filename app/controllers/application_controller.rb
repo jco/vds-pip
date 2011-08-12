@@ -12,4 +12,14 @@ protected
       raise "No parent given"
     end
   end
+
+  def authenticate_vds
+    # If the user is already signed in, do nothing (allow action to continue).
+    # Otherwise, check if email/password credentials are given via params.
+    # If not, fall back to the sign in view.
+
+    return if user_signed_in?
+
+    # try signing in
+  end
 end
