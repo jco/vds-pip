@@ -1,7 +1,11 @@
 VdsPip::Application.routes.draw do
   devise_for :users
 
-  resources :projects, :only => [:index, :show, :new, :create]
+  resources :projects, :only => [:index, :show, :new, :create] do
+    resources :memberships, :only => :index
+  end
+
+  resources :memberships, :only => [:create, :update, :destroy]
 
   resources :tasks, :only => [:show, :new, :create] do
     resources :documents, :only => [:new, :create]
