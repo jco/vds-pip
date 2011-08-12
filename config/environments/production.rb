@@ -46,4 +46,7 @@ VdsPip::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # recommended by rails g devise:install
+  config.action_mailer.default_url_options = { :host => 'vds-pip.syr.edu' }
 end

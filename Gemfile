@@ -12,6 +12,7 @@ gem 'carrierwave'
 gem 'jquery-rails'
 gem "acts_as_list", "~> 0.1.4"
 gem 'sqlite3-ruby', :require => 'sqlite3'
+gem "devise", "~> 1.4.2"
 
 # Use unicorn as the web server
 # gem 'unicorn'
