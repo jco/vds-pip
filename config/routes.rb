@@ -1,7 +1,9 @@
 VdsPip::Application.routes.draw do
-  resources :projects, :only => [:index, :show, :new, :create]
+  resources :projects, :only => [:index, :show, :new, :create] do
+    resources :tasks, :only => [:index]
+  end
 
-  resources :tasks, :only => [:index, :show, :new, :create] do
+  resources :tasks, :only => [:show, :new, :create] do
     resources :documents, :only => [:new, :create]
     resources :folders, :only => [:new, :create]
   end

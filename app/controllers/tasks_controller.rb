@@ -1,12 +1,7 @@
 class TasksController < ApplicationController
-  # GET /tasks
+  # GET /projects/1/tasks
   # for showing more than one task
   def index
-    # must supply a project id
-    unless params.has_key?(:project_id)
-      error_screen(:development => "No project id supplied", :production => :not_found)
-    end
-
     # user is authorized?
     project = Project.find(params[:project_id])
     unless current_user.is_member_of?(project)
