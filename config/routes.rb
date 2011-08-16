@@ -1,7 +1,7 @@
 VdsPip::Application.routes.draw do
   resources :projects, :only => [:index, :show, :new, :create]
 
-  resources :tasks, :only => [:show, :new, :create] do
+  resources :tasks, :only => [:index, :show, :new, :create] do
     resources :documents, :only => [:new, :create]
     resources :folders, :only => [:new, :create]
   end
@@ -19,6 +19,8 @@ VdsPip::Application.routes.draw do
   resources :dependencies, :only => [:create]
 
   resources :versions, :only => :show
+
+  match 'api/:action' => 'api#:action'
 
   root :to => "projects#index"
 

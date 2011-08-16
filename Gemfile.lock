@@ -50,6 +50,7 @@ GEM
     abstract (1.0.0)
     acts_as_list (0.1.4)
     arel (2.0.10)
+    bcrypt-ruby (2.1.4)
     builder (2.1.2)
     carrierwave (0.5.6)
       activesupport (~> 3.0)
@@ -88,6 +89,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list (~> 0.1.4)
+  bcrypt-ruby
   carrierwave
   jquery-rails
   mysql2 (~> 0.2.0)
