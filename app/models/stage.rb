@@ -19,4 +19,8 @@ class Stage < ActiveRecord::Base
     }
   end
 
+  def to_s
+    [position, name].join(". ")
+  end
+
 end

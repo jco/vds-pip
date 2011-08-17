@@ -15,6 +15,12 @@
     <% end %>
   </ul>
 </div>
+<h2>Metadata:</h2>
+<ul>
+<li>Stage: <%= @document.stage %>
+<li>Factor: <%= @document.factor %>
+<li>Actors: to be implemented</li>
+</ul>
 <table class="versions">
   <caption>All versions:</caption>
 <% @document.versions.each do |version| %>

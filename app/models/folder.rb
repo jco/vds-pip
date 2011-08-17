@@ -17,6 +17,14 @@ class Folder < ActiveRecord::Base
   def project
     parent.project
   end
+
+  def stage
+    parent.stage
+  end
+
+  def factor
+    parent.factor
+  end
   
   def coords
     [x, y]

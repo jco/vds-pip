@@ -13,6 +13,16 @@ class Task < ActiveRecord::Base
     parent_task || factor
   end
 
+  alias_method :own_stage, :stage
+  def stage
+    own_stage || parent_task.stage
+  end
+
+  alias_method :own_factor, :factor
+  def factor
+    own_factor || parent_task.factor
+  end
+
   def project
     parent.project
   end

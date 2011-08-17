@@ -17,6 +17,19 @@ class Document < ActiveRecord::Base
     self.status ||= 'up_to_date'
   end
 
+  def stage
+    parent.stage
+  end
+
+  def factor
+    parent.factor
+  end
+
+  # return folder if it exists, otherwise task
+  def parent
+    folder || task
+  end
+
   def has_at_least_one_version
     if versions.empty?
       errors.add(:versions, "must have at least one version")
