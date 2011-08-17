@@ -8,13 +8,12 @@ protected
   # the current session otherwise.
   def authenticate!
     if params.has_key?(:login)
-      # The user is attempting to authenticate via params. Trash the current user.
-      sign_out()
+      # The user is attempting to authenticate via params. Ignore the current user.
       user =  User.authenticate(params[:login], params[:password])
       if user
         sign_in(user)
       else
-        error_screen(:development => "Authenticating via params failed", :production => :not_found)
+        error_screen(:development => "Authenticating via params failed", :production => :not_found) unless current_user
       end
     else
       # Try the current user.
@@ -22,6 +21,7 @@ protected
     end
   end
 
+  # Renders an error screen that differs based on Rails.env.
   # Encapsulates the duality of showing specific debug info to the 
   # developer, and providing the least information possible to the user,
   # especially useful to hide information from attackers.
@@ -52,9 +52,5 @@ protected
 
   def sign_in(user)
     session[:user_id] = user.id
-  end
-
-  def sign_out
-    session[:user_id] = nil
   end
 end
