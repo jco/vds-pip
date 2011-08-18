@@ -1,4 +1,5 @@
 class Document < ActiveRecord::Base
+  include Linkable
   self.include_root_in_json = false
   STATUSES = %w(up_to_date being_worked_on not_updated)
 
@@ -12,6 +13,14 @@ class Document < ActiveRecord::Base
   has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
   validates_inclusion_of :status, :in => STATUSES
   after_initialize :init
+  after_update :mark_downstream_items_not_updated!, :if => Proc.new { |document| document.status_changed? && document.status == "not_updated" }
+
+  def mark_downstream_items_not_updated!
+    downstream_items.each do |item|
+      item.status = "not_updated"
+      item.save!
+    end
+  end
 
   def init
     self.status ||= 'up_to_date'
