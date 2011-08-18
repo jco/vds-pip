@@ -72,6 +72,7 @@ Pip.ItemDrawer = (function(P, $) {
                 type: 'PUT',
                 url: url,
                 data: data,
+                dataType: 'json',
                 complete: function() { console.log('...complete.'); },
                 error: P.error
               });

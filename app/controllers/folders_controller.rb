@@ -28,4 +28,15 @@ class FoldersController < ApplicationController
     end
   end
 
+  # PUT /folders/1
+  def update
+    folder = Folder.find(params[:id])
+
+    if folder.update_attributes(params[:folder])
+      render(:json => nil, :status => :ok)
+    else
+      render(:json => folder.errors, :status => :unprocessable_entity)
+    end
+  end
+
 end

@@ -8,7 +8,7 @@ VdsPip::Application.routes.draw do
     resources :folders, :only => [:new, :create]
   end
 
-  resources :folders, :only => :show do
+  resources :folders, :only => [:show, :update] do
     resources :documents, :only => [:new, :create]
     resources :folders, :only => [:new, :create]
     resources :dependencies, :only => :index

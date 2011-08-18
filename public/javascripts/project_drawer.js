@@ -3,13 +3,6 @@ var Pip = Pip || {};
 (function(P) {
     var ProjectDrawer = {};
 
-    ProjectDrawer.init = function () {
-      if (P.project)
-        this.drawProject(P.project);
-      else
-        console.log("Alert: no project but ProjectDrawer.init() was called");
-    }
-
     // Draws a tree/pane type view for the project
     ProjectDrawer.drawProject = function (project) {
       if (! (project instanceof P.Model.Project))

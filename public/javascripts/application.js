@@ -12,6 +12,7 @@ var Pip = Pip || {};
             P.project = new P.Model.Project(P.data.project);
             P.index = {};
             buildIndex(P.project, P.index);
+            P.ProjectDrawer.drawProject(P.project);
           }
 
           // set up the container
