@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
-# Fixes carrierwave error (http://stackoverflow.com/questions/5785364/how-do-i-update-rack-when-using-rails-3-bundler-wont-let-me)
-gem 'rails', :git => "git://github.com/jco/rails.git", :branch => "3_0_9_with_new_rack_mount" 
+gem 'rails', '3.0.9'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
