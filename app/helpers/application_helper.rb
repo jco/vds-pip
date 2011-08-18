@@ -3,7 +3,11 @@ module ApplicationHelper
     items = hierarchical_array_for(hierarchical_thing)
     items.map do |item|
       begin
-        link_to(item.name, item)
+        if item.is_a?(Project)
+          link_to(item.name, project_tasks_path(item))
+        else
+          link_to(item.name, item)
+        end
       rescue NoMethodError
         item.name
       end
