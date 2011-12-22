@@ -4,8 +4,16 @@ class Document < ActiveRecord::Base
   STATUSES = %w(up_to_date being_worked_on not_updated)
 
   belongs_to :folder
+  belongs_to :project
+  validate :exactly_one_parent_reference_defined
+  def exactly_one_parent_reference_defined
+    unless folder_id.nil? ^ project_id.nil?
+      errors[:base] << "Exactly one parent reference must be defined."
+    end
+  end
+
   belongs_to :task
-  # should have only one of the above defined at any one time
+
   has_many :versions, :dependent => :destroy, :order => 'created_at DESC'
   validate :has_at_least_one_version
   accepts_nested_attributes_for :versions
@@ -27,16 +35,16 @@ class Document < ActiveRecord::Base
   end
 
   def stage
-    parent.stage
+    task.try(:stage) # task may not exist
   end
 
   def factor
-    parent.factor
+    task.try(:factor) # task may not exist
   end
 
-  # return folder if it exists, otherwise task
+  # return folder if it exists, otherwise project
   def parent
-    folder || task
+    folder || project
   end
 
   def has_at_least_one_version

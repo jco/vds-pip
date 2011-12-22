@@ -4,6 +4,15 @@ class ProjectsController < ApplicationController
     @projects = Project.all
   end
 
+  # GET /projects/1
+  def show
+    @project = Project.find(params[:id])
+    @data = {
+      :project => @project,
+      :dependencies => @project.contained_dependencies
+    }.to_json.html_safe
+  end
+
   # GET /projects/new
   def new
     @project = Project.new

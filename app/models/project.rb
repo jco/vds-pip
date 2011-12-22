@@ -1,7 +1,12 @@
 class Project < ActiveRecord::Base
+  include Container
   self.include_root_in_json = false
   has_many :stages, :order => :position
   has_many :factors
+
+  # These are only the top-level docs and folders.
+  has_many :documents
+  has_many :folders
 
   def tasks
     stages.map { |stage| stage.tasks }.flatten
@@ -12,7 +17,8 @@ class Project < ActiveRecord::Base
     {
       :id => id,
       :name => name,
-      :stages => stages
+      :folders => folders,
+      :documents => documents
     }
   end
 

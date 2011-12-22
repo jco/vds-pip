@@ -2,7 +2,7 @@ require 'test_helper'
 
 class FolderTest < ActiveSupport::TestCase
   test "status_changed? work" do
-    f = Task.first.folders.create
+    f = Project.first.folders.create
     assert_equal("up_to_date", f.status)
     f.status = "not_updated"
     assert(f.status_changed?)
@@ -49,20 +49,22 @@ class FolderTest < ActiveSupport::TestCase
     f = create_folder_with_contents(["being_worked_on"])
     assert_equal("up_to_date", f.status)
 
-    f = Task.first.folders.create
+    f = Project.first.folders.create
     assert_equal("up_to_date", f.status)
   end
 
   def create_folder_with_contents(statuses = nil)
     statuses ||= ["up_to_date"] * 3
-    Task.first.folders.create do |f|
-      statuses.each do |s|
-        f.documents.build do |d|
-          d.status = s
-          d.versions.build(:external_url => "http://google.com/")
-        end
-      end
+    folder = Project.first.folders.create
+    statuses.each do |s|
+      d = Document.new
+      d.status = s
+      d.versions.build(:external_url => "http://google.com/")
+      d.folder = folder
+      d.save!
     end
+    folder.reload
+    folder
   end
 
 end

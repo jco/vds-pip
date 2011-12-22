@@ -1,2 +1,5 @@
+The application is seeded with one user with email "admin@example.com" and password "admin". To start testing, visit http://localhost:3000?login=admin@example.com&password=admin.
+
+================================================================================
 Use this README file to introduce your application and point to useful places in the API for learning more.
 Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.

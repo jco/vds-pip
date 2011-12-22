@@ -1,0 +1,13 @@
+<p id="notice"><%= notice %></p>
+<p>
+  <%= link_to "Create folder", new_project_folder_path(@project) %> &bull;
+  To upload a document, double-click anywhere in the box.
+</p>
+<div id="pane"></div>
+<div id="container"></div>
+
+<script type="text/javascript">
+var Pip = Pip || {};
+Pip.data = <%= @data %>;
+Pip.data.containerId = 'container';
+</script>

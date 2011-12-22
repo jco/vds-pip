@@ -24,60 +24,60 @@ Pip.ItemDrawer = (function(P, $) {
         }
       }
 
-        var icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34);
-        var iconLabel   = Pip.paper.text(item.coords[0] + 34 + 5, item.coords[1] + 17, item.name).attr('text-anchor', 'start');
-        stuff.push(icon, iconLabel);
+      var icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34);
+      var iconLabel   = Pip.paper.text(item.coords[0] + 34 + 5, item.coords[1] + 17, item.name).attr('text-anchor', 'start');
+      stuff.push(icon, iconLabel);
 
-        // create arrow drawing handle
-        var handle = Pip.paper.path(dragHandlePath(item)).attr('fill', 'white');
-        stuff.push(handle);
-        assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
+      // create arrow drawing handle
+      var handle = Pip.paper.path(dragHandlePath(item)).attr('fill', 'white');
+      stuff.push(handle);
+      assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
 
-        if (kind(item) == 'document') {
-          // double click opens an overlay
-          icon.dblclick(documentOverlay(item));
+      if (kind(item) == 'document') {
+        // double click opens an overlay
+        icon.dblclick(documentOverlay(item));
 
-        }
-        else {
-          // kind == 'folder'
-          icon.dblclick(function (ev) {
-            // redirect
-            location = P.folderPath(item);
-          });
-        }
+      }
+      else {
+        // kind == 'folder'
+        icon.dblclick(function (ev) {
+          // redirect
+          location = P.folderPath(item);
+        });
+      }
 
       var st = Pip.paper.set();
-        stuff.forEach(function (thing) {
-          thing.toFront();
-          st.push(thing);
-        });
+      stuff.forEach(function (thing) {
+        thing.toFront();
+        st.push(thing);
+      });
 
 
 
-        // assign listeners
-        assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
-          if (!_.isEqual(newCoords, item.coords)) {
-            var x = newCoords[0], y = newCoords[1];
+      // assign listeners
+      assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
+        if (!_.isEqual(newCoords, item.coords)) {
+          var x = newCoords[0], y = newCoords[1];
 
-            // part 1: draw dependencies
-            // first we have to update the coords of the json item
-            setJsonCoords(item, [x, y]);
-            Pip.DependencyDrawer.redrawDependencies();
+          // part 1: draw dependencies
+          // first we have to update the coords of the json item
+          setJsonCoords(item, [x, y]);
+          Pip.DependencyDrawer.redrawDependencies();
 
-            // part 2: ping server
-              console.log('PUT new coords of item ', item, [x, y], '...');
-              var url = '/' + kind(item) + 's/' + String(item.id);
-              var data = {}; data[kind(item)] = {"x": x, "y": y};
-              $.ajax({
-                type: 'PUT',
-                url: url,
-                data: data,
-                dataType: 'json',
-                complete: function() { console.log('...complete.'); },
-                error: P.error
-              });
-          }
-        }});
+          // part 2: ping server
+            console.log('PUT new coords of item ', item, [x, y], '...');
+            var url = '/' + kind(item) + 's/' + String(item.id);
+            var data = {}; data[kind(item)] = {"x": x, "y": y};
+            $.ajax({
+              type: 'PUT',
+              url: url,
+              data: data,
+              dataType: 'json',
+              complete: function() { console.log('...complete.'); },
+              error: P.error
+            });
+        }
+      }});
 
     };
 

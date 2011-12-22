@@ -3,11 +3,7 @@ module ApplicationHelper
     items = hierarchical_array_for(hierarchical_thing)
     items.map do |item|
       begin
-        if item.is_a?(Project)
-          link_to(item.name, project_tasks_path(item))
-        else
-          link_to(item.name, item)
-        end
+        link_to(item.name, item)
       rescue NoMethodError
         item.name
       end
@@ -34,13 +30,8 @@ private
 
   def get_parent(things)
     first_thing = things.first
-    if first_thing.is_a?(Folder) || first_thing.is_a?(Task)
+    if first_thing.is_a?(Folder)
       first_thing.parent
-    elsif first_thing.is_a?(Factor)
-      raise "Can't get factor's \"parent\" without a reference point" unless things[1].respond_to?(:stage)
-      things[1].stage
-    elsif first_thing.is_a?(Stage)
-      first_thing.project
     elsif first_thing.is_a?(Project)
       nil
     else

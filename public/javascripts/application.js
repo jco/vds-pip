@@ -1,24 +1,37 @@
 var Pip = Pip || {};
 
-(function(P, $) {
+(function(P, $, slang) {
     var Application = {};
     
     Application.init = function() {
+
+        // Add the string methods from the "slang" library directly to all string objects.
         slang.addToPrototype();
+
+        // Setup for the routes module.
+        var resources = [
+          'task',
+          'folder',
+          'document',
+          ['task', 'document'],
+          ['folder', 'document']
+        ];
+        P.routesHelper = generateHelpers(resources);
+
         // somehow determine whether we should be drawing a canvas
         if (P.data) {
           // build a lookup table
           if (P.data.project) {
             P.project = new P.Model.Project(P.data.project);
             P.index = {};
-            buildIndex(P.project, P.index);
+            P.Indexer.buildIndex(P.project, P.index);
             P.ProjectDrawer.drawProject(P.project);
           }
 
           // set up the container
           if (P.data.containerId) {
             P.container = document.getElementById(P.data.containerId);
-            P.paper = Raphael(P.container ,'100%','500px');//http://jsfiddle.net/6x4bR/
+            P.paper = Raphael(P.container, '100%', '500px');//http://jsfiddle.net/6x4bR/
             P.container.addEventListener('dblclick', documentCreationHandler, false);
           }
 
@@ -26,9 +39,8 @@ var Pip = Pip || {};
           if (P.data.this_folder) {
             P.thisFolder = P.index[P.data.this_folder];
             drawItemsFor(P.thisFolder);
-          } else if (P.data.this_task) {
-            P.thisTask = P.index[P.data.this_task];
-            drawItemsFor(P.thisTask);
+          } else {
+            drawItemsFor(P.project);
           } // don't do anything for a project
 
           // draw dependencies
@@ -48,12 +60,12 @@ var Pip = Pip || {};
           ev.target != P.container)
         return;
 
-      // documents can be created under either a folder or a task directly
+      // documents can be created under either a folder or a project directly
       var href;
       if (P.thisFolder)
         href = P.newFolderDocumentPath(P.thisFolder);
-      else if (P.thisTask)
-        href = P.newTaskDocumentPath(P.thisTask);
+      else if (P.project)
+        href = P.newProjectDocumentPath(P.project);
       else
         throw "No references to the parent, can't create document without any";
 
@@ -65,23 +77,8 @@ var Pip = Pip || {};
       });
     };
 
-
-    // container is anything with collections
-    var buildIndex = function(container, index) {
-      P.COLLECTION_TYPES_SINGULAR.forEach(function (kind) {
-        var plural_kind = P.plural(kind);
-        if (container[plural_kind]) {
-          container[plural_kind].forEach(function (item) {
-            index[P.domId(item)] = item;
-            // recursive for any collections
-            buildIndex(item, index);
-          });
-        }
-      });
-    };
-
     P.Application = Application;
-})(Pip, jQuery);
+})(Pip, jQuery, slang);
 
 
         

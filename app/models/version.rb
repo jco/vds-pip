@@ -2,7 +2,8 @@ class Version < ActiveRecord::Base
   belongs_to :document
   validate :file_xor_url
   after_create :mark_document_up_to_date!, :unless => Proc.new { |version|
-    version.document.upstream_items.any? { |item| item.status == "not_updated" }
+    version.document.upstream_items.any? { |item| item.status == "not_updated" } ||
+    version.document.versions.size < 2 # (don't mark the document updated if this is its first version)
   }
   after_create { |version| version.document.mark_downstream_items_not_updated! }
   mount_uploader :file, DocumentUploader
@@ -30,7 +31,11 @@ class Version < ActiveRecord::Base
     if file.blank?
       external_url
     else
-      self[:file]
+      filename
     end
+  end
+
+  def filename
+    self[:file]
   end
 end
