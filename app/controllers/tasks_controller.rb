@@ -5,7 +5,11 @@ class TasksController < ApplicationController
     # user is authorized?
     project = Project.find(params[:project_id])
     unless current_user.is_member_of?(project)
-      error_screen(:development => "User #{current_user} doesn't have permissions to view project #{project}", :production => :not_found)
+      if Rails.env.production?
+        render_404
+      else
+        render(:text => "User #{current_user} doesn't have permissions to view project #{project}", :status => :unauthorized)
+      end
     end
 
     @tasks = project.tasks

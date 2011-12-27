@@ -10,6 +10,9 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
 
   has_many :memberships
+  def projects
+    memberships.map {|membership| membership.project }
+  end
   
   # Random 6-char password
   def self.generate_password

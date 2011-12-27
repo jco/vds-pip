@@ -13,26 +13,24 @@ protected
       if user
         sign_in(user)
       else
-        error_screen(:development => "Authenticating via params failed", :production => :not_found) unless current_user
+        unless current_user
+          if Rails.env.production?
+            # display a cryptic 404
+            render_404
+          else
+            render(:text => "Authenticating via params failed", :status => :unauthorized)
+          end
+        end
       end
     else
       # Try the current user.
-      error_screen(:development => "No session, no authentication params", :production => :not_found) unless current_user
-    end
-  end
-
-  # Renders an error screen that differs based on Rails.env.
-  # Encapsulates the duality of showing specific debug info to the 
-  # developer, and providing the least information possible to the user,
-  # especially useful to hide information from attackers.
-  #
-  # Ideally, the development screen would use the builtin rails rescue
-  # screen which has stack traces and other nice things.
-  def error_screen(options)
-    if Rails.env.production?
-      raise ActionController::RoutingError.new(options[:production])
-    else
-      raise ActionController::RoutingError.new(options[:development])
+      unless current_user
+        if Rails.env.production?
+          render_404
+        else
+          render(:text => "No session, no authentication params", :status => :unauthorized)
+        end
+      end
     end
   end
 
@@ -53,4 +51,10 @@ protected
   def sign_in(user)
     session[:user_id] = user.id
   end
+
+  # http://stackoverflow.com/questions/2385799/how-to-redirect-to-a-404-in-rails
+  def render_404
+    render(:text => "Not found", :status => "404")
+  end
+
 end

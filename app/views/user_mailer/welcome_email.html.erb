@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <p>
+      Hi! Someone has registered this email (<%= @user.email %>) with vds-pip.
+      You are now a member of project "<%= @user.projects.first %>." This
+      password was generated for you: <%= @generated_password %>. You can log
+      in by visiting... etc.
+    </p>
+  </body>
+</html>
