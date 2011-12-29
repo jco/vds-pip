@@ -14,8 +14,15 @@
   left: 0;
 }
 
-ul.radio {
+ul.radio, ul.metadata {
   list-style-type: none;
+  padding: 0;
+}
+
+.metadata {
+  font-family: Georgia, serif;
+  font-size: 10pt;
+  color: #999;
 }
 
 [data-in-place-edit][type=text] {
@@ -25,4 +32,136 @@ ul.radio {
 
 [data-in-place-edit][type=text]:hover {
   outline: medium inset #BBB;
+}
+
+.document h1 {
+  margin-left: 20px;
+}
+
+.document #document_name {
+  width: 616px;
+}
+
+.document .main-icon {
+  margin-right: 20px;
+  vertical-align: text-bottom;
+}
+
+.document .basic-info {
+  margin-left: 84px;
+  margin-bottom: 1em;
+}
+
+.description {
+  color: gray;
+}
+
+.actions .btn {
+  display: block;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 100%;
+  font-family: Georgia;
+}
+
+table {
+  border: 1px solid gray;
+  width: 518px;
+}
+
+caption {
+  text-align: left;
+}
+
+/* grid system, kind of */
+
+.document {
+  width: 720px;
+  margin-left: -20px;
+}
+
+.document .info, .document .actions {
+  display: inline;
+  float: left;
+  margin-left: 20px;
+}
+
+.document .info {
+  width: 520px;
+}
+
+.document .actions {
+  width: 160px;
+}
+
+.document .main-icon {
+  width: 64px;
+}
+
+
+/* from 960.gs */
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+
+.document:before,
+.document:after,
+.document h1:before,
+.document h1:after {
+  content: '.';
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  width: 0;
+  height: 0;
+}
+
+.document:after, .document h1:after {
+  clear: both;
+}
+
+/* button from Bootstrap (Twitter) */
+.btn {
+  cursor: pointer;
+  display: inline-block;
+  background-color: #e6e6e6;
+  background-repeat: no-repeat;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+  background-image: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
+  background-image: -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+  background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+  background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+  padding: 5px 14px 6px;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  color: #333;
+  font-size: 13px;
+  line-height: normal;
+  border: 1px solid #ccc;
+  border-bottom-color: #bbb;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -webkit-transition: 0.1s linear all;
+  -moz-transition: 0.1s linear all;
+  -ms-transition: 0.1s linear all;
+  -o-transition: 0.1s linear all;
+  transition: 0.1s linear all;
+}
+
+.btn:hover {
+  background-position: 0 -15px;
+  color: #333;
+  text-decoration: none;
+}
+.btn:focus {
+  outline: 1px dotted #666;
 }

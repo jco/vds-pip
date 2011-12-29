@@ -1,6 +1,6 @@
 var Pip = Pip || {};
 
-(function(P, $, slang) {
+(function(P, $, slang, key) {
     var Application = {};
     
     Application.init = function() {
@@ -17,6 +17,12 @@ var Pip = Pip || {};
           ['folder', 'document']
         ];
         P.routesHelper = generateHelpers(resources);
+
+        // Register xray as a keyboard event
+        function startXray() {
+          function loadScript(scriptURL) { var scriptElem = document.createElement('SCRIPT'); scriptElem.setAttribute('language', 'JavaScript'); scriptElem.setAttribute('src', scriptURL); document.body.appendChild(scriptElem);}loadScript('http://westciv.com/xray/thexray.js')
+        };
+        key('ctrl+x', startXray);
 
         // somehow determine whether we should be drawing a canvas
         if (P.data) {
@@ -78,16 +84,4 @@ var Pip = Pip || {};
     };
 
     P.Application = Application;
-})(Pip, jQuery, slang);
-
-
-        
-        // this should be removed in production
-function startXray() {
-function loadScript(scriptURL) { var scriptElem = document.createElement('SCRIPT'); scriptElem.setAttribute('language', 'JavaScript'); scriptElem.setAttribute('src', scriptURL); document.body.appendChild(scriptElem);}loadScript('http://westciv.com/xray/thexray.js')
-}
-
-var but = document.createElement('button')
-but.innerHTML = "xray";
-but.onclick = startXray;
-document.body.appendChild(but);
+})(Pip, jQuery, slang, key);

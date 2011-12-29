@@ -86,7 +86,7 @@ Pip.ItemDrawer = (function(P, $) {
         $.colorbox({
           href: P.documentPath(doc),
           iframe: true,
-          width: 500,
+          innerWidth: 720,
           height: 500
         });
       };

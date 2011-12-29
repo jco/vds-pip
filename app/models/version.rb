@@ -23,7 +23,7 @@ class Version < ActiveRecord::Base
   def icon_path
     # return something like '/images/icons/folder.png'
     # TODO
-    '/images/icons/unknown.gif'
+    '/images/icons/unknown.png'
   end
 
   def name

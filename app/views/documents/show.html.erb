@@ -1,36 +1,45 @@
 <%= div_for @document do %>
-<%= image_tag @document.icon_path %>
-<h1><input data-in-place-edit="true" id="document_name" name="document[name]" size="30" type="text" value="<%= @document.name %>" /></h1>
-<p class="description"><%= @document.description %></p>
-<div class="actions">
-  <%= link_to "Download", @document.latest_version %>
-  <%= link_to "Update", new_document_version_path(@document) %>
-  <%= link_to "Delete", @document, :confirm => 'Are you sure?', :method => :delete %>
-  <h2>Status:</h2>
-  <ul class="radio">
-    <% Document::STATUSES.each do |status| %>
-      <li>
-        <%= label_tag("document_status_#{status}", radio_button(:document, :status, status, "data-in-place-edit" => true) + status) %>
-      </li>
+  <h1>
+  <%= image_tag(@document.icon_path, :class => "main-icon") %><input data-in-place-edit="true" id="document_name" name="document[name]" size="30" type="text" value="<%= @document.name %>" /></h1>
+  <div class="info">
+    <div class="basic-info">
+      <% unless @document.description.blank? %>
+      <p class="description"><%= @document.description %></p>
+      <% end %>
+      <ul class="metadata">
+      <li>Stage: <%= @document.stage || "(none)" %>
+      <li>Factor: <%= @document.factor || "(none)" %>
+      <li>Actors: [to be implemented]</li>
+      </ul>
+    </div>
+    <table class="versions">
+      <caption>All versions:</caption>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Author</th>
+        <th>Created on</th>
+    <% @document.versions.each do |version| %>
+      <tr>
+        <td><%= image_tag version.icon_path, :size => '15x15' %></td>
+        <td><%= link_to version.name, version %></td>
+        <td>[author]</td>
+        <td><%= version.created_at.to_s(:long) %></td>
+      </tr>
     <% end %>
-  </ul>
-</div>
-<h2>Metadata:</h2>
-<ul>
-<li>Stage: <%= @document.stage || "(none)" %>
-<li>Factor: <%= @document.factor || "(none)" %>
-<li>Actors: to be implemented</li>
-</ul>
-<table class="versions">
-  <caption>All versions:</caption>
-<% @document.versions.each do |version| %>
-  <tr>
-    <td><%= image_tag version.icon_path, :size => '15x15' %></td>
-    <td><%= link_to version.name, version %></td>
-    <td>[author]</td>
-    <td><%= time_ago_in_words(version.created_at) %> ago</td>
-  </tr>
-<% end %>
-</table>
-
+    </table>
+  </div>
+  <div class="actions">
+    <%= link_to("Download", @document.latest_version, :class => 'btn') %>
+    <%= link_to("Update", new_document_version_path(@document), :class => 'btn') %>
+    <%= link_to("Delete", @document, :confirm => 'Are you sure?', :method => :delete, :class => 'btn') %>
+    <h2>Status:</h2>
+    <ul class="radio">
+      <% Document::STATUSES.each do |status| %>
+        <li>
+          <%= label_tag("document_status_#{status}", radio_button(:document, :status, status, "data-in-place-edit" => true) + status) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 <% end %>
