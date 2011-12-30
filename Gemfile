@@ -17,6 +17,7 @@ gem 'jquery-rails'
 gem "acts_as_list", "~> 0.1.4"
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'bcrypt-ruby', :require => 'bcrypt'
+gem 'cancan' # for user roles
 
 # Use unicorn as the web server
 # gem 'unicorn'
