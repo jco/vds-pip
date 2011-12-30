@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 # Something that can have dependencies with other things.
 #
 # Required methods: downstream_dependencies and upstream_dependencies.

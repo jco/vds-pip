@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class FoldersController < ApplicationController
   # GET /folders/1
   def show

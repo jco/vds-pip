@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class Dependency < ActiveRecord::Base
   self.include_root_in_json = false
   belongs_to :upstream_item, :polymorphic => true

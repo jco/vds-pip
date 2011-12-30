@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 VdsPip::Application.routes.draw do
   resources :projects, :only => [:index, :show, :new, :create] do
     resources :documents, :only => [:new, :create]

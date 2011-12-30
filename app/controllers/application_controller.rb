@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :authenticate!

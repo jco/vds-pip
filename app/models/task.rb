@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class Task < ActiveRecord::Base
   include Container
   self.include_root_in_json = false

@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 module ApplicationHelper
   def breadcrumbs_for(hierarchical_thing)
     items = hierarchical_array_for(hierarchical_thing)

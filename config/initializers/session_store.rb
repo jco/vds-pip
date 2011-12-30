@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 # Be sure to restart your server when you modify this file.
 
 VdsPip::Application.config.session_store :cookie_store, :key => '_vds_pip_session'

@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class LinkDocumentsAndTasks < ActiveRecord::Migration
   def self.up
     add_column(:documents, :task_id, :integer)

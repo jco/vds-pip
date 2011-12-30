@@ -1,3 +1,8 @@
+<%#
+Authors: Jeff Cox, David Zhang
+Copyright Syracuse University
+%>
+
 <%= div_for @document do %>
   <h1>
   <%= image_tag(@document.icon_path, :class => "main-icon") %><input data-in-place-edit="true" id="document_name" name="document[name]" size="30" type="text" value="<%= @document.name %>" /></h1>

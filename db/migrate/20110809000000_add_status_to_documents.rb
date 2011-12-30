@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class AddStatusToDocuments < ActiveRecord::Migration
   def self.up
     change_table(:documents) do |t|

@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 require 'rubygems'
 
 # Set up gems listed in the Gemfile.

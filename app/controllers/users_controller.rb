@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class UsersController < ApplicationController
   def new  
     @user = User.new  

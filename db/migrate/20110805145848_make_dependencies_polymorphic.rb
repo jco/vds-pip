@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class MakeDependenciesPolymorphic < ActiveRecord::Migration
   def self.up
     change_table(:dependencies) do |t|

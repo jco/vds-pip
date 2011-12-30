@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 require 'test_helper'
 
 class FolderTest < ActiveSupport::TestCase

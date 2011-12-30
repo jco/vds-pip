@@ -1,3 +1,7 @@
+/*
+ * Authors: Jeff Cox, David Zhang
+ * Copyright Syracuse University
+ */
 var Pip = Pip || {};
 
 Pip.initModules = function() {

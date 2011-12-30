@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class CreateVersions < ActiveRecord::Migration
   def self.up
     create_table :versions do |t|

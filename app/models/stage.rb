@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class Stage < ActiveRecord::Base
   self.include_root_in_json = false
   belongs_to :project

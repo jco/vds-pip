@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 VdsPip::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 

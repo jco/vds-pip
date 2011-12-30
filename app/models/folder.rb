@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class Folder < ActiveRecord::Base
   include Container
   include Linkable

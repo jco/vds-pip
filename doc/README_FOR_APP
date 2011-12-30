@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 The application is seeded with one user with email "admin@example.com" and password "admin". To start testing, visit http://localhost:3000?login=admin@example.com&password=admin.
 
 ================================================================================

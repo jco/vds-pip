@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class ProjectsController < ApplicationController
   # GET /projects
   def index

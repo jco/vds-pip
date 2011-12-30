@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class CreateStages < ActiveRecord::Migration
   def self.up
     create_table :stages do |t|

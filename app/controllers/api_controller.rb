@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 # See http://bit.ly/vdspipintegration for a specification for these api methods.
 class ApiController < ApplicationController
   # GET /api/createuser

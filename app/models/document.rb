@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class Document < ActiveRecord::Base
   include Linkable
   self.include_root_in_json = false

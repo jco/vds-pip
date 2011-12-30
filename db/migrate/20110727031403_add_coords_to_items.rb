@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class AddCoordsToItems < ActiveRecord::Migration
   def self.up
     add_column :folders, :x, :integer, :default => 0, :null => false

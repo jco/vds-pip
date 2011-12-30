@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 # Load the rails application
 require File.expand_path('../application', __FILE__)
 

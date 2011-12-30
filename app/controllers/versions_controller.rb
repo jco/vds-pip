@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class VersionsController < ApplicationController
   # GET /versions/1
   def show

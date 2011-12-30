@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 module Container
 # specifically, a container for documents and folders
 # requires two methods: folders and documents, both return arrays of the

@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class CreateMemberships < ActiveRecord::Migration
   def self.up
     create_table :memberships do |t|

@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class AddProjectReferenceToDocumentsAndFolders < ActiveRecord::Migration
   def self.up
     add_column :folders, :project_id, :integer

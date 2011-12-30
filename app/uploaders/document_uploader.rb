@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 # encoding: utf-8
 
 class DocumentUploader < CarrierWave::Uploader::Base

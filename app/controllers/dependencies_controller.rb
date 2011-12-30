@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class DependenciesController < ApplicationController
   # GET /folders/1/dependencies
   def index

@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class DocumentsController < ApplicationController
   # GET /documents/1
   def show

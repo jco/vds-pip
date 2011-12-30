@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class TasksController < ApplicationController
   # GET /projects/1/tasks
   # for showing more than one task
