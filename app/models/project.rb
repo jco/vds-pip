@@ -12,6 +12,9 @@ class Project < ActiveRecord::Base
   # These are only the top-level docs and folders.
   has_many :documents
   has_many :folders
+  
+  has_many :memberships
+  has_many :users, :through => :memberships
 
   def tasks
     stages.map { |stage| stage.tasks }.flatten

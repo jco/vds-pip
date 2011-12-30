@@ -19,6 +19,8 @@ class User < ActiveRecord::Base
   validates_inclusion_of :role, :in => ROLES, :message => "^Nonexistent role."
   
   has_many :memberships
+  has_many :projects, :through => :memberships
+  
   def projects
     memberships.map {|membership| membership.project }
   end
