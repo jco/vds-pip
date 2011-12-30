@@ -32,6 +32,10 @@ class Task < ActiveRecord::Base
     parent.project
   end
 
+  def to_s
+    name
+  end
+
   def serializable_hash(options = nil)
     {
       :name => name,
