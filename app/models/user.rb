@@ -1,14 +1,23 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation
   
   attr_accessor :password
   before_save :encrypt_password
   
+  ROLES = %w[site_admin project_manager normal_user]
+  
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create
   validates_presence_of :email
   validates_uniqueness_of :email
-
+  validates_presence_of :role
+  validates_inclusion_of :role, :in => ROLES, :message => "^Nonexistent role."
+  
   has_many :memberships
   def projects
     memberships.map {|membership| membership.project }

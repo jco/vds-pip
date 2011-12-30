@@ -62,4 +62,53 @@ protected
     render(:text => "Not found", :status => "404")
   end
 
+# Roles feature helpers
+private
+  def logged_in?
+    current_user
+  end
+  
+  def logged_in_as_normal_user?
+	  current_user && current_user.role == 'normal_user'
+  end
+  
+	def logged_in_as_project_manager?
+	  current_user && current_user.role == 'project_manager'
+  end
+
+  def logged_in_as_site_admin?
+    current_user && current_user.role == 'site_admin'
+  end
+  
+  def require_normal_user
+    unless logged_in_as_normal_user?
+      flash[:notice] = "You must be logged in as a normal user to access this page."
+      redirect_to '/'
+      return false
+    end
+  end
+  
+  def require_project_manager
+    unless logged_in_as_project_manager?
+      flash[:notice] = "You must be logged in as a project manager to access this page."
+      redirect_to '/'
+      return false
+    end
+  end
+  
+  def require_site_admin
+    unless logged_in_as_site_admin?
+      flash[:notice] = "You must be logged in as a site admin to access this page."
+      redirect_to '/'
+      return false
+    end
+  end
+  
+  def require_user
+    unless current_user
+      flash[:notice] = "You must be logged in to access this page."
+      redirect_to '/'
+      return false
+    end
+  end
 end

@@ -21,14 +21,14 @@ class Ability
   #
   # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
   def initialize(user)
-    if user.role == "site admin"
+    if user.role == "site_admin"
       # can :manage, :all
       # # a superadmin cannot edit other superadmins
       # cannot [:update, :destroy], User, :role => "superadmin"
       # # a superadmin can only delete one superadmin account: his own
       # # can still manage non-superadmin accounts
       # can [:update, :destroy], User, :id => user.id
-    elsif user.role == "project manager"
+    elsif user.role == "project_manager"
       # # an admin can only manage meals of restaurants he has access to
       # can :manage, Meal do |meal| 
       #   (meal.restaurant_ids & user.restaurant_ids).present?
@@ -41,7 +41,7 @@ class Ability
       # end
       # # an admin can only edit himself
       # can :update, User, :id => user.id
-    elsif user.role == "user"
+    elsif user.role == "normal_user"
       # a customer can edit his own account
       # can :update, User, :id => user.id
       # # a customer can manage his user_meals (i.e. his connections to actual meals from chomping)
