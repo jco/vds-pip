@@ -4,6 +4,9 @@
 #
 
 class UsersController < ApplicationController
+  before_filter :require_site_admin # method defined in ApplicationController
+  load_and_authorize_resource # from cancan gem
+	
   def new  
     @user = User.new  
   end  
@@ -18,5 +21,9 @@ class UsersController < ApplicationController
     else  
       render "new"  
     end  
+  end
+  
+  def index
+    @users = User.all
   end
 end

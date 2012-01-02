@@ -12,6 +12,12 @@ Copyright Syracuse University
 </head>
 <body>
 
+<% if flash[:notice] %>
+<div id="flashes">
+	<%= flash[:notice] %>
+</div>
+<% end %>
+
 <%= yield %>
 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/1.5.2/raphael-min.js"></script>
