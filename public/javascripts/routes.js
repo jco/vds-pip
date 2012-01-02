@@ -13,7 +13,7 @@ var resources = [
   ['folder', 'document']
 ];
 
-var routesHelper = generateHelpers(resources);
+var routesHelper = generateHelpers(resources, {});
 
 var url = routesHelper.folderDocumentPath({name: "folder 1", id: 1}, {name: "document 6", id: 6});
 // => /folders/1/documents/6
@@ -58,24 +58,21 @@ var url = routesHelper.folderDocumentPath({name: "folder 1", id: 1}, {name: "doc
     this[camel('edit', parent, child, 'path')] = function (parentInst, childInst) { return path(pathBase(parentInst), childInst.id, 'edit'); };
   };
 
-  var flatten = module.flatten = function (array) {
-    array.reduce(function (memo, value) {
-      if (Array.isArray(value))
+  var flatten = module.flatten = function (arrayOrValue) {
+    return Array.isArray(arrayOrValue) ? arrayOrValue.reduce(function (memo, value) {
         return memo.concat(flatten(value));
-      else
-        return memo.concat(value);
-    }, []);
+    }, []) : arrayOrValue;
   };
 
   var camel = module.camel = function (strs) {
     if (arguments.length > 1)
       strs = Array.prototype.slice.call(arguments);
     return strs.slice(0,1).concat(
-      strs.slice(1).map(capitalize));
+      strs.slice(1).map(capitalize)).join('');
   };
 
   var capitalize = module.capitalize = function (str) {
-    return [str.charAt(0).toUpperCase()].concat(str.slice(1));
+    return [str.charAt(0).toUpperCase(), str.slice(1)].join('');
   };
 
   var plural = module.plural = function (str) {
@@ -96,8 +93,7 @@ var url = routesHelper.folderDocumentPath({name: "folder 1", id: 1}, {name: "doc
     return (str.charAt(0) == '/') ? str.slice(1) : str;
   };
 
-  var generateHelpers = module.generateHelpers = function (resources) {
-    var helperObj = {};
+  var generateHelpers = module.generateHelpers = function (resources, helperObj) {
     resources.forEach(function (resource) {
       if (_.isArray(resource))
         nestedResource.call(helperObj, resource);
