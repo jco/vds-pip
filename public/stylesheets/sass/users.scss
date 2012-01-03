@@ -1,0 +1,47 @@
+/*
+ * Authors: Jeff Cox, David Zhang
+ * Copyright Syracuse University
+ */
+
+
+/* All styles related to the User resource are here. */
+@import "partials/variables";
+
+/* Index.html.erb */
+#users_index {
+	// User list partial setup
+	ul.user_list {
+		margin: 0 auto;
+		list-style-type: none;
+
+  	li {
+  		ul li {
+  			display: inline-block;
+  		}
+
+  		ul li.email {
+  			position: absolute;
+  		}
+  		ul li.controls {
+  			position: relative;
+  			margin-left: 300px;
+  			width: 200px;
+  		}
+
+  		ul.items_within_user {
+  			li.email {}
+  			li.controls {}
+  		}
+
+  		ul:hover { background: darken($cool_gray, 10%); }
+  	}
+    
+	}
+	
+	#site_admins {
+		div {
+			margin-left: 20px;
+		}
+	}
+
+}

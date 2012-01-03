@@ -2,25 +2,26 @@
 Authors: Jeff Cox, David Zhang
 Copyright Syracuse University
 %>
+<div id="users_index">
+	<h1>Listing users</h1>
 
-<h1>Listing users</h1>
-
-<div id="site_admins">
+	<div id="site_admins">
 	
-	<div id="site_admins_list">
-		<ul class="user_list">
-			<% @site_admins.each do |user| %>
-				<%= content_tag_for :li, user do %>
-					<ul class="items_within_user">
-						<li class="email"><%= user.email %></li>
-						<li class="controls">
-							<%= link_to "Edit", [:edit,user], :class => "small_button" %>
-						</li>
-					</ul>
+		<div id="site_admins_list">
+			<ul class="user_list">
+				<% @site_admins.each do |user| %>
+					<%= content_tag_for :li, user do %>
+						<ul class="items_within_user">
+							<li class="email"><%= user.email %></li>
+							<li class="controls">
+								<%= link_to "Edit", [:edit,user], :class => "small_button" %>
+							</li>
+						</ul>
+					<% end %>
 				<% end %>
-			<% end %>
-		</ul>
+			</ul>
+		</div>
 	</div>
-</div>
 
-<%= link_to 'New User', new_user_path %>
+	<%= link_to 'New User', new_user_path %>
+</div>
