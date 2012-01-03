@@ -24,6 +24,6 @@ class UsersController < ApplicationController
   end
   
   def index
-    @users = User.all
+    @site_admins = User.where(:role => 'site_admin')
   end
 end
