@@ -11,18 +11,11 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-# if User.where(:role => 'site_admin').count == 0
-#   User.create(:password=>"password",:password_confirmation=>"password",
-#               :email=>"admin@example.com",:role=>"site_admin")
-#   puts "Created site admins"
-# else
-#   puts "Site admins already exist"
-# end
+admin = User.find_or_create_by_email('admin@example.com', :password => 'admin') do |u|
+  u.role = 'site_admin'
+end
 
-# not working...? model validation? what else did I change?
-admin = User.find_or_create_by_email('admin@example.com', :password => 'admin', :password_confirmation => 'admin',
-  :role => 'site_admin')
-puts "First user created with email 'admin@example.com', password 'admin', and role 'site_admin'"
+puts "First user created with email 'admin@example.com' and password 'admin'"
 
 project = Project.find_or_create_by_name('Test project 1')
 Membership.find_or_create_by_user_id_and_project_id(admin.id, project.id)
