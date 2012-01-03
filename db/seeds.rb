@@ -11,7 +11,10 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
-admin = User.find_or_create_by_email('admin@example.com', :password => 'admin')
+admin = User.find_or_create_by_email('admin@example.com', :password => 'admin') do |u|
+  u.role = 'site_admin'
+end
+
 puts "First user created with email 'admin@example.com' and password 'admin'"
 
 project = Project.find_or_create_by_name('Test project 1')
