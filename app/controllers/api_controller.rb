@@ -17,12 +17,17 @@ class ApiController < ApplicationController
 
     return unless authenticate_with_params!
 
+    unless Project.exists?(params[:project_id])
+      render(:text => "No project exists with id=#{params[:project_id]}.", :status => :unprocessable_entity)
+      return
+    end
+
     generated_password = User.generate_password
-    @user = User.new(:email => params[:new_user_email], :password => generated_password)  
-    @user.memberships.build(:project_id => params[:project_id])
-    if @user.save
-      UserMailer.welcome_email(@user, generated_password).deliver
-      render(:text => "user_id=#{@user.id}&password=#{generated_password}", :status => :created)
+    user = User.new(:email => params[:new_user_email], :password => generated_password)
+    user.memberships.build(:project_id => params[:project_id])
+    if user.save
+      UserMailer.welcome_email(user, generated_password).deliver
+      render(:text => "user_id=#{user.id}&password=#{generated_password}", :status => :created)
     else
       head :unprocessable_entity
     end  
@@ -134,12 +139,12 @@ class ApiController < ApplicationController
     else
       first_project_manager = current_user
     end
-    membership = Membership.new(:project => project, :user => first_project_manager)
+    membership = project.memberships.build(:project => project, :user => first_project_manager)
     # would create the manager role here
-    if project.save && membership.save
-      render(:text => "Successfully created project \"#{project.name}\" with project manager <#{first_project_manager.email}>", :status => :created)
+    if project.save
+      render(:text => "Successfully created project \"#{project.name}\" with project manager <#{first_project_manager}>", :status => :created)
     else
-      render(:text => "Problem saving project or membership.", :status => :unprocessable_entity)
+      render(:text => "Problem saving project(#{project.errors.inspect}) or membership(#{membership.errors.inspect}).", :status => :unprocessable_entity)
     end
   end
 
