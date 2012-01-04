@@ -23,6 +23,7 @@ class Ability
   def initialize(user)
     if user.role == "site_admin"
       can :manage, :all
+      cannot :destroy, [Stage, Factor]
     elsif user.role == "project_manager"
       # can only manage projects which he is a part of
       can :manage, Project do |project|
@@ -34,6 +35,11 @@ class Ability
       can :read, Project do |project|
         (project.membership_ids & user.membership_ids).present?
       end
+      # can create, edit, delete docs in projects he belongs to
+      can :manage, Document do |doc|
+        (doc.project.membership_ids & user.membership_ids).present?
+      end
+      
       # can edit his own account; *cannot change his own role -> set in view
       can :manage, User, :id => user.id
     end

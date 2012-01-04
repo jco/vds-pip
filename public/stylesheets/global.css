@@ -1,0 +1,17 @@
+/*
+ * Authors: Jeff Cox, David Zhang
+ * Copyright Syracuse University
+ */
+/* Global helpers */
+/* =============================================== */
+/*  Variable Declaration										   		 */
+/* =============================================== */
+/* Colors */
+/* Fonts */
+/* Measurements */
+.small_button {
+  padding: 2px;
+  border: 1px solid #787676;
+  background: #ededed; }
+  .small_button:hover {
+    background: #c7c7c7; }

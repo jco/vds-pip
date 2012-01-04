@@ -18,7 +18,8 @@ gem "acts_as_list", "~> 0.1.4"
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'bcrypt-ruby', :require => 'bcrypt'
 gem 'cancan' # for user roles
-gem 'sass' # for improved css. http://sass-lang.com/
+gem 'sass' # for improved css. http://sass-lang.com/; grabs files in stylesheets/sass and creates in stylesheets
+gem 'dynamic_form' # easy error messages for forms
 
 # Use unicorn as the web server
 # gem 'unicorn'

@@ -6,7 +6,12 @@
 class ProjectsController < ApplicationController
   # GET /projects
   def index
-    @projects = Project.all
+    # @projects = Project.all
+    @projects = Project.where("name like ?", "%#{params[:q]}%")
+    respond_to do |format| # following screencast on token fields
+      format.html
+      format.json { render :json => @projects.map(&:attributes) }
+    end
   end
 
   # GET /projects/1

@@ -1,0 +1,12 @@
+<%#
+Authors: Jeff Cox, David Zhang
+Copyright Syracuse University
+%>
+
+<!--users/edit-->
+<div id="user_edit">
+	<%= render :partial => "users/partials/form", :locals => { :user => @user, :button_name => "Update" } %>
+	<% if can? :destroy, @user %>
+		<%= link_to "Delete", @user, :method => :delete, :confirm => "Are you sure?" %>
+	<% end %>
+</div>

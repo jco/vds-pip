@@ -4,7 +4,8 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessible :email, :password, :password_confirmation
+  attr_accessible :email, :password, :password_confirmation, :role, :project_tokens
+  attr_reader :project_tokens # http://railscasts.com/episodes/258-token-fields
   
   attr_accessor :password
   before_save :encrypt_password
@@ -20,6 +21,11 @@ class User < ActiveRecord::Base
   
   has_many :memberships
   has_many :projects, :through => :memberships
+  
+  # Setter method used by jQuery token input
+  def project_tokens=(ids)
+    self.project_ids = ids.split(",")
+  end
   
   def projects
     memberships.map {|membership| membership.project }

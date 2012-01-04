@@ -1,0 +1,17 @@
+/*
+ * Authors: Jeff Cox, David Zhang
+ * Copyright Syracuse University
+ */
+
+
+/* Global helpers */
+@import "partials/variables";
+
+.small_button {
+  padding: 2px;
+  border: 1px solid $gray;
+  background: $cool_gray;
+  &:hover {
+    background: darken($cool_gray, 15%);
+  }
+}

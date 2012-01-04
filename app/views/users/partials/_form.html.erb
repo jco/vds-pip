@@ -1,0 +1,37 @@
+<%#
+Authors: Jeff Cox, David Zhang
+Copyright Syracuse University
+%>
+
+<!--form partial for users; requires variables 'user' & 'button_name'-->
+<%= form_for user do |f| %>
+	<%= f.error_messages %>
+	
+	<!--Why won't these update?-->
+	<% if logged_in_as_site_admin? %>
+		<p>
+			<%= f.label :project_tokens, "Projects" %>
+			<%= f.text_field :project_tokens, :id=>"project_token_field", "data-pre" => user.projects.map(&:attributes).to_json %>
+		</p>
+		<p>
+			<%= f.label :role %><br>
+			<%= f.collection_select :role, User::ROLES, :to_s, :humanize %>
+		</p>
+	<% end %>
+	
+	<p>
+		<%= f.label :email %>	
+		<%= f.text_field :email %>
+	</p>
+	<p>
+		<% if params[:action] == 'edit' %>
+			<i>Fill in to change; leave blank otherwise:</i><br>
+		<% end %>
+		<%= f.label :password %><br>
+		<%= f.password_field :password %><br>
+		<%= f.label :password_confirmation %><br>
+		<%= f.password_field :password_confirmation %>
+	</p>
+
+	<%= f.submit button_name %>
+<% end %>

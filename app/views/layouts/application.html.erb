@@ -7,18 +7,19 @@ Copyright Syracuse University
 <html>
 <head>
   <title>VdsPip</title>
-  <%= stylesheet_link_tag :all %>
+  <%= stylesheet_link_tag :all %><!--specify later; choose one of three tokeninputs-->
+	<%= javascript_include_tag "jquery-1.7.1.min","jquery.tokeninput","jquery_token_input" %>
   <%= csrf_meta_tag %>
 </head>
 <body>
 
-<% if flash[:notice] %>
-<div id="flashes">
-	<%= flash[:notice] %>
-</div>
-<% end %>
+	<% if flash[:notice] %>
+	<div id="flashes">
+		<%= flash[:notice] %>
+	</div>
+	<% end %>
 
-<%= yield %>
+	<%= yield %>
 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/1.5.2/raphael-min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js"></script>
@@ -41,6 +42,8 @@ Copyright Syracuse University
   <script src="/javascripts/indexer.js"></script>
   <script src="/javascripts/routes.js"></script>
   <script src="/javascripts/application.js"></script>
+
+
   <script>
   Pip.initModules();
   </script>

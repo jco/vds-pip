@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate!
 
 protected
-
   # Checks to see if the client is trying to authenticate via URL params. Uses
   # the current session otherwise.
   def authenticate!
@@ -62,7 +61,10 @@ protected
     render(:text => "Not found", :status => "404")
   end
 
-# Roles feature helpers
+# -- Roles feature helpers --
+# This makes the following methods accessible in the view
+helper_method :logged_in?, :logged_in_as_normal_user?, :logged_in_as_project_manager?, :logged_in_as_site_admin?
+
 private
   def logged_in?
     current_user

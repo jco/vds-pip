@@ -23,5 +23,5 @@
     width: 200px; }
   #users_index ul.user_list li ul:hover {
     background: #d3d3d3; }
-#users_index #site_admins div {
+#users_index #site_admins div, #users_index #project_managers div, #users_index #normal_users div {
   margin-left: 20px; }

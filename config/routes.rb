@@ -5,7 +5,7 @@
 
 VdsPip::Application.routes.draw do
   
-  resources :users
+  resources :users, :except => :show
   
   resources :projects, :only => [:index, :show, :new, :create] do
     resources :documents, :only => [:new, :create]

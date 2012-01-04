@@ -6,7 +6,7 @@ Copyright Syracuse University
 	<h1>Listing users</h1>
 
 	<div id="site_admins">
-	
+		<span>Site Admins</span>
 		<div id="site_admins_list">
 			<ul class="user_list">
 				<% @site_admins.each do |user| %>
@@ -23,5 +23,41 @@ Copyright Syracuse University
 		</div>
 	</div>
 
+	<div id="project_managers">
+		<span>Project Managers</span>
+		<div id="project_managers_list">
+			<ul class="user_list">
+				<% @project_managers.each do |user| %>
+					<%= content_tag_for :li, user do %>
+						<ul class="items_within_user">
+							<li class="email"><%= user.email %></li>
+							<li class="controls">
+								<%= link_to "Edit", [:edit,user], :class => "small_button" %>
+							</li>
+						</ul>
+					<% end %>
+				<% end %>
+			</ul>
+		</div>
+	</div>
+	
+	<div id="normal_users">
+		<span>Normal Users</span>
+		<div id="normal_users_list">
+			<ul class="user_list">
+				<% @normal_users.each do |user| %>
+					<%= content_tag_for :li, user do %>
+						<ul class="items_within_user">
+							<li class="email"><%= user.email %></li>
+							<li class="controls">
+								<%= link_to "Edit", [:edit,user], :class => "small_button" %>
+							</li>
+						</ul>
+					<% end %>
+				<% end %>
+			</ul>
+		</div>
+	</div>
+	
 	<%= link_to 'New User', new_user_path %>
 </div>
