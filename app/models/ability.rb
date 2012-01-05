@@ -37,6 +37,14 @@ class Ability
         (project.membership_ids & user.membership_ids).present?
       end
       # TODO: promote / demote?
+      
+      # can manage his own account; *cannot change his own role -> set in view
+      can :manage, User, :id => user.id
+      
+      # can edit other users (except site admins) in the same project; limitation to change role set in view
+      can :update, User do |other_user|
+        (other_user.project_ids & user.project_ids).present? # This is working =].
+      end
     elsif user.role == "normal_user"
       # can only view projects with he is a part of
       can :read, Project do |project|
@@ -47,6 +55,7 @@ class Ability
         (doc.project.membership_ids & user.membership_ids).present?
       end
       # can edit his own account only; *cannot change his own role -> set in view
+      cannot :manage, User
       can :manage, User, :id => user.id
     end
   end

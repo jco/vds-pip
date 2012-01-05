@@ -75,6 +75,12 @@ protected
 # This makes the following methods accessible in the view
 helper_method :current_user, :logged_in?, :logged_in_as_normal_user?, :logged_in_as_project_manager?, :logged_in_as_site_admin?
 
+# CanCan code
+rescue_from CanCan::AccessDenied do |exception|
+  flash[:notice] = "You do not have access to this page."
+  redirect_to root_url, :alert => exception.message
+end
+
 private
   def logged_in?
     current_user

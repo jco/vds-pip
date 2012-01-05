@@ -19,6 +19,11 @@ Copyright Syracuse University
 			<%= f.label :role %><br>
 			<%= f.collection_select :role, User::ROLES, :to_s, :humanize %>
 		</p>
+	<% elsif logged_in_as_project_manager? %>
+		<p>
+			<%= f.label :role %><br>
+			<%= f.collection_select :role, User::MINOR_ROLES, :to_s, :humanize %>
+		</p>
 	<% end %>
 	
 	<p>

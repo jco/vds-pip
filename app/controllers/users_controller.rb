@@ -4,18 +4,17 @@
 #
 
 class UsersController < ApplicationController
-  before_filter :require_site_admin # must be a site admin for any of these pages to load
   load_and_authorize_resource # checks actions (more specifically) based on ability.rb
 	
   def new  
     @user = User.new
-  end  
+  end
     
   # POST /users/create
   # This action is designed to handle the submission of an html form for an admin.
   # For the similar api method, see ApiController#createuser
   def create  
-    @user = User.new(params[:user])  
+    @user = User.new(params[:user])
     if @user.save  
       redirect_to root_url, :notice => "Signed up!"  
     else  

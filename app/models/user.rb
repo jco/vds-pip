@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   before_save :encrypt_password
   
   ROLES = %w[site_admin project_manager normal_user]
+  MINOR_ROLES = %w[project_manager normal_user] # for project managers to promote/demote
   
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create
@@ -27,9 +28,10 @@ class User < ActiveRecord::Base
     self.project_ids = ids.split(",")
   end
   
-  def projects
-    memberships.map {|membership| membership.project }
-  end
+  # What is this? I think we can get rid of it since I finished the has_many through relationship. -David
+  # def projects
+  #   memberships.map {|membership| membership.project }
+  # end
   
   # Random 6-char password
   def self.generate_password

@@ -21,7 +21,7 @@ Copyright Syracuse University
 	
 	<% if logged_in? %>
 	<div>
-		Logged in as <%= current_user.email %> (<%= current_user.role %>)
+		Logged in as <%= link_to current_user.email, [:edit, current_user] %> (<%= current_user.role %>)
 	</div>
 	<% end %>
 	
