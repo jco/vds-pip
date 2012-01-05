@@ -48,6 +48,16 @@ protected
     end
   end
 
+  # def current_user_session
+  #   return @current_user_session if defined?(@current_user_session)
+  #   @current_user_session = UserSession.find
+  # end
+  # 
+  # def current_user
+  #   return @current_user if defined?(@current_user)
+  #   @current_user = current_user_session && current_user_session.user
+  # end
+  
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
@@ -63,7 +73,7 @@ protected
 
 # -- Roles feature helpers --
 # This makes the following methods accessible in the view
-helper_method :logged_in?, :logged_in_as_normal_user?, :logged_in_as_project_manager?, :logged_in_as_site_admin?
+helper_method :current_user, :logged_in?, :logged_in_as_normal_user?, :logged_in_as_project_manager?, :logged_in_as_site_admin?
 
 private
   def logged_in?

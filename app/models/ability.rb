@@ -22,7 +22,14 @@ class Ability
   # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
   def initialize(user)
     if user.role == "site_admin"
-      can :manage, :all
+      # can [:create, :update, :destroy], User
+      can :manage, User
+      # can [:create, :update, :destroy], Document
+      can :manage, Document
+      # can [:create, :update, :destroy], Folder
+      can :manage, Folder
+      can :manage, Project
+      can :manage, [Stage, Factor]
       cannot :destroy, [Stage, Factor]
     elsif user.role == "project_manager"
       # can only manage projects which he is a part of
@@ -39,8 +46,7 @@ class Ability
       can :manage, Document do |doc|
         (doc.project.membership_ids & user.membership_ids).present?
       end
-      
-      # can edit his own account; *cannot change his own role -> set in view
+      # can edit his own account only; *cannot change his own role -> set in view
       can :manage, User, :id => user.id
     end
   end

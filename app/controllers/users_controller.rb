@@ -4,8 +4,8 @@
 #
 
 class UsersController < ApplicationController
-  before_filter :require_site_admin # method defined in ApplicationController
-  load_and_authorize_resource # from cancan gem
+  before_filter :require_site_admin # must be a site admin for any of these pages to load
+  load_and_authorize_resource # checks actions (more specifically) based on ability.rb
 	
   def new  
     @user = User.new

@@ -9,10 +9,12 @@ Copyright Syracuse University
 	
 	<!--Why won't these update?-->
 	<% if logged_in_as_site_admin? %>
-		<p>
-			<%= f.label :project_tokens, "Projects" %>
-			<%= f.text_field :project_tokens, :id=>"project_token_field", "data-pre" => user.projects.map(&:attributes).to_json %>
-		</p>
+		<% unless user.role == "site_admin" %>
+			<p><!--Don't show these if the user being edited is a site admin-->
+				<%= f.label :project_tokens, "Projects" %>
+				<%= f.text_field :project_tokens, :id=>"project_token_field", "data-pre" => user.projects.map(&:attributes).to_json %>
+			</p>
+		<% end %>
 		<p>
 			<%= f.label :role %><br>
 			<%= f.collection_select :role, User::ROLES, :to_s, :humanize %>

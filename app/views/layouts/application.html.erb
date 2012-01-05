@@ -18,7 +18,13 @@ Copyright Syracuse University
 		<%= flash[:notice] %>
 	</div>
 	<% end %>
-
+	
+	<% if logged_in? %>
+	<div>
+		Logged in as <%= current_user.email %> (<%= current_user.role %>)
+	</div>
+	<% end %>
+	
 	<%= yield %>
 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/1.5.2/raphael-min.js"></script>
