@@ -6,8 +6,16 @@
 class ProjectsController < ApplicationController
   # GET /projects
   def index
-    # @projects = Project.all
-    @projects = Project.where("name like ?", "%#{params[:q]}%")
+    @projects = []
+    if current_user.role == 'site_admin'  
+      # only site admins the fancy jquery token field; this also gets ALL projects in index view
+      @projects = Project.where("name like ?", "%#{params[:q]}%")
+    else # for project managers AND normal users - see ability.rb for specific abilities.
+      @projects = Project.all.select { |p| 
+        (p.membership_ids & current_user.membership_ids).present?
+      }
+    end
+    
     respond_to do |format| # following screencast on token fields
       format.html
       format.json { render :json => @projects.map(&:attributes) }

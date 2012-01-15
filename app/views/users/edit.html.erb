@@ -7,6 +7,7 @@ Copyright Syracuse University
 <div id="user_edit">
 	<%= render :partial => "users/partials/form", :locals => { :user => @user, :button_name => "Update" } %>
 	<% if can? :destroy, @user %>
+		<!--CHANGE THIS TO NOT ACTUALLY DELETE LATER-->
 		<%= link_to "Delete", @user, :method => :delete, :confirm => "Are you sure?" %>
 	<% end %>
 </div>
