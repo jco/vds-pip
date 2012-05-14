@@ -57,6 +57,8 @@ class Ability
       # can edit his own account only; *cannot change his own role -> set in view
       cannot :manage, User
       can :manage, User, :id => user.id
+      can :create, User
+      cannot :destroy, User # can't destroy own account
     end
   end
   

@@ -24,6 +24,19 @@ Copyright Syracuse University
 			<%= f.label :role %><br>
 			<%= f.collection_select :role, User::MINOR_ROLES, :to_s, :humanize %>
 		</p>
+	<% elsif logged_in_as_normal_user? %>
+		<!--force selection of user role to be the only role allowed: normal_user-->
+		<span style="display:none"><%= f.collection_select :role, User::ONLY_ROLE, :to_s, :humanize %></span>
+		
+		<!--just show checkboxes for the projects the current user is a part of-->
+		<ul>
+			<% current_user.projects.each do |project| %>
+				<li class="no_bullet"> <!--NOW - issue in here - the projects aren't saved!-->
+				<%= check_box_tag :project_ids, project.id, user.projects.include?(project), :name => 'user[project_ids][]' %>
+				      <%= project.name %>
+				</li>
+			<% end %>
+		</ul>
 	<% end %>
 	
 	<p>

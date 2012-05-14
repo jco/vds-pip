@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   
   ROLES = %w[site_admin project_manager normal_user]
   MINOR_ROLES = %w[project_manager normal_user] # for project managers to promote/demote
+  ONLY_ROLE = %w[normal_user] # for a normal user creating another normal user
   
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create

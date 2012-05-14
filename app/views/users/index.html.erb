@@ -101,5 +101,26 @@ Copyright Syracuse University
 			</div>
 		</div>
 		<!--end project managers-->
+	<% elsif logged_in_as_normal_user? %>
+		<div id="normal_users">
+			<span>Normal Users</span>
+			<div id="normal_users_list">
+				<ul class="user_list">
+					<% @normal_users.select {|other_user| (other_user.project_ids & current_user.project_ids).present?}.each do |user| %>
+						<%= content_tag_for :li, user do %>
+							<ul class="items_within_user">
+								<li class="email"><%= user.email %></li>
+								<li class="controls">
+									<i>no controls</i>
+								</li>
+							</ul>
+						<% end %>
+					<% end %>
+				</ul>
+			</div>
+		</div>
+		
+		<%= link_to 'New User', new_user_path %>
+		<!--end normal users-->
 	<% end %>
 </div>

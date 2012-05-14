@@ -41,4 +41,11 @@ class UsersController < ApplicationController
     @project_managers = User.where(:role => 'project_manager')
     @normal_users = User.where(:role => 'normal_user')
   end
+  
+  # change later so no real deletion (?)
+  def destroy
+    @user = User.find(params[:id])
+    @user.destroy
+    redirect_to '/', :notice => "Account deleted."
+  end
 end
