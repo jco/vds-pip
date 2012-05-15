@@ -15,6 +15,13 @@ class UsersController < ApplicationController
   # For the similar api method, see ApiController#createuser
   def create  
     @user = User.new(params[:user])
+    
+    # for normal user making another user, only
+    if logged_in_as_normal_user?
+      # http://stackoverflow.com/questions/5054633/rails-3-has-many-through-form-with-checkboxes
+      @user.attributes = {'project_ids' => []}.merge(params[:user] || {})
+    end
+    
     if @user.save  
       redirect_to root_url, :notice => "Signed up!"  
     else  
@@ -28,6 +35,9 @@ class UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
+    # http://stackoverflow.com/questions/5054633/rails-3-has-many-through-form-with-checkboxes
+    # @user.attributes = {'project_ids' => []}.merge(params[:user] || {})
+    
     if @user.update_attributes(params[:user])
       flash[:notice] = "Account updated."
       redirect_to users_path

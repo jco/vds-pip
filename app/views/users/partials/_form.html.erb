@@ -7,7 +7,6 @@ Copyright Syracuse University
 <%= form_for user do |f| %>
 	<%= f.error_messages %>
 	
-	<!--Why won't these update?-->
 	<% if logged_in_as_site_admin? %>
 		<% unless user.role == "site_admin" %>
 			<p><!--Don't show these if the user being edited is a site admin-->
@@ -24,7 +23,7 @@ Copyright Syracuse University
 			<%= f.label :role %><br>
 			<%= f.collection_select :role, User::MINOR_ROLES, :to_s, :humanize %>
 		</p>
-	<% elsif logged_in_as_normal_user? %>
+	<% elsif logged_in_as_normal_user? && user.id != current_user.id %>
 		<!--force selection of user role to be the only role allowed: normal_user-->
 		<span style="display:none"><%= f.collection_select :role, User::ONLY_ROLE, :to_s, :humanize %></span>
 		
@@ -33,6 +32,8 @@ Copyright Syracuse University
 			<% current_user.projects.each do |project| %>
 				<li class="no_bullet"> <!--NOW - issue in here - the projects aren't saved!-->
 				<%= check_box_tag :project_ids, project.id, user.projects.include?(project), :name => 'user[project_ids][]' %>
+				
+				<%#= check_box_tag 'user[company_ids]', company.id, @user.company_ids.include?(company.id) %>
 				      <%= project.name %>
 				</li>
 			<% end %>

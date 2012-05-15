@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :role, :project_tokens
   attr_reader :project_tokens # http://railscasts.com/episodes/258-token-fields
   
+  attr_accessible :project_ids # needed for check box forms in users _form, when a normal user creates another user
   attr_accessor :password
   before_save :encrypt_password
   
