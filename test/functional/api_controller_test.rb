@@ -29,11 +29,6 @@ class ApiControllerTest < ActionController::TestCase
     assert(Project.exists?(:name => "Some project name"))
   end
 
-  test "assigning project type" do
-    # this test is going to fail until projects have the notion of a type
-    flunk "Projects don't even have types yet"
-  end
-
   def credentials
     {:login => "admin@example.com", :password => "admin"}
   end

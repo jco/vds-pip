@@ -13,6 +13,8 @@ class Project < ActiveRecord::Base
   has_many :documents
   has_many :folders
 
+  validates(:name, :presence => true) # name can't be blank
+
   def tasks
     stages.map { |stage| stage.tasks }.flatten
   end
@@ -29,5 +31,9 @@ class Project < ActiveRecord::Base
 
   def to_s
     self.name
+  end
+
+  def icon_path
+    '/images/icons/folder.gif'
   end
 end

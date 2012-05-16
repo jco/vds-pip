@@ -28,6 +28,8 @@ class Document < ActiveRecord::Base
   after_initialize :init
   after_update :mark_downstream_items_not_updated!, :if => Proc.new { |document| document.status_changed? && document.status == "not_updated" }
 
+  validates(:name, :presence => true) # name can't be blank
+
   def mark_downstream_items_not_updated!
     downstream_items.each do |item|
       item.status = "not_updated"
@@ -71,6 +73,12 @@ class Document < ActiveRecord::Base
   
   def name
     read_attribute(:name) || latest_version.name
+  end
+
+  # return which project this document is in
+  alias_method :own_project_reference, :project
+  def project
+    own_project_reference || parent.project
   end
 
   def serializable_hash(options = nil)

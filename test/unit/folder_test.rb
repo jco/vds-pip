@@ -7,7 +7,7 @@ require 'test_helper'
 
 class FolderTest < ActiveSupport::TestCase
   test "status_changed? work" do
-    f = Project.first.folders.create
+    f = Project.first.folders.create(:name => "blah")
     assert_equal("up_to_date", f.status)
     f.status = "not_updated"
     assert(f.status_changed?)
@@ -60,7 +60,7 @@ class FolderTest < ActiveSupport::TestCase
 
   def create_folder_with_contents(statuses = nil)
     statuses ||= ["up_to_date"] * 3
-    folder = Project.first.folders.create
+    folder = Project.first.folders.create(:name => "blah")
     statuses.each do |s|
       d = Document.new
       d.status = s

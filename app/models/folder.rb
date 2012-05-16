@@ -25,6 +25,8 @@ class Folder < ActiveRecord::Base
   has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
   belongs_to :task
 
+  validates(:name, :presence => true) # name can't be blank
+
   after_update :propagate_status!, :if => :status_changed?
 
   # after_save callback. Sets the contents to have the same status as itself.
@@ -62,10 +64,6 @@ class Folder < ActiveRecord::Base
     changed_attributes.include?("status")
   end
 
-  def contents
-    documents + folders
-  end
-
   def parent
     parent_folder || project
   end
@@ -98,5 +96,8 @@ class Folder < ActiveRecord::Base
     }
   end
 
+  def icon_path
+    '/images/icons/folder.gif'
+  end
     
 end

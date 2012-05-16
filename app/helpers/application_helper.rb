@@ -44,4 +44,21 @@ private
     end
   end
 
+  def build_ul(item, downstream_item, options = {})
+    if item.is_a?(Container)
+      content_tag(:ul, options) do
+        item.contents.map do |child| 
+          content_tag(:li) do
+            (div_for(child, :class => (downstream_item.upstream_items.include?(child) ? "disabled" : "selectable")) do
+              (image_tag(child.icon_path, :size => '15x15') + ' ' + h(child.name)).html_safe
+            end +
+            build_ul(child, downstream_item)).html_safe
+          end
+        end.join("\n").html_safe
+      end
+    else
+      ""
+    end
+  end
+
 end

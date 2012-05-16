@@ -18,9 +18,23 @@
   left: 0;
 }
 
-ul.radio, ul.metadata {
+ul.radio, ul.metadata, ul.dependencies {
   list-style-type: none;
   padding: 0;
+}
+
+ul.dependencies img {
+  margin-right: 3px;
+}
+
+div#add-another-dependency {
+  margin-bottom: 9px;
+}
+
+div#add-another-dependency a {
+  margin-left: 18px;
+  text-decoration: underline;
+  color: #999;
 }
 
 .metadata {
@@ -38,20 +52,20 @@ ul.radio, ul.metadata {
   outline: medium inset #BBB;
 }
 
-.document h1 {
+.document.modal-dialog h1 {
   margin-left: 20px;
 }
 
-.document #document_name {
+.document.modal-dialog #document_name {
   width: 616px;
 }
 
-.document .main-icon {
+.document.modal-dialog .main-icon {
   margin-right: 20px;
   vertical-align: text-bottom;
 }
 
-.document .basic-info {
+.document.modal-dialog .basic-info {
   margin-left: 84px;
   margin-bottom: 1em;
 }
@@ -77,28 +91,92 @@ caption {
   text-align: left;
 }
 
+div.selectable {
+  cursor: pointer;
+}
+
+div.disabled {
+  background: #EEE;
+  color: #999;
+}
+
+div.selected {
+  background: #ABF;
+  outline: 1px dotted #999;
+}
+
+ul.tree-select {
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 61px;
+  left: 0;
+  margin: 0;
+  padding: 0;
+}
+
+ul.tree-select, ul.tree-select ul {
+  list-style-type: none;
+}
+
+div.submit-buttons {
+  position: absolute;
+  height: 50px;
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #EEE;
+  text-align: right;
+  padding: 5px;
+  border-top: 1px solid #999;
+}
+
+@-webkit-keyframes highlight {
+  0%    {background: transparent; outline-color: transparent;}
+  50%   {background: #FF9; outline-color: #999;}
+  100%  {background: transparent; outline-color: transparent;}
+}
+
+.new-dependency {
+  -webkit-animation: highlight 3s;
+  outline: 1px dotted transparent;
+}
+
+ul.dependencies li a[data-method=delete] {
+  text-decoration: underline;
+  font-family: sans-serif;
+  color: #888;
+  float: right;
+}
+
+ul.dependencies li:hover {
+  background: #FF9;
+}
+
 /* grid system, kind of */
 
-.document {
+.document.modal-dialog {
   width: 720px;
   margin-left: -20px;
 }
 
-.document .info, .document .actions {
+.document.modal-dialog .info, .document.modal-dialog .actions {
   display: inline;
   float: left;
   margin-left: 20px;
 }
 
-.document .info {
+.document.modal-dialog .info {
   width: 520px;
 }
 
-.document .actions {
+.document.modal-dialog .actions {
   width: 160px;
 }
 
-.document .main-icon {
+.document.modal-dialog .main-icon {
   width: 64px;
 }
 
@@ -110,10 +188,10 @@ caption {
 
 /* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
 
-.document:before,
-.document:after,
-.document h1:before,
-.document h1:after {
+.document.modal-dialog:before,
+.document.modal-dialog:after,
+.document.modal-dialog h1:before,
+.document.modal-dialog h1:after {
   content: '.';
   display: block;
   overflow: hidden;
@@ -124,12 +202,12 @@ caption {
   height: 0;
 }
 
-.document:after, .document h1:after {
+.document.modal-dialog:after, .document.modal-dialog h1:after {
   clear: both;
 }
 
 /* button from Bootstrap (Twitter) */
-.btn {
+.btn, input[type=submit] {
   cursor: pointer;
   display: inline-block;
   background-color: #e6e6e6;
@@ -161,11 +239,39 @@ caption {
   transition: 0.1s linear all;
 }
 
-.btn:hover {
+.btn:hover, input[type=submit]:hover {
   background-position: 0 -15px;
   color: #333;
   text-decoration: none;
 }
-.btn:focus {
+.btn:focus, input[type=submit]:focus {
   outline: 1px dotted #666;
+}
+
+.btn.primary, input[type=submit].primary {
+  color: #ffffff;
+  background-color: #0064cd;
+  background-repeat: repeat-x;
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));
+  background-image: -moz-linear-gradient(top, #049cdb, #0064cd);
+  background-image: -ms-linear-gradient(top, #049cdb, #0064cd);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049cdb), color-stop(100%, #0064cd));
+  background-image: -webkit-linear-gradient(top, #049cdb, #0064cd);
+  background-image: -o-linear-gradient(top, #049cdb, #0064cd);
+  background-image: linear-gradient(top, #049cdb, #0064cd);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#049cdb', endColorstr='#0064cd', GradientType=0);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  border-color: #0064cd #0064cd #003f81;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.btn:active , input[type=submit]:active {
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn.small {
+  padding: 7px 9px 7px;
+  font-size: 11px;
 }

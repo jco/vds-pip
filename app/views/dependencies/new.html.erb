@@ -1,0 +1,25 @@
+<% form_for([@document, Dependency.new]) do %>
+  <%= build_ul(@project, @document, :class => "tree-select") %>
+  <div class="submit-buttons">
+    <input type="submit" class="primary" value="Add Dependency" />
+    <%= link_to("Cancel", @document, :class => "btn") %>
+  </div>
+  <input type="hidden" name="upstream_item" value="" />
+<% end %>
+
+<script type="text/javascript">
+var hidden = document.querySelectorAll("input[name=upstream_item]")[0];
+var options = document.querySelectorAll("div.selectable");
+for (var i = 0; i < options.length; i++) {
+  options[i].addEventListener('click', handlerName, false);
+}
+
+function handlerName(ev) {
+  for (var i = 0; i < options.length; i++) {
+    options[i].classList.remove('selected');
+  }
+  ev.target.classList.add('selected');
+  hidden.value = ev.target.id;
+}
+
+</script>

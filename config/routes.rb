@@ -22,9 +22,10 @@ VdsPip::Application.routes.draw do
 
   resources :documents, :only => [:show, :update, :destroy] do
     resources :versions, :only => [:new, :create]
+    resources :dependencies, :only => [:new, :create]
   end
 
-  resources :dependencies, :only => [:create]
+  resources :dependencies, :only => [:create, :destroy]
 
   resources :versions, :only => :show
 
