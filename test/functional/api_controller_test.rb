@@ -29,6 +29,17 @@ class ApiControllerTest < ActionController::TestCase
     assert_response(:unprocessable_entity)
   end
 
+  test "duplicate task" do
+    project = Project.first
+    stage = project.stages.first
+    factor = project.factors.first
+    task_attributes = {:name => "duplicate task", :stage_id => stage.id, :factor_id => factor.id}
+    task = Task.new(task_attributes)
+    assert(task.save)
+    get(:createtask, credentials().merge(task_attributes))
+    assert_response(422)
+  end
+
   test "task creation success" do
     assert(!Task.exists?(:name => "Some task name"))
     project = Project.first
@@ -37,15 +48,31 @@ class ApiControllerTest < ActionController::TestCase
     get(:createtask, credentials.merge(:name => "Some task name", :stage_id => stage.id, :factor_id => factor.id))
     assert_response(201)
     assert(Task.exists?(:name => "Some task name"))
+  end
 
-    task = Task.new(:name => "Some other name", :stage_id => stage.id, :factor_id => factor.id)
+  test "task creation restore" do
+    project = Project.first
+    stage = project.stages.first
+    factor = project.factors.first
+    task_attributes = {:name => "Some other name", :stage_id => stage.id, :factor_id => factor.id}
+    task = Task.new(task_attributes)
     assert(task.save)
-    task.delete
+    task.soft_delete!
     assert(task.deleted?)
-    get(:createtask, credentials.merge(:name => task.name, :stage_id => task.stage.id, :factor_id => task.factor.id))
+    get(:createtask, credentials.merge(task_attributes))
     assert_response(200)
     task.reload
     assert(!task.deleted?)
+  end
+
+  test "delete task, normal case" do
+    task = Task.new(generate_task_attributes())
+    assert(task.save)
+    assert(!task.deleted?)
+    get(:deletetask, credentials().merge(:task_id => task.id))
+    assert_response(204)
+    task.reload
+    assert(task.deleted?)
   end
 
   test "project creation success" do
@@ -57,6 +84,13 @@ class ApiControllerTest < ActionController::TestCase
 
   def credentials
     {:login => "admin@example.com", :password => "admin"}
+  end
+
+  def generate_task_attributes(name = "Some name")
+    project = Project.first
+    stage = project.stages.first
+    factor = project.factors.first
+    {:name => name, :stage_id => stage.id, :factor_id => factor.id}
   end
 end
 

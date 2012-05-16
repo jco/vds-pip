@@ -113,6 +113,31 @@ class ApiController < ApplicationController
     end
   end
 
+  def deletetask
+    required_params = [:login, :password, :task_id]
+    unless required_params.all? { |param| params.has_key?(param) }
+      render(:text => "missing parameter, must have all of #{required_params.inspect}", :status => :unprocessable_entity)
+      return
+    end
+
+    return unless authenticate_with_params!
+
+    task = Task.find(params[:task_id])
+    unless task
+      render(:text => "There is no task with id=#{params[:task_id]}.", :status => 404)
+      return
+    end
+
+    unless !task.deleted?
+      render(:text =>"The task with id=#{params[:task_id]} is already marked as deleted.", :status => 410)
+      return
+    end
+
+    # delete the task
+    task.soft_delete!
+    head(204) # No Content
+  end
+
   def createproject
     # TODO: require user to be site admin
     # TODO: should name be unique? can't be blank
