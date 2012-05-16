@@ -7,7 +7,8 @@ var Pip = Pip || {};
 (function(P) {
     var ProjectDrawer = {};
 
-    // Draws a tree/pane type view for the project
+    // Draws the tree/pane type view for the project
+    // Called in application.js
     ProjectDrawer.drawProject = function (project) {
       if (! (project instanceof P.Model.Project))
         throw "Can't draw something that isn't a Project";

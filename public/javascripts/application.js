@@ -2,6 +2,7 @@
  * Authors: Jeff Cox, David Zhang
  * Copyright Syracuse University
  */
+
 var Pip = Pip || {};
 
 (function(P, $, slang, key) {

@@ -3,19 +3,16 @@
  * Copyright Syracuse University
  */
 #container {
+  float: left;
   outline: 1px solid black;
+  width: 80%;
 }
 
 #pane {
+  float: left;
   background: #AAA;
-  width: 300px;
+  width: 20%;
   height: 500px;
-  position: absolute;
-  left: -290px;
-}
-
-#pane:hover {
-  left: 0;
 }
 
 ul.radio, ul.metadata {
