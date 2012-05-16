@@ -56,8 +56,6 @@ Pip.ItemDrawer = (function(P, $) {
         st.push(thing);
       });
 
-
-
       // assign listeners
       assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
         if (!_.isEqual(newCoords, item.coords)) {
@@ -69,7 +67,7 @@ Pip.ItemDrawer = (function(P, $) {
           Pip.DependencyDrawer.redrawDependencies();
 
           // part 2: ping server
-            console.log('PUT new coords of item ', item, [x, y], '...');
+            console.log('PUT new coordinates of item ', item, [x, y], '...');
             var url = '/' + kind(item) + 's/' + String(item.id);
             var data = {}; data[kind(item)] = {"x": x, "y": y};
             $.ajax({
