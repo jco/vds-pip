@@ -134,6 +134,7 @@ Pip.ItemDrawer = (function(P, $) {
         options.handle.drag(move, start, up)
     };
     
+    // assigns arrow drawing listeners
     var assignArrowDrawingListeners = function (ops) {
        var dragStart = function () {
            // set a 'global' variable indicating we are in a drop
@@ -155,7 +156,7 @@ Pip.ItemDrawer = (function(P, $) {
            Pip.someGlobal = {};
            Pip.ArrowDrawer.clearArrows(ops.item);
        };
-       ops.handle.drag(dragMove, dragStart, dragUp);
+       ops.handle.drag(dragMove, dragStart, dragUp); // handles the drag and making the arrow appear
        ops.dropZone.mouseup(function (ev) {
            if (Pip.someGlobal && Pip.someGlobal.draggingArrow) {
                Pip.DependencyDrawer.createDependency(Pip.someGlobal.originItem, ops.item);

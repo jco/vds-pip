@@ -56,7 +56,7 @@ var Pip = Pip || {};
 
           // draw dependencies
           if (P.data.dependencies)
-            P.DependencyDrawer.redrawDependencies();
+            P.DependencyDrawer.redrawDependencies(); // all reached for arrow-drawing...
         }
     };
 
