@@ -19,9 +19,12 @@ class User < ActiveRecord::Base
   validates_presence_of :password, :on => :create
   validates_presence_of :email
   validates_uniqueness_of :email
+  
   validates_presence_of :role
   validates_inclusion_of :role, :in => ROLES, :message => "^Nonexistent role."
   
+  validate :email_formatted_correctly
+
   has_many :memberships
   has_many :projects, :through => :memberships
   
@@ -68,4 +71,12 @@ class User < ActiveRecord::Base
   def to_s
     self.email
   end
+
+  # http://guides.rubyonrails.org/active_record_validations_callbacks.html
+  def email_formatted_correctly
+    unless email =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+      errors.add(:email, "is not a valid email")
+    end
+  end
+
 end

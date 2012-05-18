@@ -19,9 +19,10 @@ var Pip = Pip || {};
           'folder',
           'document',
           ['task', 'document'],
-          ['folder', 'document']
+          ['folder', 'document'],
+          ['project', 'document']
         ];
-        P.routesHelper = generateHelpers(resources);
+        generateHelpers(resources, P);
 
         // Register xray as a keyboard event
         function startXray() {
