@@ -7,7 +7,7 @@ var Pip = Pip || {};
 Pip.ItemDrawer = (function(P, $) {
     var ItemDrawer = {};
 
-    ItemDrawer.drawItem = function(item) {
+    ItemDrawer.drawItem = function(item) { // for each item (e.g., folder) on screen
       var stuff = [];
 
       // order is important (z-index)
@@ -28,7 +28,8 @@ Pip.ItemDrawer = (function(P, $) {
         }
       }
 
-      var icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34);
+      var icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34);//34s are width and height of icon
+      // test problem of 'image'
       var iconLabel   = Pip.paper.text(item.coords[0] + 34 + 5, item.coords[1] + 17, item.name).attr('text-anchor', 'start');
       stuff.push(icon, iconLabel);
 
@@ -40,14 +41,33 @@ Pip.ItemDrawer = (function(P, $) {
       if (kind(item) == 'document') {
         // double click opens an overlay
         icon.dblclick(documentOverlay(item));
-
-      }
-      else {
+      } else {
         // kind == 'folder'
         icon.dblclick(function (ev) {
-          // redirect
-          location = P.folderPath(item);
+            // redirect
+            location = P.folderPath(item); // works
         });
+        // icon.click(function (ev) {
+        //     // alert("clicked"); // 
+        //     $('body').css('background', 'pink'); // 
+        // });
+        // icon.mouseover(function (ev) {
+        //     $('body').css('background', 'gray'); // works
+        //     // alert("mouseover"); // works for vds
+        // });
+        // icon.mouseout(function (ev) {
+        //     $('body').css('background', 'blue'); // works
+        //     // alert("mouseout"); // makes vds crash with stack overflow
+        // });
+        // icon.mousedown(function (ev) {
+        //     $('body').css('background', 'green'); // undetected
+        //     // alert("mousedown"); // undetected
+        // });
+        // icon.mouseup(function (ev) {
+        //     $('body').css('background', 'yellow'); // undetected
+        //     // alert("mouseup"); // undetected
+        // });
+        
       }
 
       var st = Pip.paper.set();
@@ -56,7 +76,7 @@ Pip.ItemDrawer = (function(P, $) {
         st.push(thing);
       });
 
-      // assign listeners
+      // assign listeners - moving folders, etc.
       assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
         if (!_.isEqual(newCoords, item.coords)) {
           var x = newCoords[0], y = newCoords[1];
@@ -67,17 +87,18 @@ Pip.ItemDrawer = (function(P, $) {
           Pip.DependencyDrawer.redrawDependencies();
 
           // part 2: ping server
-            console.log('PUT new coordinates of item ', item, [x, y], '...');
-            var url = '/' + kind(item) + 's/' + String(item.id);
-            var data = {}; data[kind(item)] = {"x": x, "y": y};
-            $.ajax({
-              type: 'PUT',
-              url: url,
-              data: data,
-              dataType: 'json',
-              complete: function() { console.log('...complete.'); },
-              error: P.error
-            });
+          console.log('PUT new coordinates of item ', item, [x, y], '...');
+          var url = '/' + kind(item) + 's/' + String(item.id);
+          var data = {}; data[kind(item)] = {"x": x, "y": y};
+          $.ajax({
+            type: 'PUT',
+            url: url,
+            data: data,
+            dataType: 'json',
+            complete: function() { console.log('...complete.'); },
+            // error: P.error
+            error: function(e, ts, et) { alert(ts) }
+          });
         }
       }});
 
@@ -114,24 +135,36 @@ Pip.ItemDrawer = (function(P, $) {
     var assignItemMovementDragListeners = function (options) {
         // define drag handlers
         // "this" is the icon
-        var start = function () {
+        var start = function () { // mousedown
+            $("body").css('background','red'); // not executed in vds
             this.ox = 0;
             this.oy = 0;
             this.attr({opacity: .5});
         },
         move = function (dx, dy) {
+            $("body").css('background','yellow'); // not executed in vds
             options.set.translate( dx - this.ox, dy - this.oy );
             this.ox = dx;
             this.oy = dy;
         },
-        up = function () {
+        up = function () { // mouseup
+            $("body").css('background','green'); // not executed in vds
             // restoring state
             this.attr({opacity: 1});
             var currentCoords = [this.attr('x'), this.attr('y')];
             options.dragEndCallback(currentCoords);
         };
         // assign them:
-        options.handle.drag(move, start, up)
+        // alert("in assignItemMovementDragListeners");
+        // $("body").css('background','orange'); // not executed in vds
+
+        if (P.kind == 'folder') {
+          this.addEventListener('mousedown', start, false);
+          this.addEventListener('mousemove', move, false);
+          this.addEventListener('mouseup', up, false);
+        }
+        
+        options.handle.drag(move, start, up); // needed 
     };
     
     // assigns arrow drawing listeners
@@ -140,7 +173,7 @@ Pip.ItemDrawer = (function(P, $) {
            // set a 'global' variable indicating we are in a drop
            Pip.someGlobal = {draggingArrow: true, originItem: ops.item};
        },
-        dragMove = function (dx, dy) {
+       dragMove = function (dx, dy) {
             // show temp arrow
             var handleCoords = handlePoint(ops.item);
             var coordPair = [
@@ -151,6 +184,7 @@ Pip.ItemDrawer = (function(P, $) {
                 [handleCoords[0] + dx, handleCoords[1] + dy]
             ];
            Pip.ArrowDrawer.replaceArrows(ops.item, [coordPair]);
+           // alert("hooray level 2"); // WHY IS THIS NOT REACHED ON VDS?
        },
        dragUp = function() {
            Pip.someGlobal = {};

@@ -12,6 +12,7 @@ Copyright Syracuse University
       <p class="description"><%= @document.description %></p>
       <% end %>
       <ul class="metadata">
+      <li>Task: <%= @document.task || "(none)" %>
       <li>Stage: <%= @document.stage || "(none)" %>
       <li>Factor: <%= @document.factor || "(none)" %>
       <li>Actors: [to be implemented]</li>
@@ -42,7 +43,7 @@ Copyright Syracuse University
     <ul class="radio">
       <% Document::STATUSES.each do |status| %>
         <li>
-          <%= label_tag("document_status_#{status}", radio_button(:document, :status, status, "data-in-place-edit" => true) + status) %>
+          <%= label_tag("document_status_#{status}", radio_button(:document, :status, status, "data-in-place-edit" => true) + status.humanize()) %>
         </li>
       <% end %>
     </ul>

@@ -1,13 +1,7 @@
 Progress:
--test new doc creation
--figure out why drag functionality not working on vds
 
-1. check mouse events - dan said he'd do this first
-	learn why drag won't work - why the arrow won't appear
-..
-	a. find a way to debug
-		make an alert dialog appear on vds
-		look for alert in other areas to debug
-		
-		
-		how is data transferred?
+Now in user.rb
+-role - project manager, architect, or systems engineer
+-make 'create task' like create user
+	-stage and factor = fixed, hard-coded
+	-

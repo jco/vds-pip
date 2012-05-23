@@ -11,6 +11,10 @@ class User < ActiveRecord::Base
   attr_accessor :password
   before_save :encrypt_password
   
+  ACTOR_ROLES = %w[ program_manager architect systems_engineer] # vds roles, started
+  # Users should be able to create a task (=folder in pip)
+  # test making user in vds, the connection here and there
+  
   ROLES = %w[site_admin project_manager normal_user]
   MINOR_ROLES = %w[project_manager normal_user] # for project managers to promote/demote
   ONLY_ROLE = %w[normal_user] # for a normal user creating another normal user
@@ -19,9 +23,12 @@ class User < ActiveRecord::Base
   validates_presence_of :password, :on => :create
   validates_presence_of :email
   validates_uniqueness_of :email
+  
   validates_presence_of :role
   validates_inclusion_of :role, :in => ROLES, :message => "^Nonexistent role."
   
+  validate :email_formatted_correctly
+
   has_many :memberships
   has_many :projects, :through => :memberships
   
@@ -68,4 +75,12 @@ class User < ActiveRecord::Base
   def to_s
     self.email
   end
+
+  # http://guides.rubyonrails.org/active_record_validations_callbacks.html
+  def email_formatted_correctly
+    unless email =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+      errors.add(:email, "is not a valid email")
+    end
+  end
+
 end

@@ -13,6 +13,13 @@ class Task < ActiveRecord::Base
   # stage and factor should be defined if and only if parent task is not defined
   has_many :folders
   has_many :documents
+  validate :uniqueness
+
+  def uniqueness
+    if Task.exists?(:name => name, :stage_id => stage_id, :factor_id => factor_id) || Task.exists?(:name => name, :parent_task_id => parent_task_id)
+      errors[:base] << "An identical task already exists"
+    end
+  end
 
   def parent
     parent_task || factor
@@ -30,6 +37,18 @@ class Task < ActiveRecord::Base
 
   def project
     parent.project
+  end
+
+  def soft_delete!
+    touch(:deleted_at)
+  end
+
+  def deleted?
+    !deleted_at.nil?
+  end
+
+  def to_s
+    name
   end
 
   def serializable_hash(options = nil)
