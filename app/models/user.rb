@@ -11,6 +11,10 @@ class User < ActiveRecord::Base
   attr_accessor :password
   before_save :encrypt_password
   
+  ACTOR_ROLES = %w[ program_manager architect systems_engineer] # vds roles, started
+  # Users should be able to create a task (=folder in pip)
+  # test making user in vds, the connection here and there
+  
   ROLES = %w[site_admin project_manager normal_user]
   MINOR_ROLES = %w[project_manager normal_user] # for project managers to promote/demote
   ONLY_ROLE = %w[normal_user] # for a normal user creating another normal user

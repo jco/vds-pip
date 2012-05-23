@@ -1,4 +1,12 @@
 Progress:
+Now in user.rb
+-role - project manager, architect, or systems engineer
+-make 'create task' like create user
+	-stage and factor = fixed, hard-coded
+	-
+
+
+
 -test new doc creation
 -figure out why drag functionality not working on vds
 

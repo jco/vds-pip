@@ -45,6 +45,14 @@ var Pip = Pip || {};
             P.container = document.getElementById(P.data.containerId);
             P.paper = Raphael(P.container, '100%', '500px');//http://jsfiddle.net/6x4bR/
             P.container.addEventListener('dblclick', documentCreationHandler, false);
+            
+            // Key place to add event listeners for mouse events
+            
+            //my addition:
+            // P.container.addEventListener('click', documentCreationHandler, false);
+            // P.paper.image.addEventListener('click', documentCreationHandler, false);
+            $('body').css('background', 'purple'); // works
+            // P.container.addEventListener('mousedown', documentCreationHandler, false); // works
           }
 
           // draw items in this folder
