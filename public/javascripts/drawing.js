@@ -2,6 +2,12 @@
  * Authors: Jeff Cox, David Zhang
  * Copyright Syracuse University
  */
+ 
+/*
+    Utility methods for drawing: SVG notation abstracted. All methods return an SVG "path"
+    (a.k.a. instructions to draw on the canvas) as a string.
+*/
+
 var Pip = Pip || {};
 
 Pip.Drawing = (function() {

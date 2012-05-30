@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   # Users should be able to create a task (=folder in pip)
   # test making user in vds, the connection here and there
   
+  # These are user roles, mainly for control - not as important as actor roles
   ROLES = %w[site_admin project_manager normal_user]
   MINOR_ROLES = %w[project_manager normal_user] # for project managers to promote/demote
   ONLY_ROLE = %w[normal_user] # for a normal user creating another normal user
@@ -26,6 +27,9 @@ class User < ActiveRecord::Base
   
   validates_presence_of :role
   validates_inclusion_of :role, :in => ROLES, :message => "^Nonexistent role."
+  # validates_presence_of :actor_role
+  # validates_inclusion_of :actor_role, :in => ACTOR_ROLES, :message => "^Nonexistent actor role."
+  
   
   validate :email_formatted_correctly
 

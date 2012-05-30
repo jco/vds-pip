@@ -2,6 +2,14 @@
  * Authors: Jeff Cox, David Zhang
  * Copyright Syracuse University
  */
+ 
+ /*
+ 
+    Draws the tree/pane type view for the project, NOT the entire canvas
+    
+    */
+    
+    
 var Pip = Pip || {};
 
 (function(P) {
@@ -9,6 +17,7 @@ var Pip = Pip || {};
 
     // Draws the tree/pane type view for the project
     // Called in application.js
+    // Uses jquery - this sets up the ul, etc.
     ProjectDrawer.drawProject = function (project) {
       if (! (project instanceof P.Model.Project))
         throw "Can't draw something that isn't a Project";
@@ -22,7 +31,7 @@ var Pip = Pip || {};
       
       recursiveDrawItem(project, ul);
 
-      $(ul).simpleTreeMenu();
+      $(ul).simpleTreeMenu(); // jquery function
 
     };
 

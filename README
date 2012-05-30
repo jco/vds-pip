@@ -1,7 +1,33 @@
 Progress:
 
-Now in user.rb
+focusing on js w/o raphael
+
+in testvdspip, I've found that the most simple drag functions of jquery and raphaeljs don't
+work in vds. Stuck. maybe older or newer version of raphael?
+maybe the drag problem is the "layer" in vds?
+
+So I'll focus on something else for now -
+
+Then, go to user.rb
 -role - project manager, architect, or systems engineer
 -make 'create task' like create user
 	-stage and factor = fixed, hard-coded
-	-
+
+Questions for Jeff:
+How do you test api_controller, that createtask stuff?
+tested locally by putting url on own computer's browser
+
+find bookmarklet debugger
+
+handler = listener
+
+--
+
+Questions for later (probably trivial):
+Is createuser (register) only for certain users, so you can't register straight-up?
+
+Way Later:
+Soft delete, which isn't an essential feature, isn't only partly done so far.
+Key idea = The tasks table has a t.datetime "deleted_at" field
+	-if this is null, the task is not deleted; 
+	-if it's not null (it's an actual datetime), then that datetime is when the task was deleted, and the task is deleted.

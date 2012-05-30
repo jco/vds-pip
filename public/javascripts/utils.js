@@ -5,6 +5,9 @@
 var Pip = Pip || {};
 (function (P) {
 
+  // You can pass this function as the callback of a JSON call, and depending
+  // on whether we are in "development mode" (defined in constants.js), this will give
+  // helpful error info or simply a warning.
   P.error = function() {
     if (P.DEVELOPMENT) {
       console.log(arguments);
@@ -14,6 +17,7 @@ var Pip = Pip || {};
       alert('Error');
   };
 
+  // JS version of ruby's inspect(), useful for visualizing objects and such
   P.inspect = function (obj) {
     if (_.isObject(obj))
       return "{" + _.map(obj, function (v, k) {
@@ -23,6 +27,7 @@ var Pip = Pip || {};
       return '"' + String(obj) + '"';
   };
 
+  // Convert from an object to a string representing that object
   P.domId = function (item, kind) {
     if (item instanceof P.Model.Base)
       var kind = item.type;

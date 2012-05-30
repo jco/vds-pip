@@ -5,15 +5,19 @@
 
 var Pip = Pip || {};
 
+// P is a pattern in JS so everything is a property of 1 variable, so your variable is consistently separated from others
+// slang, key are for 2 other libraries
 (function(P, $, slang, key) {
     var Application = {};
     
+    // This function is called when all the javascript files have been loaded, to make sure everything we
+    // want to exist exists.
     Application.init = function() {
-
+      
         // Add the string methods from the "slang" library directly to all string objects.
         slang.addToPrototype();
 
-        // Setup for the routes module.
+        // Setup for the routes module (see routes.js for what this module provides)
         var resources = [
           'task',
           'folder',
@@ -22,7 +26,7 @@ var Pip = Pip || {};
           ['folder', 'document'],
           ['project', 'document']
         ];
-        generateHelpers(resources, P);
+        generateHelpers(resources, P); // makes the helpers available under _P_
 
         // Register xray as a keyboard event
         function startXray() {
@@ -30,23 +34,40 @@ var Pip = Pip || {};
         };
         key('ctrl+x', startXray);
 
-        // somehow determine whether we should be drawing a canvas
+        // P.data is raw json data provided by the server. It is used to describe what should be drawn
+        // and what the data in the project is.
+        //
+        // P.data.asdf => asdf is set in a controller or view
+        //
+        // If it isn't defined, don't draw a canvas.
         if (P.data) {
-          // build a lookup table
+          
+          // Build a lookup table ("index"). This conveniently allows us to find
+          // the object we want based on a string. For example, if we know we want a document
+          // who's id is 6, but we don't have a reference to the actual object, we can do
+          // P.index["document-6"] to get the reference.
+          
           if (P.data.project) {
             P.project = new P.Model.Project(P.data.project);
             P.index = {};
             P.Indexer.buildIndex(P.project, P.index);
-            P.ProjectDrawer.drawProject(P.project);
+            P.ProjectDrawer.drawProject(P.project); // draws the side pane thingy
           }
 
           // set up the container
-          if (P.data.containerId) {
+          if (P.data.containerId) { // containerId is set in view files whenever there's a canvas
+            
+            // figure out which html element to make the container for the canvas
             P.container = document.getElementById(P.data.containerId);
+            
+            // Create the canvas
             P.paper = Raphael(P.container, '100%', '500px');//http://jsfiddle.net/6x4bR/
+            
+            // Attach the listener for creating documents
             P.container.addEventListener('dblclick', documentCreationHandler, false);
             
-            // Key place to add event listeners for mouse events
+            // Key place to add event listeners for mouse events... although Jeff said that
+            // objects like folders get their event listeners when the objects are created, as in drag
             
             //my addition:
             // P.container.addEventListener('click', documentCreationHandler, false);
@@ -56,10 +77,16 @@ var Pip = Pip || {};
           }
 
           // draw items in this folder
-          if (P.data.this_folder) {
-            P.thisFolder = P.index[P.data.this_folder];
+          if (P.data.this_folder) { // if we are in a folder
+            P.thisFolder = P.index[P.data.this_folder]; // create an obj reference to this folder
+            
+            // side note: this_folder is a dom id (e.g. "folder-5")
+            // whereas thisFolder is an actualy Model.Folder object
+            
+            // Draw the contents of the folder
             drawItemsFor(P.thisFolder);
-          } else {
+            
+          } else { // otherwise, we are just in the project itself
             drawItemsFor(P.project);
           } // don't do anything for a project
 
@@ -69,19 +96,22 @@ var Pip = Pip || {};
         }
     };
 
+    // Draw all the folders and documents of this container (container is a folder or project)
     var drawItemsFor = function (container) {
       container.folders.concat(container.documents).forEach(P.ItemDrawer.drawItem);
     };
 
+    // This gets called on a dblclick. Responsible for making the "create document" overlay
     var documentCreationHandler = function (ev) {
       // filter for acceptable targets
       // (imo this should just be svg, but the qtwebkit is firing events on the div instead)
+      
       if (ev.target != document.getElementsByTagName('svg')[0] &&
           ev.target != P.container)
         return;
 
       // documents can be created under either a folder or a project directly
-      var href;
+      var href; // variable for what URL to load
       if (P.thisFolder)
         href = P.newFolderDocumentPath(P.thisFolder);
       else if (P.project)
@@ -89,7 +119,7 @@ var Pip = Pip || {};
       else
         throw "No references to the parent, can't create document without any";
 
-      $.colorbox({
+      $.colorbox({ // jQuery plugin that, here, creates an iframe (could be popup, overlay, etc.) in the current window
         href: href,
         iframe: true,
         width: 500,
@@ -99,3 +129,4 @@ var Pip = Pip || {};
 
     P.Application = Application;
 })(Pip, jQuery, slang, key);
+

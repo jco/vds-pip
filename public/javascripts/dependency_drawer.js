@@ -2,17 +2,28 @@
  * Authors: Jeff Cox, David Zhang
  * Copyright Syracuse University
  */
+ 
+/*
+  Module responsible for both creating the actual dependencies on the server, and for
+  calling the methods of the ArrowDrawer module to represent these dependencies for the user.
+
+*/
 var Pip = Pip || {};
 
 (function(P) {
     var DependencyDrawer = P.DependencyDrawer = {};
         
-    // does not fetch new deps from server
+    // Redraws (or draws for the first time) all the dependencies as arrows. Redrawing is necessary
+    // after the coordinates of an item change, so that an arrow is not left pointing to nothing.
+    // This method DOES NOT get an updated list of dependencies from the server; it does not talk to
+    // the server at all. It just uses the initial list provided by P.data.
     var redrawDependencies = DependencyDrawer.redrawDependencies = function () {
         P.ArrowDrawer.clearArrows('global');
         P.data.dependencies.forEach(drawDependency);
     };
 
+    // Creates a new dependency between two object references to items. This both updates
+    // the server via an ajax call, and draws the new arrow locally.
     DependencyDrawer.createDependency = function (upstream_item, downstream_item) {
       console.log('create dep from ', upstream_item, 'to', downstream_item);
       $.ajax({
@@ -37,6 +48,8 @@ var Pip = Pip || {};
       });
     };
 
+    // Ask the server for an up-to-date list of dependencies that are contained within this folder.
+    // This method apparently assumes we can't be in project; we must be in a folder.
     var reloadDependencies = function() {
       $.ajax({
         type: 'GET',
@@ -50,6 +63,7 @@ var Pip = Pip || {};
       });
     };
 
+    // Draw a dependency as an arrow on the canvas. _dep_ looks like ["document-4", "document-111"]
     var drawDependency = function(dep) {
       var upstreamItem = P.index[dep[0]];
       var downstreamItem = P.index[dep[1]];

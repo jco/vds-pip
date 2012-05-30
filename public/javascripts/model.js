@@ -2,15 +2,28 @@
  * Authors: Jeff Cox, David Zhang
  * Copyright Syracuse University
  */
+ 
+ /*
+ 
+ Emulate active record models, kind of. Provides an object oriented structure
+ for the kind of objects pip deals with (e.g. Project, Folder, Document, etc.)
+ Allows things like myFolder.id #=> 4
+ or myDocument.type #=> "document"
+ 
+ */
+ 
 var Pip = Pip || {};
 
 (function (P) {
   
   var Model = P.Model = {};
 
+  // Given a bunch of json data, which is just the javascript equivalent of the rails object, generate 
+  // the object we want (Folder, Document, whatever). This is essentially a way of getting rails-like
+  // objects in javascript-land.
   Model.Base = function (json) {
     if (json) {
-      // rules. if it is a recognized collection type, initialize an array of models
+      // Rules: if it is a recognized collection type, initialize an array of models
       // otherwise, it is a simple property that should be added
       var that = this;
       Object.keys(json).forEach(function (k) {

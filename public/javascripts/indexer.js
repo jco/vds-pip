@@ -2,6 +2,12 @@
  * Authors: Jeff Cox, David Zhang
  * Copyright Syracuse University
  */
+ 
+ /* The sole purpose of this module is to take a Project object, which has information
+    about everything in it, and generate a lookup table or index
+    
+  */
+  
 var Pip = Pip || {};
 
 Pip.Indexer = (function(P) {

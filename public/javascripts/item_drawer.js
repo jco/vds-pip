@@ -7,8 +7,9 @@ var Pip = Pip || {};
 Pip.ItemDrawer = (function(P, $) {
     var ItemDrawer = {};
 
+    // Draws an item (which can be a folder or a document) on the canvas.
     ItemDrawer.drawItem = function(item) { // for each item (e.g., folder) on screen
-      var stuff = [];
+      var stuff = []; // holds items of things to be drawn; handles order ('layer')
 
       // order is important (z-index)
       // first: optional color highlight to indicate status
@@ -28,22 +29,27 @@ Pip.ItemDrawer = (function(P, $) {
         }
       }
 
+      // draws the icon associated with the file type
+      // raphael object
       var icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34);//34s are width and height of icon
       // test problem of 'image'
       var iconLabel   = Pip.paper.text(item.coords[0] + 34 + 5, item.coords[1] + 17, item.name).attr('text-anchor', 'start');
       stuff.push(icon, iconLabel);
 
-      // create arrow drawing handle
+      // create arrow drawing handle (handle is the white circle w/ arrow from which the user can draw arrows)
       var handle = Pip.paper.path(dragHandlePath(item)).attr('fill', 'white');
       stuff.push(handle);
+      
+      // Actually assign the event listeners for creating arrows/dependencies
       assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
 
+      // Figure out what a double-click should do based on whether _item_ a folder or document
       if (kind(item) == 'document') {
         // double click opens an overlay
         icon.dblclick(documentOverlay(item));
       } else {
         // kind == 'folder'
-        icon.dblclick(function (ev) {
+        icon.dblclick(function (ev) { // look at raphael docs to check for these methods
             // redirect
             location = P.folderPath(item); // works
         });
@@ -70,40 +76,48 @@ Pip.ItemDrawer = (function(P, $) {
         
       }
 
-      var st = Pip.paper.set();
+      // Reorder the elements of _stuff[]_ such that the last thing in the array is at the front.
+      var st = Pip.paper.set(); // Pip.paper is raphaeljs's own data structure; set returns an empty set
       stuff.forEach(function (thing) {
         thing.toFront();
         st.push(thing);
       });
 
-      // assign listeners - moving folders, etc.
-      assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
-        if (!_.isEqual(newCoords, item.coords)) {
-          var x = newCoords[0], y = newCoords[1];
-
-          // part 1: draw dependencies
-          // first we have to update the coords of the json item
-          setJsonCoords(item, [x, y]);
-          Pip.DependencyDrawer.redrawDependencies();
-
-          // part 2: ping server
-          console.log('PUT new coordinates of item ', item, [x, y], '...');
-          var url = '/' + kind(item) + 's/' + String(item.id);
-          var data = {}; data[kind(item)] = {"x": x, "y": y};
-          $.ajax({
-            type: 'PUT',
-            url: url,
-            data: data,
-            dataType: 'json',
-            complete: function() { console.log('...complete.'); },
-            // error: P.error
-            error: function(e, ts, et) { alert(ts) }
-          });
-        }
-      }});
+      // Assign the event listeners responsible for letting the user change the visual position of the item
+      // by dragging.
+      item.draggable({
+        // stop: function(event, ui) { }
+      });
+      
+      // assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
+      //   if (!_.isEqual(newCoords, item.coords)) { // can't do this: if ([4,5] == [4,5])
+      //     var x = newCoords[0], y = newCoords[1];
+      // 
+      //     // part 1: draw dependencies
+      //     // first we have to update the coords of the json item
+      //     setJsonCoords(item, [x, y]);
+      //     Pip.DependencyDrawer.redrawDependencies();
+      // 
+      //     // part 2: ping server
+      //     console.log('PUT new coordinates of item ', item, [x, y], '...');
+      //     var url = '/' + kind(item) + 's/' + String(item.id);
+      //     var data = {}; data[kind(item)] = {"x": x, "y": y};
+      //     $.ajax({
+      //       type: 'PUT',
+      //       url: url,
+      //       data: data,
+      //       dataType: 'json',
+      //       complete: function() { console.log('...complete.'); },
+      //       // error: P.error
+      //       error: function(e, ts, et) { alert(ts) }
+      //     });
+      //   }
+      // }});
 
     };
 
+    // A function that, when called, returns another function that pops up the correct overlay.
+    // Used in drawItem().
     var documentOverlay = ItemDrawer.documentOverlay = function (doc) {
       return function (ev) {
         $.colorbox({
@@ -115,8 +129,8 @@ Pip.ItemDrawer = (function(P, $) {
       };
     };
 
-
     var setIconCoords = function (item, coords) {
+      
     };
 
     var setJsonCoords = function (item, coords) {
@@ -127,14 +141,24 @@ Pip.ItemDrawer = (function(P, $) {
       //
     };
 
+    // Function for determining whether the given item is a document or folder.
     var kind = P.kind = function (item) {
       return item.documents ? 'folder' : 'document';
     };
 
-    
+    // Assign the event listeners responsible for letting the user change the visual position of the item
+    // by dragging.
+    // _options_ should look like {set: st, handle: icon, dragEndCallback: function(newCoords) { ... } }
+    //    Where _set_ is all the components that represent the item. We want to drag these all at once.
+    //      ... _handle_ is the area the user clicks to initiate the drag; in this case, the icon.
+    //      ... _dragEndCallback_ is a function that's called when the user lifts the mouse. The coordinates
+    //                            where the user did that are supplied as a argument.
     var assignItemMovementDragListeners = function (options) {
         // define drag handlers
         // "this" is the icon
+        // raphael calls these functions, 
+        // raphael example:
+        // Element.drag(onmove, onstart, onend, [mcontext], [scontext], [econtext])
         var start = function () { // mousedown
             $("body").css('background','red'); // not executed in vds
             this.ox = 0;
@@ -147,7 +171,7 @@ Pip.ItemDrawer = (function(P, $) {
             this.ox = dx;
             this.oy = dy;
         },
-        up = function () { // mouseup
+        up = function () { // mouseup, 'onend' for raphael doc
             $("body").css('background','green'); // not executed in vds
             // restoring state
             this.attr({opacity: 1});
@@ -164,12 +188,22 @@ Pip.ItemDrawer = (function(P, $) {
           this.addEventListener('mouseup', up, false);
         }
         
+        // Assign the listeners
         options.handle.drag(move, start, up); // needed 
     };
     
-    // assigns arrow drawing listeners
+    // Assign event listeners to the various components of an item (doc or folder) such that
+    // when the user clicks and drags from the drag handle to another icon, an arrow/dependency is created.
     var assignArrowDrawingListeners = function (ops) {
-       var dragStart = function () {
+      
+      // First, create the three events that will fire as part of the dragging process
+      // (http://raphaeljs.com/reference.html#Element.drag)
+      
+      // dragStart() fires when the drag is initiated
+      // dragMove() fires every time the listener is dragged (I think continuously?)
+      // dragUp() fires when the mouse is lifted after a drag, signaling the end
+      
+      var dragStart = function () {
            // set a 'global' variable indicating we are in a drop
            Pip.someGlobal = {draggingArrow: true, originItem: ops.item};
        },
@@ -190,7 +224,13 @@ Pip.ItemDrawer = (function(P, $) {
            Pip.someGlobal = {};
            Pip.ArrowDrawer.clearArrows(ops.item);
        };
+       
+       // This line actually assigns the listeners
        ops.handle.drag(dragMove, dragStart, dragUp); // handles the drag and making the arrow appear
+       
+       // This is a fourth event listener, placed on the "dropZone" (i.e. the destination of the drag).
+       // It is responsible for figuring out whether we were dragging in the first place, and if it
+       // thinks everything is legit, it creates the dependency on the server.
        ops.dropZone.mouseup(function (ev) {
            if (Pip.someGlobal && Pip.someGlobal.draggingArrow) {
                Pip.DependencyDrawer.createDependency(Pip.someGlobal.originItem, ops.item);

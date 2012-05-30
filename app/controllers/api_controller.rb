@@ -9,14 +9,14 @@ class ApiController < ApplicationController
   # This action is designed to respond to the vds call to create a user.
   # For the corresponding html form action, see UsersController#create
   def createuser
-    required_params = [:login, :password, :new_user_email, :project_id]
+    required_params = [:login, :password, :new_user_email, :project_id, :role] # added roles recently. vds doesn't have a place for this yet.
     unless required_params.all? { |param| params.has_key?(param) }
       render(:text => "missing parameter, must have all of #{required_params.inspect}", :status => :unprocessable_entity)
       return
     end
 
     return unless authenticate_with_params!
-
+    
     unless Project.exists?(params[:project_id])
       render(:text => "No project exists with id=#{params[:project_id]}.", :status => :unprocessable_entity)
       return
@@ -24,6 +24,9 @@ class ApiController < ApplicationController
 
     generated_password = User.generate_password
     user = User.new(:email => params[:new_user_email], :password => generated_password)
+    
+    user.role = params[:role] # added recently
+    
     user.memberships.build(:project_id => params[:project_id])
     if user.save
       UserMailer.welcome_email(user, generated_password).deliver
@@ -35,37 +38,41 @@ class ApiController < ApplicationController
 
   # GET /api/createtask
   def createtask
+    puts '-----------------------------------------'
+    puts "creating a task!"
+    puts '-----------------------------------------'
+    
     # try to catch param errors
     errors = []
     required_params = [:login, :password, :name]
     unless required_params.all? { |param| params.has_key?(param) }
       errors << "missing parameter, must have all of #{required_params.inspect}"
     end
-    xor_msg = "must have either parent_task_id or a pair of (stage_id, factor_id) but not both"
-    if params.has_key?(:parent_task_id)
-      if params.has_key?(:stage_id) || params.has_key?(:factor_id)
+    xor_msg = "must have either parent_task_name or the pair (stage_name, factor_name) but not both"
+    if params.has_key?(:parent_task_name)
+      if params.has_key?(:stage_name) || params.has_key?(:factor_name) # check for xor error
         errors << xor_msg
       end
-      # parent_task_id must be valid
+      # parent_task_id must be valid at this point
       begin
-        parent_task = Task.find(params[:parent_task_id])
+        parent_task = Task.find_by_name(params[:parent_task_name]) # Task.find(params[:parent_task_id])
       rescue ActiveRecord::RecordNotFound
-        errors << "Parent task with id #{params[:parent_task_id]} does not exist."
+        errors << "Parent task with name #{params[:parent_task_name]} does not exist."
       end
-    elsif params.has_key?(:stage_id) && params.has_key?(:factor_id)
-      if params.has_key?(:parent_task_id)
+    elsif params.has_key?(:stage_name) && params.has_key?(:factor_name)
+      if params.has_key?(:parent_task_name) # check for xor error... kind of like above. necessary? meh.
         errors << xor_msg
       end
-      # stage_id and factor_id must be a) valid and b) from the same project
+      # stage_name and factor_name must be a) valid and b) from the same project
       begin
-        stage = Stage.find(params[:stage_id])
+        stage = Stage.find_by_name(params[:stage_name]) #Stage.find(params[:stage_id])
       rescue ActiveRecord::RecordNotFound
-        errors << "Stage with id #{params[:stage_id]} does not exist."
+        errors << "Stage with name #{params[:stage_name]} does not exist."
       end
       begin
-        factor = Factor.find(params[:factor_id])
+        factor = Factor.find_by_name(params[:factor_name])#Factor.find(params[:factor_id])
       rescue ActiveRecord::RecordNotFound
-        errors << "Factor with id #{params[:factor_id]} does not exist."
+        errors << "Factor with name #{params[:factor_name]} does not exist."
       end
       unless stage.nil? or factor.nil?
         unless stage.project_id == factor.project_id
@@ -76,7 +83,6 @@ class ApiController < ApplicationController
       errors << xor_msg
     end
 
-
     unless errors.empty?
       render(:text => errors.join("\n"), :status => :unprocessable_entity)
       return
@@ -86,11 +92,11 @@ class ApiController < ApplicationController
     return unless authenticate_with_params!
 
     # find the relevant project
-    if params.has_key?(:parent_task_id)
-      parent_task = Task.find(params[:parent_task_id])
+    if params.has_key?(:parent_task_name)
+      parent_task = Task.find_by_name(params[:parent_task_name])
       project = parent_task.project
     else
-      stage = Stage.find(params[:stage_id])
+      stage = Stage.find_by_name(params[:stage_name])
       project = stage.project
     end
 
@@ -101,7 +107,7 @@ class ApiController < ApplicationController
     end
 
     # they are, so try to create the task
-    if params.has_key?(:parent_task_id)
+    if params.has_key?(:parent_task_name)
       task = parent_task.tasks.build(:name => params[:name])
     else
       task = Task.new(:name => params[:name], :stage => stage, :factor => factor)
@@ -112,6 +118,90 @@ class ApiController < ApplicationController
       render(:text => "There was a problem saving the task: #{task.errors}", :status => :unprocessable_entity)
     end
   end
+
+  # # old version
+  # # GET /api/createtask
+  # def createtask
+  #   puts '-----------------------------------------'
+  #   puts "creating a task!"
+  #   puts '-----------------------------------------'
+  # 
+  #   # try to catch param errors
+  #   errors = []
+  #   required_params = [:login, :password, :name]
+  #   unless required_params.all? { |param| params.has_key?(param) }
+  #     errors << "missing parameter, must have all of #{required_params.inspect}"
+  #   end
+  #   xor_msg = "must have either parent_task_id or a pair of (stage_id, factor_id) but not both"
+  #   if params.has_key?(:parent_task_id)
+  #     if params.has_key?(:stage_id) || params.has_key?(:factor_id)
+  #       errors << xor_msg
+  #     end
+  #     # parent_task_id must be valid
+  #     begin
+  #       parent_task = Task.find(params[:parent_task_id])
+  #     rescue ActiveRecord::RecordNotFound
+  #       errors << "Parent task with id #{params[:parent_task_id]} does not exist."
+  #     end
+  #   elsif params.has_key?(:stage_id) && params.has_key?(:factor_id)
+  #     if params.has_key?(:parent_task_id)
+  #       errors << xor_msg
+  #     end
+  #     # stage_id and factor_id must be a) valid and b) from the same project
+  #     begin
+  #       stage = Stage.find(params[:stage_id])
+  #     rescue ActiveRecord::RecordNotFound
+  #       errors << "Stage with id #{params[:stage_id]} does not exist."
+  #     end
+  #     begin
+  #       factor = Factor.find(params[:factor_id])
+  #     rescue ActiveRecord::RecordNotFound
+  #       errors << "Factor with id #{params[:factor_id]} does not exist."
+  #     end
+  #     unless stage.nil? or factor.nil?
+  #       unless stage.project_id == factor.project_id
+  #         errors << "Stage and factor belong to different projects."
+  #       end
+  #     end
+  #   else
+  #     errors << xor_msg
+  #   end
+  # 
+  #   unless errors.empty?
+  #     render(:text => errors.join("\n"), :status => :unprocessable_entity)
+  #     return
+  #   end
+  # 
+  #   # authenticate the user
+  #   return unless authenticate_with_params!
+  # 
+  #   # find the relevant project
+  #   if params.has_key?(:parent_task_id)
+  #     parent_task = Task.find(params[:parent_task_id])
+  #     project = parent_task.project
+  #   else
+  #     stage = Stage.find(params[:stage_id])
+  #     project = stage.project
+  #   end
+  # 
+  #   # check if the user is authorized
+  #   unless current_user.is_member_of?(project)
+  #     render(:text => "user #{current_user} is not authorized to add a task to project #{project}", :status => :unauthorized)
+  #     return
+  #   end
+  # 
+  #   # they are, so try to create the task
+  #   if params.has_key?(:parent_task_id)
+  #     task = parent_task.tasks.build(:name => params[:name])
+  #   else
+  #     task = Task.new(:name => params[:name], :stage => stage, :factor => factor)
+  #   end
+  #   if task.save
+  #     render(:text => "task_id=#{task.id}", :status => :created)
+  #   else
+  #     render(:text => "There was a problem saving the task: #{task.errors}", :status => :unprocessable_entity)
+  #   end
+  # end
 
   def deletetask
     required_params = [:login, :password, :task_id]

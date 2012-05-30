@@ -3,17 +3,22 @@
  * Copyright Syracuse University
  */
 
-/* sample usage:
+/* 
+
+  This module mimics the rails routing helpers. You have to provide a description of what the
+  "resources" are, including nested resources, but then it generates convenience methods.
+
+sample usage:
 
 var resources = [
-  'task',
+  'task',                     // simple resources
   'folder',
   'document',
-  ['task', 'document'],
+  ['task', 'document'],       // nested resources
   ['folder', 'document']
 ];
 
-var routesHelper = generateHelpers(resources, {});
+var routesHelper = generateHelpers(resources, {}); // this call is needed to actually generate the helpers
 
 var url = routesHelper.folderDocumentPath({name: "folder 1", id: 1}, {name: "document 6", id: 6});
 // => /folders/1/documents/6
