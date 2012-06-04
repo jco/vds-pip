@@ -85,34 +85,37 @@ Pip.ItemDrawer = (function(P, $) {
 
       // Assign the event listeners responsible for letting the user change the visual position of the item
       // by dragging.
-      item.draggable({
-        // stop: function(event, ui) { }
-      });
+      // $("svg").draggable();
+      // item.draggable({
+      //   // stop: function(event, ui) { }
+      // });
       
-      // assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
-      //   if (!_.isEqual(newCoords, item.coords)) { // can't do this: if ([4,5] == [4,5])
-      //     var x = newCoords[0], y = newCoords[1];
-      // 
-      //     // part 1: draw dependencies
-      //     // first we have to update the coords of the json item
-      //     setJsonCoords(item, [x, y]);
-      //     Pip.DependencyDrawer.redrawDependencies();
-      // 
-      //     // part 2: ping server
-      //     console.log('PUT new coordinates of item ', item, [x, y], '...');
-      //     var url = '/' + kind(item) + 's/' + String(item.id);
-      //     var data = {}; data[kind(item)] = {"x": x, "y": y};
-      //     $.ajax({
-      //       type: 'PUT',
-      //       url: url,
-      //       data: data,
-      //       dataType: 'json',
-      //       complete: function() { console.log('...complete.'); },
-      //       // error: P.error
-      //       error: function(e, ts, et) { alert(ts) }
-      //     });
-      //   }
-      // }});
+      assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
+        alert('newCoords: '+newCoords+' item coords: '+item.coords);
+        if (!_.isEqual(newCoords, item.coords)) { // If the coordinates have changed ( can't do this: if ([4,5] == [4,5]) )
+          var x = newCoords[0], y = newCoords[1];
+      
+          // part 1: draw dependencies
+          // first we have to update the coords of the json item
+          setJsonCoords(item, [x, y]);
+          Pip.DependencyDrawer.redrawDependencies();
+      
+          // part 2: ping server
+          console.log('PUT new coordinates of item ', item, [x, y], '...');
+          alert('here');
+          var url = '/' + kind(item) + 's/' + String(item.id);
+          var data = {}; data[kind(item)] = {"x": x, "y": y};
+          $.ajax({
+            type: 'PUT',
+            url: url,
+            data: data,
+            dataType: 'json',
+            complete: function() { console.log('...complete.'); },
+            // error: P.error
+            error: function(e, ts, et) { alert(ts) }
+          });
+        }
+      }});
 
     };
 
@@ -175,7 +178,8 @@ Pip.ItemDrawer = (function(P, $) {
             $("body").css('background','green'); // not executed in vds
             // restoring state
             this.attr({opacity: 1});
-            var currentCoords = [this.attr('x'), this.attr('y')];
+            var currentCoords = [this.ox, this.oy]; // RECENTLY CHANGED [this.attr('x'), this.attr('y')]; // issue: this resets the coords
+            alert('currentCoords after mouseup: '+currentCoords);
             options.dragEndCallback(currentCoords);
         };
         // assign them:
