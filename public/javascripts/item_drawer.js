@@ -4,118 +4,69 @@
  */
 var Pip = Pip || {};
 
+// Coordinates here are in the 4th quadrant; +x goes right, +y goes down
 Pip.ItemDrawer = (function(P, $) {
     var ItemDrawer = {};
 
-    // Draws an item (which can be a folder or a document) on the canvas.
+    var helper = new Helper(); // Defined in app/coffeescripts
+    helper.test();
+    var f = new Folder("my name"); // YAYY it works.
+    
+    // Draws an item (which can be a folder or a document)
     ItemDrawer.drawItem = function(item) { // for each item (e.g., folder) on screen
-      var stuff = []; // holds items of things to be drawn; handles order ('layer')
-
-      // order is important (z-index)
-      // first: optional color highlight to indicate status
-      var m = P.HIGHLIGHT_MARGIN; // for convenience
+      var m = P.HIGHLIGHT_MARGIN; // first: optional color highlight to indicate status; for convenience
       if (kind(item) == 'document') {
         switch (item.status) {
           case "not_updated":
-            var color = P.paper.rect(item.coords[0] - m, item.coords[1] - m, 34 + (2 * m), 34 + (2 * m));
-            color.attr({"stroke": "none", fill: 'red'});
-            stuff.push(color);
+            // TODO: Create not updated document
+            
+            // var color = P.paper.rect(item.coords[0] - m, item.coords[1] - m, 34 + (2 * m), 34 + (2 * m));
+            // color.attr({"stroke": "none", fill: 'red'});
+            // stuff.push(color);
             break;
           case 'being_worked_on':
-            var color = P.paper.rect(item.coords[0] - m, item.coords[1] - m, 34 + (2 * m), 34 + (2 * m));
-            color.attr({"stroke": "none", fill: 'yellow'});
-            stuff.push(color);
+            // TODO: Created document being worked on
+            // var color = P.paper.rect(item.coords[0] - m, item.coords[1] - m, 34 + (2 * m), 34 + (2 * m));
+            // color.attr({"stroke": "none", fill: 'yellow'});
+            // stuff.push(color);
             break;
         }
       }
 
-      // draws the icon associated with the file type
-      // raphael object
-      var icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34);//34s are width and height of icon
-      // test problem of 'image'
-      var iconLabel   = Pip.paper.text(item.coords[0] + 34 + 5, item.coords[1] + 17, item.name).attr('text-anchor', 'start');
-      stuff.push(icon, iconLabel);
-
-      // create arrow drawing handle (handle is the white circle w/ arrow from which the user can draw arrows)
-      var handle = Pip.paper.path(dragHandlePath(item)).attr('fill', 'white');
-      stuff.push(handle);
+      // TODO: Draw the icon associated with the file type
+      // var icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34);//34s are width and height of icon
       
-      // Actually assign the event listeners for creating arrows/dependencies
-      assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
+      // jquery div img stuff!!
+      
 
-      // Figure out what a double-click should do based on whether _item_ a folder or document
+      // TODO: Create arrow drawing handle (handle is the white circle w/ arrow from which the user can draw arrows)
+      // var handle = Pip.paper.path(dragHandlePath(item)).attr('fill', 'white');
+      
+      // TODO: Actually assign the event listeners for creating arrows/dependencies
+      // LATER
+      // assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
+
+      // TODO: Figure out what a double-click should do based on whether _item_ a folder or document
       if (kind(item) == 'document') {
         // double click opens an overlay
-        icon.dblclick(documentOverlay(item));
+        // icon.dblclick(documentOverlay(item));
       } else {
         // kind == 'folder'
-        icon.dblclick(function (ev) { // look at raphael docs to check for these methods
-            // redirect
-            location = P.folderPath(item); // works
-        });
-        // icon.click(function (ev) {
-        //     // alert("clicked"); // 
-        //     $('body').css('background', 'pink'); // 
+        // icon.dblclick(function (ev) { // look at raphael docs to check for these methods
+        //     // redirect
+        //     location = P.folderPath(item); // works
         // });
-        // icon.mouseover(function (ev) {
-        //     $('body').css('background', 'gray'); // works
-        //     // alert("mouseover"); // works for vds
-        // });
-        // icon.mouseout(function (ev) {
-        //     $('body').css('background', 'blue'); // works
-        //     // alert("mouseout"); // makes vds crash with stack overflow
-        // });
-        // icon.mousedown(function (ev) {
-        //     $('body').css('background', 'green'); // undetected
-        //     // alert("mousedown"); // undetected
-        // });
-        // icon.mouseup(function (ev) {
-        //     $('body').css('background', 'yellow'); // undetected
-        //     // alert("mouseup"); // undetected
-        // });
-        
       }
 
-      // Reorder the elements of _stuff[]_ such that the last thing in the array is at the front.
-      var st = Pip.paper.set(); // Pip.paper is raphaeljs's own data structure; set returns an empty set
-      stuff.forEach(function (thing) {
-        thing.toFront();
-        st.push(thing);
-      });
-
-      // Assign the event listeners responsible for letting the user change the visual position of the item
+      // TODO: Set id of icon for jQuery access, and modify properties so jQuery's draggable works
+      // icon.node.id = "icon_id_"+randomValue();
+      
+      // TODO: Assign the event listeners responsible for letting the user change the visual position of the item
       // by dragging.
-      // $("svg").draggable();
-      // item.draggable({
+      // $("#"+icon.node.id).draggable({
       //   // stop: function(event, ui) { }
       // });
-      
-      assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
-        alert('newCoords: '+newCoords+' item coords: '+item.coords);
-        if (!_.isEqual(newCoords, item.coords)) { // If the coordinates have changed ( can't do this: if ([4,5] == [4,5]) )
-          var x = newCoords[0], y = newCoords[1];
-      
-          // part 1: draw dependencies
-          // first we have to update the coords of the json item
-          setJsonCoords(item, [x, y]);
-          Pip.DependencyDrawer.redrawDependencies();
-      
-          // part 2: ping server
-          console.log('PUT new coordinates of item ', item, [x, y], '...');
-          alert('here');
-          var url = '/' + kind(item) + 's/' + String(item.id);
-          var data = {}; data[kind(item)] = {"x": x, "y": y};
-          $.ajax({
-            type: 'PUT',
-            url: url,
-            data: data,
-            dataType: 'json',
-            complete: function() { console.log('...complete.'); },
-            // error: P.error
-            error: function(e, ts, et) { alert(ts) }
-          });
-        }
-      }});
+
 
     };
 
@@ -168,24 +119,27 @@ Pip.ItemDrawer = (function(P, $) {
             this.oy = 0;
             this.attr({opacity: .5});
         },
-        move = function (dx, dy) {
+        move = function (dx, dy) { // A: dx is the new x coordinate, dy the new y coordinate - not actually the 'difference/change' of the variables.
             $("body").css('background','yellow'); // not executed in vds
-            options.set.translate( dx - this.ox, dy - this.oy );
-            this.ox = dx;
+            options.set.translate( dx - this.ox, dy - this.oy ); // "A" is why we subtract!
+            this.ox = dx; // updates frequently while moving: this sets the item's coordinates to be the new coords
             this.oy = dy;
         },
         up = function () { // mouseup, 'onend' for raphael doc
             $("body").css('background','green'); // not executed in vds
             // restoring state
             this.attr({opacity: 1});
-            var currentCoords = [this.ox, this.oy]; // RECENTLY CHANGED [this.attr('x'), this.attr('y')]; // issue: this resets the coords
+            // Old: var currentCoords = [this.attr('x'), this.attr('y')]; // issue: coordinates don't end up changing/saving on page reload
+            // Attempt 1: var currentCoords = [this.ox, this.oy]; // [this.ox, this.oy] ends up being the change in coordinates, somehow.
+            // [this.attr('x'), this.attr('y')] are the original coordinates! so add this and [this.ox, this.oy]
+            var currentCoords = [this.ox+this.attr('x'), this.oy+this.attr('y')] // this works last I tried!
             alert('currentCoords after mouseup: '+currentCoords);
-            options.dragEndCallback(currentCoords);
+            options.dragEndCallback(currentCoords); // currentCoords becomes newCoords in assignItemMovementDragListeners
         };
         // assign them:
         // alert("in assignItemMovementDragListeners");
         // $("body").css('background','orange'); // not executed in vds
-
+    
         if (P.kind == 'folder') {
           this.addEventListener('mousedown', start, false);
           this.addEventListener('mousemove', move, false);
@@ -261,6 +215,11 @@ Pip.ItemDrawer = (function(P, $) {
         return item.icon || '/images/icons/folder.gif';
     };
 
+    // Returns a random integer value, used for id generation
+    var randomValue = function() {
+      return (Math.random() + "").replace(".", ""); // replace the . so there's no decimal, just because id= values shouldn't have decimals
+    };
+      
     return ItemDrawer;
 })(Pip, jQuery);
 

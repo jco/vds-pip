@@ -19,3 +19,6 @@ gem 'cancan' # for user roles
 gem 'sass' # for improved css. http://sass-lang.com/; grabs files in stylesheets/sass and creates in stylesheets
 gem 'dynamic_form' # easy error messages for forms
 # gem 'guard-coffeescript' # so we can use coffeescript for JS (this automatically compiles coffee)
+
+gem 'barista' # https://github.com/Sutto/barista so we can use coffeescript (in app/coffeescripts)
+gem 'json' # dependency if ruby 1.8
