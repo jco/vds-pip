@@ -1,0 +1,71 @@
+# Files in app/coffeescripts are automatically compiled into JS in public/javascripts by Barista (gem)
+
+jQuery ->
+
+class Folder
+  helper = new Helper
+  
+  # Folder is accessible outside this class via $(f.get()), where f is the instance of Folder
+  # Inside this class, use $(@get())
+  # More specific ones like $(@getImage()) exist too
+  constructor: (@name) ->
+    # Prepare basic properties for tag
+    @id = helper.getRandomNumber()
+    div = "<div id=folder_#{@id} style='#{@getStyleAttributes()}'>"
+    img = "<img id='folder_icon_#{@id}' src='#{IMAGE_PATH}/icons/folder.gif' />"
+    label = "<span id=folder_label_#{@id}>#{@name}</span>"
+    handle = "<img id=folder_handle_#{@id} src='#{IMAGE_PATH}/icons/circle0.png' width='15' height='15'/>"
+    enddiv = "</div>"
+    
+    @tag = div + handle + img + label + enddiv
+    $("#container").append(@tag)
+    
+    # Set coordinates
+    @x = 0; @y = 0
+    @setCoordinates(@x, @y)
+    
+    @_makeDraggable() # Make self draggable
+    @_makeHandleDraggable() # Make the handle draggable, allowing for dependency drawing
+  
+  getStyleAttributes: ->
+    return 'position: relative;'
+  
+  # Returns the string that jQuery would use to access the Document DOM surrounding divobject, 
+  # like '#folder_134235'
+  get: ->
+    return "#folder_#{@id}"
+  
+  getImage: ->
+    return "#folder_icon_#{@id}"
+  
+  getHandle: ->
+    return "#folder_handle_#{@id}"
+  
+  setCoordinates: (x,y) ->
+    @x = x; @y = y
+    $(@get()).css('left', "#{@x}px")
+    $(@get()).css('top', "#{@y}px")
+    
+  _makeHandleDraggable: ->
+    $(@getHandle()).draggable
+      containment: "#container",
+      handle: @getHandle(),
+      helper: "clone",
+      revert: true
+      # other options specified in file that creates the instance
+  
+  _makeDraggable: ->
+    $(@get()).draggable
+      containment: "#container",
+      handle: @getImage(),
+      stop: ->
+        _updateDBCoords()
+      
+  
+  # Updates coordinates in database with ajax
+  _updateDBCoords = ->
+    # @x LATER
+    
+  # setDblClick: ->
+    
+window.Folder = Folder # Makes the class global

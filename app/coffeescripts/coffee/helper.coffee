@@ -3,18 +3,11 @@
 
 jQuery ->
 
-# Quick advice: In coffee, to call a function foo from within another function, do @foo
-# Convention: _foo means foo is a private method
-
 class Helper
   canvas = null # just a local variable for the class (essentially, a private variable)
   
-  test: ->
-    alert "test"
-  
   setCanvas: (c) ->
     canvas = c
-    
   
   # Returns the view; possibilities set in application_controller
   # Post: returns 'other', 'projects/show', or 'folders/show'
@@ -29,7 +22,7 @@ class Helper
 
   # Useful for random id generation (which allows identification) in classes like Folder
   getRandomNumber: ->
-    return Math.random()
+    return (Math.random() + '').replace('.','') # removes the '.'
   
   # -- Raphael-dependent draw line functions --
   

@@ -1,6 +1,11 @@
 /*
  * Authors: Jeff Cox, David Zhang
  * Copyright Syracuse University
+  
+The module pattern is described in brief here alongside other possible module patterns. 
+The way it works is by using a "closure" (https://developer.mozilla.org/en/JavaScript/Guide/Closures). 
+Here's another good article: http://www.adequatelygood.com/2010/3/JavaScript-Module-Pattern-In-Depth.
+
  */
 
 var Pip = Pip || {};
@@ -62,6 +67,8 @@ var Pip = Pip || {};
             
             // Create the canvas
             P.paper = Raphael(P.container, '100%', '500px');//http://jsfiddle.net/6x4bR/
+            $("svg").css('position','absolute');
+            // $("svg").css('border','1px solid red');
             
             // Attach the listener for creating documents
             P.container.addEventListener('dblclick', documentCreationHandler, false);
@@ -72,7 +79,7 @@ var Pip = Pip || {};
             //my addition:
             // P.container.addEventListener('click', documentCreationHandler, false);
             // P.paper.image.addEventListener('click', documentCreationHandler, false);
-            $('body').css('background', 'purple'); // works
+            
             // P.container.addEventListener('mousedown', documentCreationHandler, false); // works
           }
 

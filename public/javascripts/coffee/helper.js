@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Tue, 05 Jun 2012 18:36:37 GMT from
+/* DO NOT MODIFY. This file was compiled Wed, 06 Jun 2012 15:47:40 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/helper.coffee
  */
 
@@ -13,10 +13,6 @@
     function Helper() {}
 
     canvas = null;
-
-    Helper.prototype.test = function() {
-      return alert("test");
-    };
 
     Helper.prototype.setCanvas = function(c) {
       return canvas = c;
@@ -35,7 +31,7 @@
     };
 
     Helper.prototype.getRandomNumber = function() {
-      return Math.random();
+      return (Math.random() + '').replace('.', '');
     };
 
     Helper.prototype.drawArrow = function(startCoords, endCoords) {

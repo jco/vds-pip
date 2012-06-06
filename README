@@ -31,3 +31,9 @@ Soft delete, which isn't an essential feature, isn't only partly done so far.
 Key idea = The tasks table has a t.datetime "deleted_at" field
 	-if this is null, the task is not deleted; 
 	-if it's not null (it's an actual datetime), then that datetime is when the task was deleted, and the task is deleted.
+	
+	
+--
+
+Quick Thanks
+Document icon: http://www-03.ibm.com/software/lotus/symphony/gallery.nsf/GalleryClipArtAll/BC366132009A4D3E8525759600321C79
