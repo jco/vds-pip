@@ -40,11 +40,42 @@ Pip.ItemDrawer = (function(P, $) {
             location = P.folderPath(item); // redirect - this works
         });
         
-        // Set draggable for dependency drawing - other options specified in the appropriate class
+        // Set draggable's stop event for dependency drawing on the handle - other options in folder.coffee
         $(icon.getHandle()).draggable({
           stop: function(event, ui) { 
             alert('yay'); 
+            // TODO
             assignArrowDrawingListeners({handle: icon.getHandle(), dropZone: icon, item: item});
+          }
+        });
+        
+        // Set draggable's stop event for ajax calls & updating coordinates on the actual icon/folder - other options in folder.coffee
+        $(icon.get()).draggable({ // THIS WORKS
+          stop: function(event, ui) { 
+            // Update
+            icon.updateCoordinates();
+            var x = icon.x, y = icon.y;
+            
+            // part 1: draw dependencies
+            // first we have to update the coords of the json item
+            setJsonCoords(item, [x, y]);
+            Pip.DependencyDrawer.redrawDependencies();
+        
+            // part 2: ping server
+            console.log('PUT new coordinates of item ', item, [x, y], '...');
+            var url = '/' + kind(item) + 's/' + String(item.id);
+            var data = {}; data[kind(item)] = {"x": x, "y": y};
+            $.ajax({ // is this working? If I drag 2 times, the item saves in the wrong spot. 
+              // It's as though the new coordinate after the 1st drag wasn't saved,
+              // so the 2nd drag actually ends up saving the object in a position relative to the INITIAL coords.
+              type: 'PUT',
+              url: url,
+              data: data,
+              dataType: 'json',
+              complete: function() { console.log('...complete.'); },
+              // error: P.error
+              // error: function(e, ts, et) { alert(ts) }
+            });
           }
         });
       }

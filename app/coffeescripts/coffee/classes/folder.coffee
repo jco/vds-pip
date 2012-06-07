@@ -28,7 +28,8 @@ class Folder
     @_makeHandleDraggable() # Make the handle draggable, allowing for dependency drawing
   
   getStyleAttributes: ->
-    return 'position: relative;'
+    return ''
+    # return 'position: relative;'
   
   # Returns the string that jQuery would use to access the Document DOM surrounding divobject, 
   # like '#folder_134235'
@@ -41,10 +42,17 @@ class Folder
   getHandle: ->
     return "#folder_handle_#{@id}"
   
+  # Sets @x and @y to passed in variables and sets the location
+  # to the proper spot
   setCoordinates: (x,y) ->
     @x = x; @y = y
     $(@get()).css('left', "#{@x}px")
     $(@get()).css('top', "#{@y}px")
+  
+  # Updates @x and @y based on actual coordinates
+  updateCoordinates: ->
+    @x = $(@get()).css('left').replace('px','')
+    @y = $(@get()).css('top').replace('px','')
     
   _makeHandleDraggable: ->
     $(@getHandle()).draggable
@@ -52,20 +60,13 @@ class Folder
       handle: @getHandle(),
       helper: "clone",
       revert: true
-      # other options specified in file that creates the instance
+      # other options specified in file that creates the instance, item_drawer
   
   _makeDraggable: ->
     $(@get()).draggable
       containment: "#container",
       handle: @getImage(),
-      stop: ->
-        _updateDBCoords()
-      
-  
-  # Updates coordinates in database with ajax
-  _updateDBCoords = ->
-    # @x LATER
-    
+      # other options specified in file that creates the instance, item_drawer
   # setDblClick: ->
     
 window.Folder = Folder # Makes the class global

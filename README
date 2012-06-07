@@ -1,12 +1,11 @@
-Progress:
+Progress: focusing on js w/o raphael
 
-focusing on js w/o raphael
+Now: 
 
-in testvdspip, I've found that the most simple drag functions of jquery and raphaeljs don't
-work in vds. Stuck. maybe older or newer version of raphael?
-maybe the drag problem is the "layer" in vds?
+-make draggable update location
+-draggable containment problem
 
-So I'll focus on something else for now -
+
 
 Then, go to user.rb
 -role - project manager, architect, or systems engineer
