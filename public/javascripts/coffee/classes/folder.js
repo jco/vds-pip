@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Thu, 07 Jun 2012 15:23:27 GMT from
+/* DO NOT MODIFY. This file was compiled Fri, 08 Jun 2012 18:14:33 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/folder.coffee
  */
 
@@ -19,7 +19,7 @@
       div = "<div id=folder_" + this.id + " style='" + (this.getStyleAttributes()) + "'>";
       img = "<img id='folder_icon_" + this.id + "' src='" + IMAGE_PATH + "/icons/folder.gif' />";
       label = "<span id=folder_label_" + this.id + ">" + this.name + "</span>";
-      handle = "<img id=folder_handle_" + this.id + " src='" + IMAGE_PATH + "/icons/circle0.png' width='15' height='15'/>";
+      handle = "<img id=folder_handle_" + this.id + " src='" + IMAGE_PATH + "/icons/circle0.png' width='15' height='15' />";
       enddiv = "</div>";
       this.tag = div + handle + img + label + enddiv;
       $("#container").append(this.tag);
@@ -28,10 +28,11 @@
       this.setCoordinates(this.x, this.y);
       this._makeDraggable();
       this._makeHandleDraggable();
+      this._makeDroppable();
     }
 
     Folder.prototype.getStyleAttributes = function() {
-      return '';
+      return 'display: inline-block';
     };
 
     Folder.prototype.get = function() {
@@ -71,6 +72,12 @@
       return $(this.get()).draggable({
         containment: "#container",
         handle: this.getImage()
+      });
+    };
+
+    Folder.prototype._makeDroppable = function() {
+      return $(this.get()).droppable({
+        drop: function() {}
       });
     };
 

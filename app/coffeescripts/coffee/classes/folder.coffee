@@ -5,7 +5,7 @@ jQuery ->
 class Folder
   helper = new Helper
   
-  # Folder is accessible outside this class via $(f.get()), where f is the instance of Folder
+  # Folder is accessible outside this class via $(f.get()), where f is an instance of Folder
   # Inside this class, use $(@get())
   # More specific ones like $(@getImage()) exist too
   constructor: (@name) ->
@@ -14,7 +14,7 @@ class Folder
     div = "<div id=folder_#{@id} style='#{@getStyleAttributes()}'>"
     img = "<img id='folder_icon_#{@id}' src='#{IMAGE_PATH}/icons/folder.gif' />"
     label = "<span id=folder_label_#{@id}>#{@name}</span>"
-    handle = "<img id=folder_handle_#{@id} src='#{IMAGE_PATH}/icons/circle0.png' width='15' height='15'/>"
+    handle = "<img id=folder_handle_#{@id} src='#{IMAGE_PATH}/icons/circle0.png' width='15' height='15' />"
     enddiv = "</div>"
     
     @tag = div + handle + img + label + enddiv
@@ -26,12 +26,13 @@ class Folder
     
     @_makeDraggable() # Make self draggable
     @_makeHandleDraggable() # Make the handle draggable, allowing for dependency drawing
+    @_makeDroppable() # Make self droppable so detection of when to draw dependencies exists
   
   getStyleAttributes: ->
-    return ''
-    # return 'position: relative;'
+    return 'display: inline-block'
+    # return 'position: relative;' # position automatically relative by jQuery draggable, which uses 'left' and 'top' like you planned
   
-  # Returns the string that jQuery would use to access the Document DOM surrounding divobject, 
+  # Returns the string that jQuery would use to access the surrounding div object, 
   # like '#folder_134235'
   get: ->
     return "#folder_#{@id}"
@@ -60,13 +61,17 @@ class Folder
       handle: @getHandle(),
       helper: "clone",
       revert: true
-      # other options specified in file that creates the instance, item_drawer
+      # other options like stop specified in file that creates the instance, item_drawer
   
   _makeDraggable: ->
     $(@get()).draggable
       containment: "#container",
-      handle: @getImage(),
-      # other options specified in file that creates the instance, item_drawer
-  # setDblClick: ->
-    
+      handle: @getImage()
+      # other options like stop specified in file that creates the instance, item_drawer
+  
+  _makeDroppable: ->
+    $(@get()).droppable
+      drop: ->
+        # $(this).css('border','1px solid red') # works
+
 window.Folder = Folder # Makes the class global

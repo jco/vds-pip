@@ -67,6 +67,7 @@ var Pip = Pip || {};
     var drawDependency = function(dep) {
       var upstreamItem = P.index[dep[0]];
       var downstreamItem = P.index[dep[1]];
+      alert("upstream: "+upstreamItem+"; downstream: "+downstreamItem);
       P.ArrowDrawer.addArrows('global', [[arrowEndpoint(upstreamItem), arrowEndpoint(downstreamItem)]]);
     };
     

@@ -1,11 +1,8 @@
 Progress: focusing on js w/o raphael
 
-Now: 
-
--make draggable update location
--draggable containment problem
-
-
+Now:
+draw arrows - droppable - in item_drawer.js:88
+make docs drag save properly
 
 Then, go to user.rb
 -role - project manager, architect, or systems engineer
