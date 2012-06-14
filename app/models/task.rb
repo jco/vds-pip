@@ -12,7 +12,7 @@ class Task < ActiveRecord::Base
   belongs_to :factor
   # stage and factor should be defined if and only if parent task is not defined
   has_many :folders
-  has_many :documents
+  has_many :documents # a task should always have folders; a document can only exist in a folder, so this is off
   validate :uniqueness
 
   def uniqueness

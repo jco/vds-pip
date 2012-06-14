@@ -17,6 +17,7 @@ Pip.ItemDrawer = (function(P, $) {
       var icon;
       if (kind(item) == 'document') { 
         icon = new Document(item.name);
+        icon.setCoordinates(item.coords[0], item.coords[1]);
         switch (item.status) {
           case "not_updated":
             icon.setBorderColor('red');
@@ -85,7 +86,7 @@ Pip.ItemDrawer = (function(P, $) {
         drop: function(event, ui) {
           alert("ui.draggable: "+$(ui.draggable));
           // I will pass the div if object!
-          Pip.DependencyDrawer.createDependency(originItem, droppable);
+          Pip.DependencyDrawer.createDependency(originItem, droppable); // USE JEFF'S ARROW DRAWING, NOT HELPER.DRAW
         }
         // get id of object that dropped
       });

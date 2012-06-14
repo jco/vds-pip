@@ -37,10 +37,10 @@ class Folder < ActiveRecord::Base
 
   def status
     @status ||= if contents.any? { |item| item.status == "not_updated" }
-        "not_updated"
-      else
-        "up_to_date"
-      end
+      "not_updated"
+    else
+      "up_to_date"
+    end
   end
 
   def status=(val)

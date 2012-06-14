@@ -8,11 +8,11 @@ class Project < ActiveRecord::Base
   self.include_root_in_json = false
   has_many :stages, :order => :position
   has_many :factors
-  has_many :memberships
+  has_many :memberships # project has many tasks, task has one stage & one factor, task has many task
 
   # These are only the top-level docs and folders.
   has_many :documents
-  has_many :folders
+  has_many :folders 
   
   has_many :memberships
   has_many :users, :through => :memberships

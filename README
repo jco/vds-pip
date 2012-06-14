@@ -2,7 +2,8 @@ Progress: focusing on js w/o raphael
 
 Now:
 draw arrows - droppable - in item_drawer.js:88
-make docs drag save properly
+make docs drag save properly √
+make sql diagram - mysql workbench
 
 Then, go to user.rb
 -role - project manager, architect, or systems engineer
@@ -16,6 +17,19 @@ tested locally by putting url on own computer's browser
 find bookmarklet debugger
 
 handler = listener
+
+issues:
+
+x and y coordinates of folder and docs should vary per user
+	o new locations table, user id, x, y, folder_id or doc_id
+	o people would be confused
+	o purpose of dragging is for preference
+	o composite primary keys more efficient, but harder to implement, than individual auto-incrementing primary keys
+	o a folder has one location, a doc has one location, a user has many locations, a location belongs to [user, folder, doc]
+
+document linked to user
+	o whole point of version was to keep track of history of document
+	o 
 
 --
 

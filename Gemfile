@@ -22,3 +22,7 @@ gem 'dynamic_form' # easy error messages for forms
 
 gem 'barista' # https://github.com/Sutto/barista so we can use coffeescript (in app/coffeescripts)
 gem 'json' # dependency if ruby 1.8
+
+group :development do
+  gem "rails-erd"
+end
