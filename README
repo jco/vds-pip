@@ -2,25 +2,6 @@ Progress:
 
 focusing on js w/o raphael
 
-in testvdspip, I've found that the most simple drag functions of jquery and raphaeljs don't
-work in vds. Stuck. maybe older or newer version of raphael?
-maybe the drag problem is the "layer" in vds?
-
-So I'll focus on something else for now -
-
-Then, go to user.rb
--role - project manager, architect, or systems engineer
--make 'create task' like create user
-	-stage and factor = fixed, hard-coded
-
-Questions for Jeff:
-How do you test api_controller, that createtask stuff?
-tested locally by putting url on own computer's browser
-
-find bookmarklet debugger
-
-handler = listener
-
 --
 
 Questions for later (probably trivial):
