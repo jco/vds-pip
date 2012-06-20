@@ -5,12 +5,18 @@
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :authenticate!, :set_current_user
+  before_filter :authenticate!#, :set_current_user
+  around_filter :do_with_current_user
 
 protected
-  
-  def set_current_user
-    User.current = current_user
+  # http://stackoverflow.com/questions/7896298/safety-of-thread-current-usage-in-rails
+  def do_with_current_user
+    User.current = current_user # Thread.current[:user] = self.current_user
+    begin
+      yield
+    ensure
+      User.current = nil # clean up thread: Thread.current[:user] = nil
+    end
   end
 
   # Checks to see if the client is trying to authenticate via URL params. Uses

@@ -2,8 +2,8 @@ This branch has coffeescript incorporated into existing JS, and has started sign
 
 Progress: focusing on js w/o raphael
 
-Now: Locations for folders, docs, users - use composite primary keys... seeds.rb
-make default location... so nasty, this method...
+Now: 
+
 
 Then, go to user.rb
 -role - project manager, architect, or systems engineer

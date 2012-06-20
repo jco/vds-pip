@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   # Sets up multiple threads so we can access User.current (which is current_user) in models
   # http://stackoverflow.com/questions/2513383/access-current-user-in-model, http://rails-bestpractices.com/posts/47-fetch-current-user-in-models
   def self.current
-    Thread.current[:user] # current_user?
+    Thread.current[:user]
   end
   def self.current=(user)
     Thread.current[:user] = user
