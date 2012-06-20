@@ -24,9 +24,17 @@ class Folder < ActiveRecord::Base
   has_many :downstream_dependencies, :as => :upstream_item, :class_name => "Dependency", :dependent => :destroy
   has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
   belongs_to :task
-
+  has_many :locations
+  # has_one :location
+  
   after_update :propagate_status!, :if => :status_changed?
-
+  after_create :create_location_object
+  
+  # Create a location object (after creating a folder)
+  def create_location_object
+    Location.create!(:folder_id => id)
+  end
+  
   # after_save callback. Sets the contents to have the same status as itself.
   def propagate_status!
     contents.each do |item|
@@ -84,19 +92,27 @@ class Folder < ActiveRecord::Base
     task.try(:factor)
   end
   
+  # Gets this folder's location based on the current user's id
+  def location
+    locations.each do |location|
+      return location if User.current.id == location.user_id
+    end
+  end
+  
   def coords
-    [x, y]
+    [location.x, location.y]
   end
 
+  # This lets JS access these properties of folder - like in item_drawer.js, item.name works
   def serializable_hash(options = nil)
     {
       :name => name,
       :id => id,
       :coords => coords,
       :folders => folders,
-      :documents => documents
+      :documents => documents,
+      :location_id => location.id
     }
   end
-
     
 end

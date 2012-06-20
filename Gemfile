@@ -23,6 +23,8 @@ gem 'dynamic_form' # easy error messages for forms
 gem 'barista' # https://github.com/Sutto/barista so we can use coffeescript (in app/coffeescripts)
 gem 'json' # dependency if ruby 1.8
 
+# gem 'composite_primary_keys' # https://github.com/drnic/composite_primary_keys
+
 group :development do
-  gem "rails-erd"
+  gem "rails-erd" # generating entity relationship diagrams
 end

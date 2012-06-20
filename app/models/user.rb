@@ -4,16 +4,22 @@
 #
 
 class User < ActiveRecord::Base
+  # Sets up multiple threads so we can access User.current (which is current_user) in models
+  # http://stackoverflow.com/questions/2513383/access-current-user-in-model, http://rails-bestpractices.com/posts/47-fetch-current-user-in-models
+  def self.current
+    Thread.current[:user] # current_user?
+  end
+  def self.current=(user)
+    Thread.current[:user] = user
+  end
+  
+  
   attr_accessible :email, :password, :password_confirmation, :role, :project_tokens
   attr_reader :project_tokens # http://railscasts.com/episodes/258-token-fields
   
   attr_accessible :project_ids # needed for check box forms in users _form, when a normal user creates another user
   attr_accessor :password
   before_save :encrypt_password
-  
-  ACTOR_ROLES = %w[ program_manager architect systems_engineer] # vds roles, started
-  # Users should be able to create a task (=folder in pip)
-  # test making user in vds, the connection here and there
   
   # These are user roles, mainly for control - not as important as actor roles
   ROLES = %w[site_admin project_manager normal_user]
@@ -35,6 +41,7 @@ class User < ActiveRecord::Base
 
   has_many :memberships
   has_many :projects, :through => :memberships
+  has_many :locations
   
   # Setter method used by jQuery token input
   def project_tokens=(ids)

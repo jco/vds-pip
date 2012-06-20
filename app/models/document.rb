@@ -18,6 +18,7 @@ class Document < ActiveRecord::Base
   end
 
   belongs_to :task
+  has_many :locations
 
   has_many :versions, :dependent => :destroy, :order => 'created_at DESC'
   validate :has_at_least_one_version
@@ -27,6 +28,11 @@ class Document < ActiveRecord::Base
   validates_inclusion_of :status, :in => STATUSES
   after_initialize :init
   after_update :mark_downstream_items_not_updated!, :if => Proc.new { |document| document.status_changed? && document.status == "not_updated" }
+  after_create :create_location_object
+  
+  def create_location_object
+    Location.create!(:document_id => id)
+  end
 
   def mark_downstream_items_not_updated!
     downstream_items.each do |item|
@@ -66,7 +72,7 @@ class Document < ActiveRecord::Base
   end
   
   def coords
-    [x, y]
+    [location.x, location.y]
   end
   
   def name

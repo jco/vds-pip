@@ -27,7 +27,8 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @data = {
       :project => @project,
-      :dependencies => @project.contained_dependencies
+      :dependencies => @project.contained_dependencies,
+      :current_user_id => current_user.id
     }.to_json.html_safe
   end
 

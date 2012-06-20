@@ -72,15 +72,6 @@ var Pip = Pip || {};
             
             // Attach the listener for creating documents
             P.container.addEventListener('dblclick', documentCreationHandler, false);
-            
-            // Key place to add event listeners for mouse events... although Jeff said that
-            // objects like folders get their event listeners when the objects are created, as in drag
-            
-            //my addition:
-            // P.container.addEventListener('click', documentCreationHandler, false);
-            // P.paper.image.addEventListener('click', documentCreationHandler, false);
-            
-            // P.container.addEventListener('mousedown', documentCreationHandler, false); // works
           }
 
           // draw items in this folder
@@ -94,7 +85,7 @@ var Pip = Pip || {};
             drawItemsFor(P.thisFolder);
             
           } else { // otherwise, we are just in the project itself
-            drawItemsFor(P.project);
+            drawItemsFor(P.project); // how does the project possess the folder
           } // don't do anything for a project
 
           // draw dependencies

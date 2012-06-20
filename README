@@ -2,10 +2,8 @@ This branch has coffeescript incorporated into existing JS, and has started sign
 
 Progress: focusing on js w/o raphael
 
-Now:
-draw arrows - droppable - in item_drawer.js:88
-make docs drag save properly √
-make sql diagram - mysql workbench
+Now: Locations for folders, docs, users - use composite primary keys... seeds.rb
+make default location... so nasty, this method...
 
 Then, go to user.rb
 -role - project manager, architect, or systems engineer
@@ -23,7 +21,7 @@ handler = listener
 issues:
 
 x and y coordinates of folder and docs should vary per user
-	o new locations table, user id, x, y, folder_id or doc_id
+	o new locations table, user id, x, y, folder_id and doc_id
 	o people would be confused
 	o purpose of dragging is for preference
 	o composite primary keys more efficient, but harder to implement, than individual auto-incrementing primary keys

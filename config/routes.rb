@@ -32,6 +32,9 @@ VdsPip::Application.routes.draw do
 
   resources :versions, :only => :show
 
+  # resource :locations
+  resources :locations, :only => :update # only for ajax call in item_drawer.js
+
   match 'api/:action' => 'api#:action'
 
   root :to => "projects#index"

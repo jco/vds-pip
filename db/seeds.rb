@@ -2,7 +2,7 @@
 # Authors: Jeff Cox, David Zhang
 # Copyright Syracuse University
 #
-
+# require 'composite_primary_keys'
 
 # Site admins
 admin1 = User.find_or_create_by_email('admin1@example.com', :password => 'admin') do |u|
@@ -36,8 +36,6 @@ end
 user3 = User.find_or_create_by_email('user3@example.com', :password => 'admin') do |u|
   u.role = 'normal_user'
 end
-
-puts "---created users"
 
 # Projects
 project1 = Project.find_or_create_by_name('Test project 1')
@@ -87,3 +85,33 @@ factors.each { |f| Factor.find_or_create_by_name(f, :project => project1) }
 
 # Tasks
 Task.find_or_create_by_name("Sample task A", :stage => Stage.find_by_name(stages[0]), :factor => Factor.find_by_name(factors[0]))
+
+# Folders
+if Folder.count == 0
+  Folder.create!(:name=>"folder 1",:project_id=>Project.all[0].id)
+  Folder.create!(:name=>"folder 2",:project_id=>Project.all[0].id)
+  puts '---created folders'
+else
+  puts '---folders not created'
+end
+
+# Documents - bleh, need to specify version
+# if Document.count == 0
+#   Document.create!(:name=>'document 1',:project_id=>Project.all[0].id)
+#   Document.create!(:name=>'document 2',:project_id=>Project.all[0].id)
+#   puts '---created documents'
+# else
+#   puts '---documents not created'
+# end
+
+# Locations
+if Location.count == 0
+  Folder.all.each do |f|
+    User.all.each do |u|
+      Location.create!(:folder_id=>f.id, :user_id=>u.id)
+    end
+  end
+  puts '---created locations'
+else
+  puts '---locations not created'  
+end

@@ -5,9 +5,14 @@
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :authenticate!
+  before_filter :authenticate!, :set_current_user
 
 protected
+  
+  def set_current_user
+    User.current = current_user
+  end
+
   # Checks to see if the client is trying to authenticate via URL params. Uses
   # the current session otherwise.
   def authenticate!

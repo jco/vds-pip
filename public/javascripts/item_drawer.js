@@ -48,7 +48,7 @@ Pip.ItemDrawer = (function(P, $) {
         });
       }
       
-      // Set draggable's stop event for ajax calls & updating coordinates on the actual icon - other options in folder.coffee / document.coffee
+      // Set draggable's stop event for ajax calls for _updating coordinates on the actual icon_ - other options in folder.coffee / document.coffee
       $(icon.get()).draggable({ // THIS WORKS =D Good example
         stop: function(event, ui) { 
           // Update
@@ -56,15 +56,16 @@ Pip.ItemDrawer = (function(P, $) {
           
           var x = icon.x, y = icon.y;
           
-          alert("Here: "+x+"; "+y);
+          // alert("Here: "+x+"; "+y);
           // part 1: draw dependencies
           // first we have to update the coords of the json item
           setJsonCoords(item, [x, y]);
           Pip.DependencyDrawer.redrawDependencies();
 
           // part 2: ping server
-          console.log('PUT new coordinates of item ', item, [x, y], '...');
-          var url = '/' + kind(item) + 's/' + String(item.id); // so you have /documents/2 or /folders/3
+          console.log('PUT new coordinates of item ', item, [x, y], '...'+item.location_id);
+          var url = '/locations/' + String(item.location_id)
+          // what jeff had before: var url = '/' + kind(item) + 's/' + String(item.id); // so you have /documents/2 or /folders/3
           var data = {}; data[kind(item)] = {"x": x, "y": y}; // so data is like { document => {:x => x, :y => y} }
           $.ajax({
             type: 'PUT',

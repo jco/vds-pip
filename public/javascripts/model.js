@@ -63,5 +63,9 @@ var Pip = Pip || {};
   Model.Document = function(json) { Model.Base.call(this, json); };
   Model.Document.prototype = new Model.Base();
   Model.Document.prototype.type = 'document';
+  
+  Model.Location = function(json) { Model.Base.call(this, json); };
+  Model.Location.prototype = new Model.Base();
+  Model.Location.prototype.type = 'location';
 
 })(Pip);
