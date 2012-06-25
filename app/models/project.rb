@@ -12,10 +12,17 @@ class Project < ActiveRecord::Base
 
   # These are only the top-level docs and folders.
   has_many :documents
-  has_many :folders 
+  has_many :folders
   
   has_many :memberships
   has_many :users, :through => :memberships
+  after_create :create_memberships_for_site_admins
+
+  def create_memberships_for_site_admins
+    User.where(:role=>'site_admin').each do |u|
+      Membership.find_or_create_by_user_id_and_project_id(u.id, self.id)
+    end
+  end
 
   def tasks
     stages.map { |stage| stage.tasks }.flatten

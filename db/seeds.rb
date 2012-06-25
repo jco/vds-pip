@@ -44,7 +44,9 @@ project3 = Project.find_or_create_by_name('Test project 3')
 project4 = Project.find_or_create_by_name('Test project 4')
 project5 = Project.find_or_create_by_name('Test project 5')
 
-# Memberships - note that site admins can control all projects & so don't need any
+# Memberships - note that site admins can control all projects & so don't need any THIS IS THE PROBLEM FOR LOCATIONS
+
+# non-site admins:
 Membership.find_or_create_by_user_id_and_project_id(pm1.id, project1.id)
 Membership.find_or_create_by_user_id_and_project_id(pm1.id, project2.id)
 Membership.find_or_create_by_user_id_and_project_id(pm2.id, project3.id)
@@ -105,13 +107,13 @@ end
 # end
 
 # Locations
-if Location.count == 0
-  Folder.all.each do |f|
-    User.all.each do |u|
-      Location.create!(:folder_id=>f.id, :user_id=>u.id)
-    end
-  end
-  puts '---created locations'
-else
-  puts '---locations not created'  
-end
+# if Location.count == 0
+#   Folder.all.each do |f|
+#     User.all.each do |u| # NO
+#       Location.create!(:folder_id=>f.id, :user_id=>u.id)
+#     end
+#   end
+#   puts '---created locations'
+# else
+#   puts '---locations not created'  
+# end

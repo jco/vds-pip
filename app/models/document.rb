@@ -28,10 +28,15 @@ class Document < ActiveRecord::Base
   validates_inclusion_of :status, :in => STATUSES
   after_initialize :init
   after_update :mark_downstream_items_not_updated!, :if => Proc.new { |document| document.status_changed? && document.status == "not_updated" }
-  after_create :create_location_object
+  after_create :create_location_objects
   
-  def create_location_object
-    Location.create!(:document_id => id)
+  # Create a location object (after creating a document)
+  def create_location_objects
+    User.all.each { |u| 
+      if u.is_member_of? project # If the user is a member of this document's project - should get current user too
+        Location.create!(:document_id => id, :user_id => u.id)
+      end
+    }
   end
 
   def mark_downstream_items_not_updated!
@@ -71,6 +76,14 @@ class Document < ActiveRecord::Base
     versions.first
   end
   
+  # Gets this document's location based on the current user's id
+  def location
+    locations.each do |location|
+      return location if User.current.id == location.user_id
+    end
+    return nil
+  end
+  
   def coords
     [location.x, location.y]
   end
@@ -85,7 +98,8 @@ class Document < ActiveRecord::Base
       :id => id,
       :status => status,
       :coords => coords,
-      :icon => icon_path
+      :icon => icon_path,
+      :location_id => location.id
     }
   end
 end

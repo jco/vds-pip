@@ -25,14 +25,17 @@ class Folder < ActiveRecord::Base
   has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
   belongs_to :task
   has_many :locations
-  # has_one :location
   
   after_update :propagate_status!, :if => :status_changed?
-  after_create :create_location_object
+  after_create :create_location_objects
   
   # Create a location object (after creating a folder)
-  def create_location_object
-    Location.create!(:folder_id => id)
+  def create_location_objects
+    User.all.each { |u| 
+      if u.is_member_of? project # If the user is a member of this folder's project - should get current user too
+        Location.create!(:folder_id => id, :user_id => u.id)
+      end
+    }
   end
   
   # after_save callback. Sets the contents to have the same status as itself.
@@ -94,9 +97,12 @@ class Folder < ActiveRecord::Base
   
   # Gets this folder's location based on the current user's id
   def location
+    puts "Locations: "
     locations.each do |location|
+      puts "folder id: #{location.folder_id}, user id: #{location.user_id} (current user's id: #{User.current.id})"
       return location if User.current.id == location.user_id
     end
+    return nil
   end
   
   def coords

@@ -43,15 +43,20 @@ class User < ActiveRecord::Base
   has_many :projects, :through => :memberships
   has_many :locations
   
+  after_create :create_memberships_for_site_admins
+  
+  def create_memberships_for_site_admins
+    if role == 'site_admin'
+      Project.all.each do |p|
+        Membership.find_or_create_by_user_id_and_project_id(self.id, p.id)
+      end
+    end
+  end
+  
   # Setter method used by jQuery token input
   def project_tokens=(ids)
     self.project_ids = ids.split(",")
   end
-  
-  # What is this? I think we can get rid of it since I finished the has_many through relationship. -David
-  # def projects
-  #   memberships.map {|membership| membership.project }
-  # end
   
   # Random 6-char password
   def self.generate_password
