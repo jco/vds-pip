@@ -1,5 +1,5 @@
 CoffeeScript is improved JS. http://coffeescript.org/
-Files in app/coffeescripts are automatically compiled into JS in public/javascripts by Barista (gem).
+Files in app/coffeescripts are automatically compiled into JS in public/javascripts by Barista (a gem).
 
 Assumption: 
 #container is the container that contains objects (folders, documents, etc.)
@@ -26,3 +26,6 @@ If you do
 		# code here
 then foo is a not a property of the class - it's just a local function. Here, you just do foo() to call it.
 In a sense, it's "private", although the _foo convention is used for methods in general. It really doesn't matter.
+
+
+THE COFFEE STUFF HERE IS MAINLY USED IN item_drawer.js - THAT'S IT FOR NOW

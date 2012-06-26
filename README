@@ -1,34 +1,6 @@
-This branch has coffeescript incorporated into existing JS, and has started significant database changes.
+*This branch has coffeescript incorporated into existing JS, and has started significant database changes.
 
-Progress: focusing on js w/o raphael
-
-Now:
-
-Then, go to user.rb
--role - project manager, architect, or systems engineer
--make 'create task' like create user
-	-stage and factor = fixed, hard-coded
-
-Questions for Jeff:
-How do you test api_controller, that createtask stuff?
-tested locally by putting url on own computer's browser
-
-find bookmarklet debugger
-
-handler = listener
-
-issues:
-
-x and y coordinates of folder and docs should vary per user
-	o new locations table, user id, x, y, folder_id and doc_id
-	o people would be confused
-	o purpose of dragging is for preference
-	o composite primary keys more efficient, but harder to implement, than individual auto-incrementing primary keys
-	o a folder has one location, a doc has one location, a user has many locations, a location belongs to [user, folder, doc]
-
-document linked to user
-	o whole point of version was to keep track of history of document
-	o 
+See the "history of vds-pip" doc file for background on everything that's happened here.
 
 --
 
@@ -36,11 +8,10 @@ Questions for later (probably trivial):
 Is createuser (register) only for certain users, so you can't register straight-up?
 
 Way Later:
-Soft delete, which isn't an essential feature, isn't only partly done so far.
+Soft delete, which isn't an essential feature, is only partly done so far.
 Key idea = The tasks table has a t.datetime "deleted_at" field
 	-if this is null, the task is not deleted; 
 	-if it's not null (it's an actual datetime), then that datetime is when the task was deleted, and the task is deleted.
-	
 	
 --
 

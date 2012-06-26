@@ -81,15 +81,14 @@ Pip.ItemDrawer = (function(P, $) {
       
       $(icon.get()).droppable({
         // TODO - update arrows appropriately
+        // Code here can be compared to Jeff's v0.3 tag/branch at https://github.com/jco/vds-pip, which has the same code as is in the folder "vds-pip-jeffs-last (dep working)"
         // helper.drawArrow([100,200],[300,300])
         // Actually assign the event listeners for creating arrows/dependencies
         // assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
         drop: function(event, ui) {
-          alert("ui.draggable: "+$(ui.draggable));
-          // I will pass the div if object!
-          Pip.DependencyDrawer.createDependency(originItem, droppable); // USE JEFF'S ARROW DRAWING, NOT HELPER.DRAW
+          alert("Dropped! Code to be implemented.");
+          Pip.DependencyDrawer.createDependency(originItem, droppable);
         }
-        // get id of object that dropped
       });
     };
 

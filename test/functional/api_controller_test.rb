@@ -3,6 +3,8 @@
 # Copyright Syracuse University
 #
 
+# TESTS HERE PROBABLY DON'T WORK ANYMORE AFTER DRASTIC DATABASE REMODELING (the commit after "cleaned up locations for document...")
+
 require 'test_helper'
 
 class ApiControllerTest < ActionController::TestCase

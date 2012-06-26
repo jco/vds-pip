@@ -5,6 +5,8 @@
 
 require 'test_helper'
 
+# TESTS HERE PROBABLY DON'T WORK ANYMORE AFTER DRASTIC DATABASE REMODELING (the commit after "cleaned up locations for document...")
+
 class TaskTest < ActiveSupport::TestCase
   test "normal task creation" do
     project = Project.first
