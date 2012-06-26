@@ -24,9 +24,20 @@ class Folder < ActiveRecord::Base
   has_many :downstream_dependencies, :as => :upstream_item, :class_name => "Dependency", :dependent => :destroy
   has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
   belongs_to :task
-
+  has_many :locations
+  
   after_update :propagate_status!, :if => :status_changed?
-
+  after_create :create_location_objects
+  
+  # Create a location object (after creating a folder)
+  def create_location_objects
+    User.all.each { |u| 
+      if u.is_member_of? project # If the user is a member of this folder's project - should get current user too
+        Location.create!(:folder_id => id, :user_id => u.id)
+      end
+    }
+  end
+  
   # after_save callback. Sets the contents to have the same status as itself.
   def propagate_status!
     contents.each do |item|
@@ -37,10 +48,10 @@ class Folder < ActiveRecord::Base
 
   def status
     @status ||= if contents.any? { |item| item.status == "not_updated" }
-        "not_updated"
-      else
-        "up_to_date"
-      end
+      "not_updated"
+    else
+      "up_to_date"
+    end
   end
 
   def status=(val)
@@ -84,19 +95,30 @@ class Folder < ActiveRecord::Base
     task.try(:factor)
   end
   
+  # Gets this folder's location based on the current user's id
+  def location
+    puts "Locations: "
+    locations.each do |location|
+      puts "folder id: #{location.folder_id}, user id: #{location.user_id} (current user's id: #{User.current.id})"
+      return location if User.current.id == location.user_id
+    end
+    return nil
+  end
+  
   def coords
-    [x, y]
+    [location.x, location.y]
   end
 
+  # This lets JS access these properties of folder - like in item_drawer.js, item.name works
   def serializable_hash(options = nil)
     {
       :name => name,
       :id => id,
       :coords => coords,
       :folders => folders,
-      :documents => documents
+      :documents => documents,
+      :location_id => location.id
     }
   end
-
     
 end

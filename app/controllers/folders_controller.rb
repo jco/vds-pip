@@ -27,6 +27,7 @@ class FoldersController < ApplicationController
     @folder = @parent.folders.build(params[:folder])
 
     if @folder.save
+      Location.create!(:user_id=>current_user.id, :folder_id=>@folder.id)
       redirect_to(@parent, :notice => 'Folder was successfully created.')
     else
       render :action => "new"
@@ -35,13 +36,11 @@ class FoldersController < ApplicationController
 
   # PUT /folders/1
   def update
-    folder = Folder.find(params[:id])
-
-    if folder.update_attributes(params[:folder])
+    @folder = Folder.find(params[:id])
+    if @folder.update_attributes(params[:folder])
       render(:json => nil, :status => :ok)
     else
-      render(:json => folder.errors, :status => :unprocessable_entity)
+      render(:json => @folder.errors, :status => :unprocessable_entity)
     end
   end
-
 end

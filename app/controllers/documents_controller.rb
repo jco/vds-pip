@@ -22,6 +22,7 @@ class DocumentsController < ApplicationController
     @document = @parent.documents.build(params[:document])
 
     if @document.save
+      Location.create!(:user_id=>current_user.id, :document_id=>@document.id)
       redirect_to(@document, :notice => 'Document was successfully created.')
     else
       render :action => "new"
@@ -32,12 +33,20 @@ class DocumentsController < ApplicationController
   # this is sometimes called with coords, sometimes with in-place edits
   def update
     @document = Document.find(params[:id])
-
+    puts '-----------------------------------------'
+    puts "document update called: params[:document]: #{params[:document]}"
+    puts '-----------------------------------------'
     respond_to do |format|
       if @document.update_attributes(params[:document])
-        format.json { render :json => nil }
+        puts '-----------------------------------------'
+        puts "good"
+        puts '-----------------------------------------'
+        format.json { render :json => nil, :status => :ok }
         format.html { redirect_to(@document, :notice => 'Document was successfully updated.') }
       else
+        puts '-----------------------------------------'
+        puts "bad"
+        puts '-----------------------------------------'
         format.json { render :json => @document.errors, :status => :unprocessable_entity }
       end
     end

@@ -23,15 +23,15 @@ var Pip = Pip || {};
     };
 
     // Creates a new dependency between two object references to items. This both updates
-    // the server via an ajax call, and draws the new arrow locally.
-    DependencyDrawer.createDependency = function (upstream_item, downstream_item) {
+    // the server via an ajax call, and draws the new arrow locally. maybe 3rd argument for PATH, default null and just within folder
+    DependencyDrawer.createDependency = function (upstream_item, downstream_item) { // upstream=from, downstream=to
       console.log('create dep from ', upstream_item, 'to', downstream_item);
       $.ajax({
         type: 'POST',
         url: '/dependencies',
         data: {
           "dependency": {
-            "upstream_item_id": upstream_item.id,
+            "upstream_item_id": upstream_item.id, // what is id? does this differentiate b/w folder and document id.. 
             "upstream_item_type": upstream_item.type.capitalize(),
             "downstream_item_id": downstream_item.id,
             "downstream_item_type": downstream_item.type.capitalize()
@@ -67,6 +67,7 @@ var Pip = Pip || {};
     var drawDependency = function(dep) {
       var upstreamItem = P.index[dep[0]];
       var downstreamItem = P.index[dep[1]];
+      alert("upstream: "+upstreamItem+"; downstream: "+downstreamItem);
       P.ArrowDrawer.addArrows('global', [[arrowEndpoint(upstreamItem), arrowEndpoint(downstreamItem)]]);
     };
     

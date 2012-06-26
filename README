@@ -1,14 +1,21 @@
-Progress:
+*This branch has coffeescript incorporated into existing JS, and has started significant database changes.
 
-focusing on js w/o raphael
+See the "history of vds-pip" doc file for background on everything that's happened here.
 
 --
+
+Old thoughts: 
 
 Questions for later (probably trivial):
 Is createuser (register) only for certain users, so you can't register straight-up?
 
 Way Later:
-Soft delete, which isn't an essential feature, isn't only partly done so far.
+Soft delete, which isn't an essential feature, is only partly done so far.
 Key idea = The tasks table has a t.datetime "deleted_at" field
 	-if this is null, the task is not deleted; 
 	-if it's not null (it's an actual datetime), then that datetime is when the task was deleted, and the task is deleted.
+	
+--
+
+Quick Thanks
+Document icon: http://www-03.ibm.com/software/lotus/symphony/gallery.nsf/GalleryClipArtAll/BC366132009A4D3E8525759600321C79

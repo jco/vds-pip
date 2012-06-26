@@ -4,16 +4,22 @@
 #
 
 class User < ActiveRecord::Base
+  # Sets up multiple threads so we can access User.current (which is current_user) in models
+  # http://stackoverflow.com/questions/2513383/access-current-user-in-model, http://rails-bestpractices.com/posts/47-fetch-current-user-in-models
+  def self.current
+    Thread.current[:user]
+  end
+  def self.current=(user)
+    Thread.current[:user] = user
+  end
+  
+  
   attr_accessible :email, :password, :password_confirmation, :role, :project_tokens
   attr_reader :project_tokens # http://railscasts.com/episodes/258-token-fields
   
   attr_accessible :project_ids # needed for check box forms in users _form, when a normal user creates another user
   attr_accessor :password
   before_save :encrypt_password
-  
-  ACTOR_ROLES = %w[ program_manager architect systems_engineer] # vds roles, started
-  # Users should be able to create a task (=folder in pip)
-  # test making user in vds, the connection here and there
   
   # These are user roles, mainly for control - not as important as actor roles
   ROLES = %w[site_admin project_manager normal_user]
@@ -35,16 +41,22 @@ class User < ActiveRecord::Base
 
   has_many :memberships
   has_many :projects, :through => :memberships
+  has_many :locations
+  
+  after_create :create_memberships_for_site_admins
+  
+  def create_memberships_for_site_admins
+    if role == 'site_admin'
+      Project.all.each do |p|
+        Membership.find_or_create_by_user_id_and_project_id(self.id, p.id)
+      end
+    end
+  end
   
   # Setter method used by jQuery token input
   def project_tokens=(ids)
     self.project_ids = ids.split(",")
   end
-  
-  # What is this? I think we can get rid of it since I finished the has_many through relationship. -David
-  # def projects
-  #   memberships.map {|membership| membership.project }
-  # end
   
   # Random 6-char password
   def self.generate_password

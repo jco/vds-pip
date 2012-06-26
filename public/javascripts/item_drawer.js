@@ -4,107 +4,69 @@
  */
 var Pip = Pip || {};
 
+// Coordinates here are in the 4th quadrant; +x goes right, +y goes down
 Pip.ItemDrawer = (function(P, $) {
     var ItemDrawer = {};
 
-    // Draws an item (which can be a folder or a document) on the canvas.
+    var helper = new Helper(); // Defined in app/coffeescripts
+    helper.setCanvas(P.paper);
+    // helper.showCanvas();
+    
+    // Draws an item (which can be a folder or a document)
     ItemDrawer.drawItem = function(item) { // for each item (e.g., folder) on screen
-      var stuff = []; // holds items of things to be drawn; handles order ('layer')
-
-      // order is important (z-index)
-      // first: optional color highlight to indicate status
-      var m = P.HIGHLIGHT_MARGIN; // for convenience
-      if (kind(item) == 'document') {
+      var icon;
+      if (kind(item) == 'document') { 
+        icon = new Document(item.name);
+        icon.setCoordinates(item.coords[0], item.coords[1]);
         switch (item.status) {
           case "not_updated":
-            var color = P.paper.rect(item.coords[0] - m, item.coords[1] - m, 34 + (2 * m), 34 + (2 * m));
-            color.attr({"stroke": "none", fill: 'red'});
-            stuff.push(color);
+            icon.setBorderColor('red');
             break;
           case 'being_worked_on':
-            var color = P.paper.rect(item.coords[0] - m, item.coords[1] - m, 34 + (2 * m), 34 + (2 * m));
-            color.attr({"stroke": "none", fill: 'yellow'});
-            stuff.push(color);
+            icon.setBorderColor('yellow');
+            break;
+          case 'up_to_date':
+            // no border
             break;
         }
-      }
-
-      // draws the icon associated with the file type
-      // raphael object
-      var icon        = Pip.paper.image(iconFor(item), item.coords[0], item.coords[1], 34, 34);//34s are width and height of icon
-      // test problem of 'image'
-      var iconLabel   = Pip.paper.text(item.coords[0] + 34 + 5, item.coords[1] + 17, item.name).attr('text-anchor', 'start');
-      stuff.push(icon, iconLabel);
-
-      // create arrow drawing handle (handle is the white circle w/ arrow from which the user can draw arrows)
-      var handle = Pip.paper.path(dragHandlePath(item)).attr('fill', 'white');
-      stuff.push(handle);
-      
-      // Actually assign the event listeners for creating arrows/dependencies
-      assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
-
-      // Figure out what a double-click should do based on whether _item_ a folder or document
-      if (kind(item) == 'document') {
-        // double click opens an overlay
-        icon.dblclick(documentOverlay(item));
-      } else {
-        // kind == 'folder'
-        icon.dblclick(function (ev) { // look at raphael docs to check for these methods
-            // redirect
-            location = P.folderPath(item); // works
-        });
-        // icon.click(function (ev) {
-        //     // alert("clicked"); // 
-        //     $('body').css('background', 'pink'); // 
-        // });
-        // icon.mouseover(function (ev) {
-        //     $('body').css('background', 'gray'); // works
-        //     // alert("mouseover"); // works for vds
-        // });
-        // icon.mouseout(function (ev) {
-        //     $('body').css('background', 'blue'); // works
-        //     // alert("mouseout"); // makes vds crash with stack overflow
-        // });
-        // icon.mousedown(function (ev) {
-        //     $('body').css('background', 'green'); // undetected
-        //     // alert("mousedown"); // undetected
-        // });
-        // icon.mouseup(function (ev) {
-        //     $('body').css('background', 'yellow'); // undetected
-        //     // alert("mouseup"); // undetected
-        // });
         
+        // Set dblclick for document - opens an overlay
+        $(icon.getImage()).dblclick(documentOverlay(item));
+      } else { // Item is a folder
+        // Initialize icon
+        icon = new Folder(item.name);
+        icon.setCoordinates(item.coords[0], item.coords[1]);
+        
+        // Set dblclick for folder
+        $(icon.getImage()).dblclick(function (ev) { // look at raphael docs to check for these methods
+            location = P.folderPath(item); // redirect - this works
+        });
+        
+        // Set draggable's stop event for dependency drawing on the handle - other options in folder.coffee
+        $(icon.getHandle()).draggable({
+          // nothing needed
+        });
       }
-
-      // Reorder the elements of _stuff[]_ such that the last thing in the array is at the front.
-      var st = Pip.paper.set(); // Pip.paper is raphaeljs's own data structure; set returns an empty set
-      stuff.forEach(function (thing) {
-        thing.toFront();
-        st.push(thing);
-      });
-
-      // Assign the event listeners responsible for letting the user change the visual position of the item
-      // by dragging.
-      // $("svg").draggable();
-      // item.draggable({
-      //   // stop: function(event, ui) { }
-      // });
       
-      assignItemMovementDragListeners({set: st, handle: icon, dragEndCallback: function(newCoords) {
-        alert('newCoords: '+newCoords+' item coords: '+item.coords);
-        if (!_.isEqual(newCoords, item.coords)) { // If the coordinates have changed ( can't do this: if ([4,5] == [4,5]) )
-          var x = newCoords[0], y = newCoords[1];
-      
+      // Set draggable's stop event for ajax calls for _updating coordinates on the actual icon_ - other options in folder.coffee / document.coffee
+      $(icon.get()).draggable({ // THIS WORKS =D Good example
+        stop: function(event, ui) { 
+          // Update
+          icon.updateCoordinates();
+          
+          var x = icon.x, y = icon.y;
+          
+          // alert("Here: "+x+"; "+y);
           // part 1: draw dependencies
           // first we have to update the coords of the json item
           setJsonCoords(item, [x, y]);
           Pip.DependencyDrawer.redrawDependencies();
-      
+
           // part 2: ping server
-          console.log('PUT new coordinates of item ', item, [x, y], '...');
-          alert('here');
-          var url = '/' + kind(item) + 's/' + String(item.id);
-          var data = {}; data[kind(item)] = {"x": x, "y": y};
+          console.log('PUT new coordinates of item ', item, [x, y], '...'+item.location_id);
+          var url = '/locations/' + String(item.location_id)
+          // what jeff had before: var url = '/' + kind(item) + 's/' + String(item.id); // so you have /documents/2 or /folders/3
+          var data = {}; data[kind(item)] = {"x": x, "y": y}; // so data is like { document => {:x => x, :y => y} }
           $.ajax({
             type: 'PUT',
             url: url,
@@ -112,11 +74,22 @@ Pip.ItemDrawer = (function(P, $) {
             dataType: 'json',
             complete: function() { console.log('...complete.'); },
             // error: P.error
-            error: function(e, ts, et) { alert(ts) }
+            // error: function(e, ts, et) { alert(ts) }
           });
         }
-      }});
-
+      });
+      
+      $(icon.get()).droppable({
+        // TODO - update arrows appropriately
+        // Code here can be compared to Jeff's v0.3 tag/branch at https://github.com/jco/vds-pip, which has the same code as is in the folder "vds-pip-jeffs-last (dep working)"
+        // helper.drawArrow([100,200],[300,300])
+        // Actually assign the event listeners for creating arrows/dependencies
+        // assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
+        drop: function(event, ui) {
+          alert("Dropped! Code to be implemented.");
+          Pip.DependencyDrawer.createDependency(originItem, droppable);
+        }
+      });
     };
 
     // A function that, when called, returns another function that pops up the correct overlay.
@@ -132,16 +105,8 @@ Pip.ItemDrawer = (function(P, $) {
       };
     };
 
-    var setIconCoords = function (item, coords) {
-      
-    };
-
     var setJsonCoords = function (item, coords) {
       item.coords = coords;
-    };
-
-    var setServerCoords = function (item, coords) {
-      //
     };
 
     // Function for determining whether the given item is a document or folder.
@@ -149,118 +114,10 @@ Pip.ItemDrawer = (function(P, $) {
       return item.documents ? 'folder' : 'document';
     };
 
-    // Assign the event listeners responsible for letting the user change the visual position of the item
-    // by dragging.
-    // _options_ should look like {set: st, handle: icon, dragEndCallback: function(newCoords) { ... } }
-    //    Where _set_ is all the components that represent the item. We want to drag these all at once.
-    //      ... _handle_ is the area the user clicks to initiate the drag; in this case, the icon.
-    //      ... _dragEndCallback_ is a function that's called when the user lifts the mouse. The coordinates
-    //                            where the user did that are supplied as a argument.
-    var assignItemMovementDragListeners = function (options) {
-        // define drag handlers
-        // "this" is the icon
-        // raphael calls these functions, 
-        // raphael example:
-        // Element.drag(onmove, onstart, onend, [mcontext], [scontext], [econtext])
-        var start = function () { // mousedown
-            $("body").css('background','red'); // not executed in vds
-            this.ox = 0;
-            this.oy = 0;
-            this.attr({opacity: .5});
-        },
-        move = function (dx, dy) {
-            $("body").css('background','yellow'); // not executed in vds
-            options.set.translate( dx - this.ox, dy - this.oy );
-            this.ox = dx;
-            this.oy = dy;
-        },
-        up = function () { // mouseup, 'onend' for raphael doc
-            $("body").css('background','green'); // not executed in vds
-            // restoring state
-            this.attr({opacity: 1});
-            var currentCoords = [this.ox, this.oy]; // RECENTLY CHANGED [this.attr('x'), this.attr('y')]; // issue: this resets the coords
-            alert('currentCoords after mouseup: '+currentCoords);
-            options.dragEndCallback(currentCoords);
-        };
-        // assign them:
-        // alert("in assignItemMovementDragListeners");
-        // $("body").css('background','orange'); // not executed in vds
-
-        if (P.kind == 'folder') {
-          this.addEventListener('mousedown', start, false);
-          this.addEventListener('mousemove', move, false);
-          this.addEventListener('mouseup', up, false);
-        }
-        
-        // Assign the listeners
-        options.handle.drag(move, start, up); // needed 
-    };
-    
-    // Assign event listeners to the various components of an item (doc or folder) such that
-    // when the user clicks and drags from the drag handle to another icon, an arrow/dependency is created.
-    var assignArrowDrawingListeners = function (ops) {
-      
-      // First, create the three events that will fire as part of the dragging process
-      // (http://raphaeljs.com/reference.html#Element.drag)
-      
-      // dragStart() fires when the drag is initiated
-      // dragMove() fires every time the listener is dragged (I think continuously?)
-      // dragUp() fires when the mouse is lifted after a drag, signaling the end
-      
-      var dragStart = function () {
-           // set a 'global' variable indicating we are in a drop
-           Pip.someGlobal = {draggingArrow: true, originItem: ops.item};
-       },
-       dragMove = function (dx, dy) {
-            // show temp arrow
-            var handleCoords = handlePoint(ops.item);
-            var coordPair = [
-                // sane way to get coords of ops.handle
-                // assume its a circle?
-                handleCoords,
-                // current point
-                [handleCoords[0] + dx, handleCoords[1] + dy]
-            ];
-           Pip.ArrowDrawer.replaceArrows(ops.item, [coordPair]);
-           // alert("hooray level 2"); // WHY IS THIS NOT REACHED ON VDS?
-       },
-       dragUp = function() {
-           Pip.someGlobal = {};
-           Pip.ArrowDrawer.clearArrows(ops.item);
-       };
-       
-       // This line actually assigns the listeners
-       ops.handle.drag(dragMove, dragStart, dragUp); // handles the drag and making the arrow appear
-       
-       // This is a fourth event listener, placed on the "dropZone" (i.e. the destination of the drag).
-       // It is responsible for figuring out whether we were dragging in the first place, and if it
-       // thinks everything is legit, it creates the dependency on the server.
-       ops.dropZone.mouseup(function (ev) {
-           if (Pip.someGlobal && Pip.someGlobal.draggingArrow) {
-               Pip.DependencyDrawer.createDependency(Pip.someGlobal.originItem, ops.item);
-           }
-       });
-
-    };
-
-    var dragHandlePath = function(item) {
-        var centerPoint = handlePoint(item);
-        var point = [ centerPoint[0] + 3, centerPoint[1] ];
-        var radius = 5;
-        return Pip.Drawing.circlePath(centerPoint[0], centerPoint[1], radius) +
-            Pip.moveTo([ centerPoint[0] - 3, centerPoint[1] ]) + Pip.lineTo(point) + 
-            Pip.moveTo([ centerPoint[0], centerPoint[1] - 3 ]) + Pip.lineTo(point) +
-            Pip.moveTo([ centerPoint[0], centerPoint[1] + 3 ]) + Pip.lineTo(point);
-    };
-
-    var handlePoint = function (item) {
-        return [ item.coords[0] + 30, item.coords[1] + 17 ];
-    };
-
     var iconFor = P.iconFor = function (item) {
         return item.icon || '/images/icons/folder.gif';
     };
-
+    
     return ItemDrawer;
 })(Pip, jQuery);
 
