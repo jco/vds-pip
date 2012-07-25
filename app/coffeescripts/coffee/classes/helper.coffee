@@ -1,3 +1,7 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
 # Files in app/coffeescripts are automatically compiled into JS in public/javascripts by Barista (gem)
 # Helper methods used by other classes
 
@@ -49,7 +53,7 @@ class Helper
     dx = endCoords[0] - startCoords[0]
     dy = endCoords[1] - startCoords[1]
     mainLineAngle = Math.atan(dy / dx)
-    mainLineAngle = Math.PI + mainLineAngle  if startCoords[0] > endCoords[0]
+    mainLineAngle = Math.PI + mainLineAngle if startCoords[0] > endCoords[0]
     @_arrowheadPath centerCoords, mainLineAngle
   
   # The path that draws the tiny arrowhead

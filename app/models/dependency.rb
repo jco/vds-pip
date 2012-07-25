@@ -7,6 +7,7 @@ class Dependency < ActiveRecord::Base
   self.include_root_in_json = false
   belongs_to :upstream_item, :polymorphic => true
   belongs_to :downstream_item, :polymorphic => true
+  # validate later: upstream_item_type and downstream_item_type are either "Folder" or "Document"
 
   validates_presence_of :upstream_item
   validates_presence_of :downstream_item

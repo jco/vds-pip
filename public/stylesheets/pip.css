@@ -3,6 +3,7 @@
  * Copyright Syracuse University
  */
 #container {
+  position:relative;
   float: left;
   outline: 1px solid black;
   width: 80%;
@@ -10,6 +11,7 @@
 }
 
 #pane {
+  position:relative;
   float: left;
   background: #AAA;
   width: 20%;

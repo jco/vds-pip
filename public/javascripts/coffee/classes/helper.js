@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Fri, 08 Jun 2012 16:20:00 GMT from
+/* DO NOT MODIFY. This file was compiled Tue, 24 Jul 2012 15:16:02 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/helper.coffee
  */
 

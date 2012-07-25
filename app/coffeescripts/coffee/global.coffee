@@ -1,3 +1,7 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
 # Files in app/coffeescripts are automatically compiled into JS in public/javascripts by Barista (gem)
 # This file contains constants and useful global things for coffee files. Should be required first for coffee files.
 

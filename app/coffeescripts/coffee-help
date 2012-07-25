@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 CoffeeScript is improved JS. http://coffeescript.org/
 Files in app/coffeescripts are automatically compiled into JS in public/javascripts by Barista (a gem).
 

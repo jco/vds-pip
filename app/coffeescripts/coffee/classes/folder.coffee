@@ -1,3 +1,7 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
 # Files in app/coffeescripts are automatically compiled into JS in public/javascripts by Barista (gem)
 
 jQuery ->
@@ -29,7 +33,7 @@ class Folder
     @_makeDroppable() # Make self droppable so detection of when to draw dependencies exists
   
   getStyleAttributes: ->
-    return 'display: inline-block'
+    return 'display: inline-block; position: absolute;'
     # return 'position: relative;' # position automatically relative by jQuery draggable, which uses 'left' and 'top' like you planned
   
   # Returns the string that jQuery would use to access the surrounding div object, 
@@ -40,6 +44,9 @@ class Folder
   getImage: ->
     return "#folder_icon_#{@id}"
   
+  getLabel: ->
+    return "#folder_label_#{@id}"
+      
   getHandle: ->
     return "#folder_handle_#{@id}"
   
@@ -49,6 +56,7 @@ class Folder
     @x = x; @y = y
     $(@get()).css('left', "#{@x}px")
     $(@get()).css('top', "#{@y}px")
+    $(@getLabel()).html("#{@name} | (#{@x},#{@y})") # temporary
   
   # Updates @x and @y based on actual coordinates
   updateCoordinates: ->

@@ -1,3 +1,8 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
+
 # Methods to help with drawing: SVG notation abstracted. All methods return an SVG "path"
 # (a.k.a. instructions to draw on the canvas) as a string.
 # Depends on raphael

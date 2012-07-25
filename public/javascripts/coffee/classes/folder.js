@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Fri, 08 Jun 2012 18:14:33 GMT from
+/* DO NOT MODIFY. This file was compiled Wed, 25 Jul 2012 14:56:19 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/folder.coffee
  */
 
@@ -32,7 +32,7 @@
     }
 
     Folder.prototype.getStyleAttributes = function() {
-      return 'display: inline-block';
+      return 'display: inline-block; position: absolute;';
     };
 
     Folder.prototype.get = function() {
@@ -43,6 +43,10 @@
       return "#folder_icon_" + this.id;
     };
 
+    Folder.prototype.getLabel = function() {
+      return "#folder_label_" + this.id;
+    };
+
     Folder.prototype.getHandle = function() {
       return "#folder_handle_" + this.id;
     };
@@ -51,7 +55,8 @@
       this.x = x;
       this.y = y;
       $(this.get()).css('left', "" + this.x + "px");
-      return $(this.get()).css('top', "" + this.y + "px");
+      $(this.get()).css('top', "" + this.y + "px");
+      return $(this.getLabel()).html("" + this.name + " | (" + this.x + "," + this.y + ")");
     };
 
     Folder.prototype.updateCoordinates = function() {

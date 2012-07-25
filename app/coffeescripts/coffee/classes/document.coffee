@@ -1,3 +1,7 @@
+#
+# Authors: Jeff Cox, David Zhang
+# Copyright Syracuse University
+#
 # Files in app/coffeescripts are automatically compiled into JS in public/javascripts by Barista (gem)
 
 jQuery ->
@@ -26,7 +30,7 @@ class Document
     @_makeDraggable() # Make self draggable
 
   getStyleAttributes: ->
-    return 'display: inline-block'
+    return 'display: inline-block; position: absolute;'
   
   # Returns the string that jQuery would use to access the surrounding div object, 
   # like '#document_134235'
@@ -36,10 +40,14 @@ class Document
   getImage: ->
     return "#document_icon_#{@id}"
   
+  getLabel: ->
+    return "#document_label_#{@id}"
+    
   setCoordinates: (x,y) ->
     @x = x; @y = y
     $(@get()).css('left', "#{@x}px")
     $(@get()).css('top', "#{@y}px")
+    $(@getLabel()).html("#{@name} | (#{@x},#{@y})") # temporary
   
   setBorderColor: (color) ->
     $(@get()).css('border',"1px solid #{color}")

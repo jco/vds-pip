@@ -65,14 +65,18 @@ var Pip = Pip || {};
 
     // Draw a dependency as an arrow on the canvas. _dep_ looks like ["document-4", "document-111"]
     var drawDependency = function(dep) {
-      var upstreamItem = P.index[dep[0]];
-      var downstreamItem = P.index[dep[1]];
-      alert("upstream: "+upstreamItem+"; downstream: "+downstreamItem);
-      P.ArrowDrawer.addArrows('global', [[arrowEndpoint(upstreamItem), arrowEndpoint(downstreamItem)]]);
+        var upstreamItem = P.index[dep[0]];
+        var downstreamItem = P.index[dep[1]];
+        // alert("upstream: "+upstreamItem.id+"; "+upstreamItem.location_id);//+" | downstream: "+downstreamItem);
+        P.ArrowDrawer.addArrows('global', [[arrowEndpoint(upstreamItem), arrowEndpoint(downstreamItem)]]);
     };
     
     var arrowEndpoint = function(item) {
-      return [ item.coords[0] + 17, item.coords[1] + 17 ];
+        // This parsing is needed when an item is dragged. For some reason, the coords become strings, but we want numbers.
+        item.coords[0] = parseInt(item.coords[0])
+        item.coords[1] = parseInt(item.coords[1])
+        
+        return [ item.coords[0] + 17, item.coords[1] + 17 ];
     };
 
 })(Pip);

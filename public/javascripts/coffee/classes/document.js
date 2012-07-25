@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Thu, 07 Jun 2012 16:26:21 GMT from
+/* DO NOT MODIFY. This file was compiled Wed, 25 Jul 2012 14:56:19 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/document.coffee
  */
 
@@ -29,7 +29,7 @@
     }
 
     Document.prototype.getStyleAttributes = function() {
-      return 'display: inline-block';
+      return 'display: inline-block; position: absolute;';
     };
 
     Document.prototype.get = function() {
@@ -40,11 +40,16 @@
       return "#document_icon_" + this.id;
     };
 
+    Document.prototype.getLabel = function() {
+      return "#document_label_" + this.id;
+    };
+
     Document.prototype.setCoordinates = function(x, y) {
       this.x = x;
       this.y = y;
       $(this.get()).css('left', "" + this.x + "px");
-      return $(this.get()).css('top', "" + this.y + "px");
+      $(this.get()).css('top', "" + this.y + "px");
+      return $(this.getLabel()).html("" + this.name + " | (" + this.x + "," + this.y + ")");
     };
 
     Document.prototype.setBorderColor = function(color) {

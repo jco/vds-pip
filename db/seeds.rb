@@ -4,6 +4,9 @@
 #
 # require 'composite_primary_keys'
 
+# A big thing where you might run into issues here is validations set in the models/.
+# If something isn't getting created, it's possible that a model validation isn't passing.
+
 # Site admins
 admin1 = User.find_or_create_by_email('admin1@example.com', :password => 'admin') do |u|
   u.role = 'site_admin'

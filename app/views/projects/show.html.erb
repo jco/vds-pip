@@ -9,15 +9,7 @@ Copyright Syracuse University
   To upload a document, double-click anywhere in the box.
 </p>
 
-<!--JS uses this to toggle the pane-->
-<a id="pane_toggler" href="javascript: void(0);">+/-</a>
-
-<br>
-<!--pane is the sidebar-->
-<div id="pane"></div>
-
-<!--container holds the documents, arrows, etc.-->
-<div id="container"></div>
+<%= render :partial => "partials/pane_and_container" %>
 
 <script type="text/javascript">
 var Pip = Pip || {};

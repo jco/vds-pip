@@ -8,15 +8,11 @@ var Pip = Pip || {};
 Pip.ItemDrawer = (function(P, $) {
     var ItemDrawer = {};
 
-    var helper = new Helper(); // Defined in app/coffeescripts
-    helper.setCanvas(P.paper);
-    // helper.showCanvas();
-    
     // Draws an item (which can be a folder or a document)
     ItemDrawer.drawItem = function(item) { // for each item (e.g., folder) on screen
       var icon;
       if (kind(item) == 'document') { 
-        icon = new Document(item.name);
+        icon = new Document(item.name); // Document is defined in coffee/
         icon.setCoordinates(item.coords[0], item.coords[1]);
         switch (item.status) {
           case "not_updated":
@@ -34,7 +30,7 @@ Pip.ItemDrawer = (function(P, $) {
         $(icon.getImage()).dblclick(documentOverlay(item));
       } else { // Item is a folder
         // Initialize icon
-        icon = new Folder(item.name);
+        icon = new Folder(item.name); // Folder is defined in coffee/
         icon.setCoordinates(item.coords[0], item.coords[1]);
         
         // Set dblclick for folder
@@ -65,7 +61,6 @@ Pip.ItemDrawer = (function(P, $) {
           // part 2: ping server
           console.log('PUT new coordinates of item ', item, [x, y], '...'+item.location_id);
           var url = '/locations/' + String(item.location_id)
-          // what jeff had before: var url = '/' + kind(item) + 's/' + String(item.id); // so you have /documents/2 or /folders/3
           var data = {}; data[kind(item)] = {"x": x, "y": y}; // so data is like { document => {:x => x, :y => y} }
           $.ajax({
             type: 'PUT',
@@ -79,6 +74,7 @@ Pip.ItemDrawer = (function(P, $) {
         }
       });
       
+      // Set droppable / DEPENDENCY drawing
       $(icon.get()).droppable({
         // TODO - update arrows appropriately
         // Code here can be compared to Jeff's v0.3 tag/branch at https://github.com/jco/vds-pip, which has the same code as is in the folder "vds-pip-jeffs-last (dep working)"
@@ -87,7 +83,20 @@ Pip.ItemDrawer = (function(P, $) {
         // assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
         drop: function(event, ui) {
           alert("Dropped! Code to be implemented.");
-          Pip.DependencyDrawer.createDependency(originItem, droppable);
+          fromItem = item;
+          toItem = P.index[P.data.this_folder]; // HMMMM?
+          Pip.DependencyDrawer.createDependency(fromItem, toItem); // item of the drawItem function IS the origin item
+          
+          // set a 'global' variable indicating we are in a drop
+          // Pip.someGlobal = {draggingArrow: true, originItem: ops.item};
+          // 
+          // ops.handle.drag(dragMove, dragStart, dragUp);
+          // ops.dropZone.mouseup(function (ev) {
+          //     if (Pip.someGlobal && Pip.someGlobal.draggingArrow) {
+          //         Pip.DependencyDrawer.createDependency(Pip.someGlobal.originItem, ops.item);
+          //     }
+          // });
+          
         }
       });
     };

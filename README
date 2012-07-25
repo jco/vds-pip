@@ -2,6 +2,12 @@
 
 See the "history of vds-pip" doc file for background on everything that's happened here.
 
+Now: why coordinates shown strangely?
+
+dep drawing: show lines + dependency table when you dblclick on a doc
+
+
+
 --
 
 Old thoughts: 
