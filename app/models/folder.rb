@@ -24,7 +24,7 @@ class Folder < ActiveRecord::Base
   has_many :downstream_dependencies, :as => :upstream_item, :class_name => "Dependency", :dependent => :destroy
   has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
   belongs_to :task
-  has_many :locations
+  has_many :locations, :dependent => :destroy
   
   after_update :propagate_status!, :if => :status_changed?
   after_create :create_location_objects
@@ -97,9 +97,7 @@ class Folder < ActiveRecord::Base
   
   # Gets this folder's location based on the current user's id
   def location
-    puts "Locations: "
     locations.each do |location|
-      puts "folder id: #{location.folder_id}, user id: #{location.user_id} (current user's id: #{User.current.id})"
       return location if User.current.id == location.user_id
     end
     return nil

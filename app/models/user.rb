@@ -53,6 +53,25 @@ class User < ActiveRecord::Base
     end
   end
   
+  def folders
+  end
+  
+  # Returns an array of documents that this user has access to
+  # def documents
+  #   docs = [ ]
+  #   self.projects.each { |project|
+  #     project.documents.each do |doc|
+  #       docs << doc
+  #     end
+  #     project.folders.each do |folder|
+  #       folder.documents.each do |doc|
+  #         docs << doc
+  #       end
+  #     end
+  #   }
+  #   docs
+  # end
+  
   # Setter method used by jQuery token input
   def project_tokens=(ids)
     self.project_ids = ids.split(",")
@@ -99,4 +118,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  # For the current user, gets items without locations within the specified project
+  # Used in after_filters within projects controller and folders controller for lazy loading
+  def get_items_without_locations project
+    arr = [ ]
+    project.documents.each { |doc|
+      arr.push doc if doc.location.nil? # doc.location returns nil if current user does not have a location for the doc
+    }
+    # add folders...
+    return arr
+  end
 end

@@ -47,5 +47,4 @@ class ProjectsController < ApplicationController
       render :action => "new"
     end
   end
-
 end

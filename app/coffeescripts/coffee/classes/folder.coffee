@@ -56,25 +56,25 @@ class Folder
     @x = x; @y = y
     $(@get()).css('left', "#{@x}px")
     $(@get()).css('top', "#{@y}px")
-    $(@getLabel()).html("#{@name} | (#{@x},#{@y})") # temporary
+    # $(@getLabel()).html("#{@name} | (#{@x},#{@y})") # if you want to see coordinates
   
   # Updates @x and @y based on actual coordinates
   updateCoordinates: ->
     @x = $(@get()).css('left').replace('px','')
     @y = $(@get()).css('top').replace('px','')
-    
+      
+  _makeDraggable: ->
+    $(@get()).draggable
+      containment: "#container",
+      handle: @getImage()
+      # other options like stop specified in file that creates the instance, item_drawer
+  
   _makeHandleDraggable: ->
     $(@getHandle()).draggable
       containment: "#container",
       handle: @getHandle(),
       helper: "clone",
       revert: true
-      # other options like stop specified in file that creates the instance, item_drawer
-  
-  _makeDraggable: ->
-    $(@get()).draggable
-      containment: "#container",
-      handle: @getImage()
       # other options like stop specified in file that creates the instance, item_drawer
   
   _makeDroppable: ->

@@ -14,6 +14,9 @@ class DependenciesController < ApplicationController
   # POST /dependencies
   def create
     @dependency = Dependency.new(params[:dependency])
+    puts '-----------------------------------------'
+    puts "CREATE"
+    puts '-----------------------------------------'
     @dependency.save
     head :created
   end

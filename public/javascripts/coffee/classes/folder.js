@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Wed, 25 Jul 2012 14:56:19 GMT from
+/* DO NOT MODIFY. This file was compiled Wed, 25 Jul 2012 16:45:50 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/folder.coffee
  */
 
@@ -55,13 +55,19 @@
       this.x = x;
       this.y = y;
       $(this.get()).css('left', "" + this.x + "px");
-      $(this.get()).css('top', "" + this.y + "px");
-      return $(this.getLabel()).html("" + this.name + " | (" + this.x + "," + this.y + ")");
+      return $(this.get()).css('top', "" + this.y + "px");
     };
 
     Folder.prototype.updateCoordinates = function() {
       this.x = $(this.get()).css('left').replace('px', '');
       return this.y = $(this.get()).css('top').replace('px', '');
+    };
+
+    Folder.prototype._makeDraggable = function() {
+      return $(this.get()).draggable({
+        containment: "#container",
+        handle: this.getImage()
+      });
     };
 
     Folder.prototype._makeHandleDraggable = function() {
@@ -70,13 +76,6 @@
         handle: this.getHandle(),
         helper: "clone",
         revert: true
-      });
-    };
-
-    Folder.prototype._makeDraggable = function() {
-      return $(this.get()).draggable({
-        containment: "#container",
-        handle: this.getImage()
       });
     };
 

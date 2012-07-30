@@ -18,7 +18,7 @@ class Document < ActiveRecord::Base
   end
 
   belongs_to :task
-  has_many :locations
+  has_many :locations, :dependent => :destroy
 
   has_many :versions, :dependent => :destroy, :order => 'created_at DESC'
   validate :has_at_least_one_version
@@ -30,10 +30,9 @@ class Document < ActiveRecord::Base
   after_update :mark_downstream_items_not_updated!, :if => Proc.new { |document| document.status_changed? && document.status == "not_updated" }
   after_create :create_location_objects
   
-  # Create a location object (after creating a document)
   def create_location_objects
-    User.all.each { |u| 
-      if u.is_member_of? project # If the user is a member of this document's project - should get current user too
+    User.all.each { |u|
+      if u.is_member_of?(self.project) || ( !self.folder.nil? && u.is_member_of?(self.folder.project) )
         Location.create!(:document_id => id, :user_id => u.id)
       end
     }
@@ -82,12 +81,19 @@ class Document < ActiveRecord::Base
       return location if User.current.id == location.user_id
     end
     return nil
+    # Abandoned:
+    # Lazy initialization - only reached if no location for this document and user
+    # final_location = Location.create!(:document_id => self.id, :user_id => User.current.id)
+    # return final_location
+    # Why can't this see that the location already exists? Making it once should be enough.
+    # Different threads. That would explain it. But no.
   end
   
   def coords
-    [location.x, location.y]
+    return [self.location.x, self.location.y]
   end
   
+  # Why?
   def name
     read_attribute(:name) || latest_version.name
   end

@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Wed, 25 Jul 2012 14:56:19 GMT from
+/* DO NOT MODIFY. This file was compiled Fri, 27 Jul 2012 13:52:56 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/document.coffee
  */
 
@@ -12,20 +12,24 @@
 
     helper = new Helper;
 
-    function Document(name) {
-      var div, enddiv, img, label;
+    function Document(name, document_id) {
+      var div, enddiv, handle, img, label;
       this.name = name;
+      this.document_id = document_id;
       this.id = helper.getRandomNumber();
       div = "<div id=document_" + this.id + " style='" + (this.getStyleAttributes()) + "'>";
       img = "<img id='document_icon_" + this.id + "' src='" + IMAGE_PATH + "/icons/document.png' width='25' height='25' />";
       label = "<span id=document_label_" + this.id + ">" + this.name + "</span>";
+      handle = "<img id=document_handle_" + this.id + "_" + this.document_id + " src='" + IMAGE_PATH + "/icons/circle0.png' width='15' height='15' />";
       enddiv = "</div>";
-      this.tag = div + img + label + enddiv;
+      this.tag = div + handle + img + label + enddiv;
       $("#container").append(this.tag);
       this.x = 0;
       this.y = 0;
       this.setCoordinates(this.x, this.y);
       this._makeDraggable();
+      this._makeHandleDraggable();
+      this._makeDroppable();
     }
 
     Document.prototype.getStyleAttributes = function() {
@@ -44,12 +48,15 @@
       return "#document_label_" + this.id;
     };
 
+    Document.prototype.getHandle = function() {
+      return "#document_handle_" + this.id + "_" + this.document_id;
+    };
+
     Document.prototype.setCoordinates = function(x, y) {
       this.x = x;
       this.y = y;
       $(this.get()).css('left', "" + this.x + "px");
-      $(this.get()).css('top', "" + this.y + "px");
-      return $(this.getLabel()).html("" + this.name + " | (" + this.x + "," + this.y + ")");
+      return $(this.get()).css('top', "" + this.y + "px");
     };
 
     Document.prototype.setBorderColor = function(color) {
@@ -65,6 +72,21 @@
       return $(this.get()).draggable({
         containment: "#container",
         handle: this.get()
+      });
+    };
+
+    Document.prototype._makeHandleDraggable = function() {
+      return $(this.getHandle()).draggable({
+        containment: "#container",
+        handle: this.getHandle(),
+        helper: "clone",
+        revert: true
+      });
+    };
+
+    Document.prototype._makeDroppable = function() {
+      return $(this.get()).droppable({
+        drop: function() {}
       });
     };
 

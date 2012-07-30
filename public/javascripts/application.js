@@ -56,7 +56,7 @@ var Pip = Pip || {};
             P.project = new P.Model.Project(P.data.project);
             P.index = {};
             P.Indexer.buildIndex(P.project, P.index);
-            P.ProjectDrawer.drawProject(P.project); // draws the side pane thingy
+            P.ProjectDrawer.drawProject(P.project); // draws the side pane
           }
 
           // set up the container

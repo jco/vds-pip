@@ -20,9 +20,7 @@ class DocumentsController < ApplicationController
   def create
     @parent = get_parent_from_params
     @document = @parent.documents.build(params[:document])
-
     if @document.save
-      Location.create!(:user_id=>current_user.id, :document_id=>@document.id)
       redirect_to(@document, :notice => 'Document was successfully created.')
     else
       render :action => "new"

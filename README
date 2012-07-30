@@ -2,11 +2,12 @@
 
 See the "history of vds-pip" doc file for background on everything that's happened here.
 
-Now: why coordinates shown strangely?
+Now: drag and drop, make dep
 
-dep drawing: show lines + dependency table when you dblclick on a doc
+make 2 buttons, "from" and "to", in documents/show so you can create dependencies in there
+need tree in secondary pane
 
-
+fix this --> why does document in folder not work across users? why "only parent reference should be defined"?
 
 --
 
