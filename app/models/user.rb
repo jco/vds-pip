@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
   attr_reader :project_tokens # http://railscasts.com/episodes/258-token-fields
   
   attr_accessible :project_ids # needed for check box forms in users _form, when a normal user creates another user
-  attr_accessor :password
+  attr_accessor :password # getter and setter
   before_save :encrypt_password
   
   # These are user roles, mainly for control - not as important as actor roles
@@ -55,23 +55,7 @@ class User < ActiveRecord::Base
   
   def folders
   end
-  
-  # Returns an array of documents that this user has access to
-  # def documents
-  #   docs = [ ]
-  #   self.projects.each { |project|
-  #     project.documents.each do |doc|
-  #       docs << doc
-  #     end
-  #     project.folders.each do |folder|
-  #       folder.documents.each do |doc|
-  #         docs << doc
-  #       end
-  #     end
-  #   }
-  #   docs
-  # end
-  
+
   # Setter method used by jQuery token input
   def project_tokens=(ids)
     self.project_ids = ids.split(",")

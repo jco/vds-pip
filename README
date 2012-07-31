@@ -2,7 +2,7 @@
 
 See the "history of vds-pip" doc file for background on everything that's happened here.
 
-Now: drag and drop, make dep
+Now: jquery dialog in dialog.coffee, show.html
 
 make 2 buttons, "from" and "to", in documents/show so you can create dependencies in there
 need tree in secondary pane

@@ -29,10 +29,9 @@ class Folder < ActiveRecord::Base
   after_update :propagate_status!, :if => :status_changed?
   after_create :create_location_objects
   
-  # Create a location object (after creating a folder)
   def create_location_objects
-    User.all.each { |u| 
-      if u.is_member_of? project # If the user is a member of this folder's project - should get current user too
+    User.all.each { |u|
+      if u.is_member_of?(self.project)
         Location.create!(:folder_id => id, :user_id => u.id)
       end
     }
@@ -104,7 +103,10 @@ class Folder < ActiveRecord::Base
   end
   
   def coords
-    [location.x, location.y]
+    puts '-----------------------------------------'
+    puts "self.location: #{self.location.nil?}"
+    puts '-----------------------------------------'
+    return [self.location.x, self.location.y]
   end
 
   # This lets JS access these properties of folder - like in item_drawer.js, item.name works

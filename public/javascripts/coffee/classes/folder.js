@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Wed, 25 Jul 2012 16:45:50 GMT from
+/* DO NOT MODIFY. This file was compiled Tue, 31 Jul 2012 13:36:27 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/folder.coffee
  */
 
@@ -12,14 +12,15 @@
 
     helper = new Helper;
 
-    function Folder(name) {
+    function Folder(name, folder_id) {
       var div, enddiv, handle, img, label;
       this.name = name;
+      this.folder_id = folder_id;
       this.id = helper.getRandomNumber();
       div = "<div id=folder_" + this.id + " style='" + (this.getStyleAttributes()) + "'>";
       img = "<img id='folder_icon_" + this.id + "' src='" + IMAGE_PATH + "/icons/folder.gif' />";
       label = "<span id=folder_label_" + this.id + ">" + this.name + "</span>";
-      handle = "<img id=folder_handle_" + this.id + " src='" + IMAGE_PATH + "/icons/circle0.png' width='15' height='15' />";
+      handle = "<img id=folder_handle_" + this.id + "_" + this.folder_id + " src='" + IMAGE_PATH + "/icons/circle0.png' width='15' height='15' />";
       enddiv = "</div>";
       this.tag = div + handle + img + label + enddiv;
       $("#container").append(this.tag);
@@ -48,7 +49,7 @@
     };
 
     Folder.prototype.getHandle = function() {
-      return "#folder_handle_" + this.id;
+      return "#folder_handle_" + this.id + "_" + this.folder_id;
     };
 
     Folder.prototype.setCoordinates = function(x, y) {

@@ -30,7 +30,7 @@ Pip.ItemDrawer = (function(P, $) {
         $(icon.getImage()).dblclick(documentOverlay(item));
       } else { // Item is a folder
         // Initialize icon
-        icon = new Folder(item.name); // Folder is defined in coffee/
+        icon = new Folder(item.name, item.id); // Folder is defined in coffee/
         icon.setCoordinates(item.coords[0], item.coords[1]);
         
         // Set dblclick for folder
@@ -42,7 +42,7 @@ Pip.ItemDrawer = (function(P, $) {
         $(icon.getHandle()).draggable({
           // nothing needed
         });
-      }
+      } // end folder-specific stuff
       
       // Set draggable's stop event for ajax calls for _updating coordinates on the actual icon_ - other options in folder.coffee / document.coffee
       $(icon.get()).draggable({ // THIS WORKS =D Good example
@@ -79,13 +79,37 @@ Pip.ItemDrawer = (function(P, $) {
         // Actually assigns the event listeners for creating arrows/dependencies
         // assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
         drop: function(event, ui) {            
-            // ui.draggable - current draggable element
-            fromItem = P.index['document_'+getIdOfDraggable(ui.draggable)] // fromItem = P.index['document_1'] // This works! This is the main idea.
+            // ui.draggable - current draggable element, something like <img id=​"document_handle_018951038690283895_2" src=​"../​images/​icons/​circle0.png" width=​"15" height=​"15" class=​"ui-draggable">​
+            fromItem = P.index[getKeyFromDraggable(ui.draggable)] // Main idea: get something like this: fromItem = P.index['document_1']
             toItem = item; // Because "droppable" is saying, "If you drop on _this_ item, take some action"
             Pip.DependencyDrawer.createDependency(fromItem, toItem);
         }
       });
     };
+
+    // Used in dependency drawing to get the key for P.index[ ] so it's like P.index['folder_2']
+    // Returns somethign like 'folder_2' or 'document_1'
+    var getKeyFromDraggable = function(draggable) {
+        return getItemNameFromDraggable(draggable) + '_' + getIdOfDraggable(draggable)
+    }
+
+    // Used to get the fromItem's name ('document' or 'folder') from the draggable
+    var getItemNameFromDraggable = function(draggable) {
+        // draggable might be <img id=​"document_handle_018951038690283895_2" src=​"../​images/​icons/​circle0.png" width=​"15" height=​"15" class=​"ui-draggable">​
+        return draggable.attr('id').split('_')[0];
+    }
+
+    // Used to get the fromItem's id from the draggable
+    var getIdOfDraggable = function(draggable) {
+        return draggable.attr('id').split('_')[3];
+        // Explanation (from console):
+        // ui.draggable (which is draggable here)
+        // => <img id=​"document_handle_018951038690283895_2" src=​"../​images/​icons/​circle0.png" width=​"15" height=​"15" class=​"ui-draggable">​
+        // ui.draggable.attr('id')
+        // => "document_handle_018951038690283895_2"
+        // ui.draggable.attr('id').split('_')
+        // => ["document", "handle", "018951038690283895", "2"]
+    }
 
     // A function that, when called, returns another function that pops up the correct overlay.
     // Used in drawItem().
@@ -95,7 +119,7 @@ Pip.ItemDrawer = (function(P, $) {
                 onComplete: function() {
                     // Set click action so the create-dependency-from-tree box appears
                     $("#from_button").click(function() { // WHY ISN'T THIS WORKING?
-                        alert("anything!");
+                        alert("anything!"); // nope...
                         $("#pane").toggle();
                     });
                     
@@ -138,18 +162,6 @@ Pip.ItemDrawer = (function(P, $) {
     var iconFor = P.iconFor = function (item) {
         return item.icon || '/images/icons/folder.gif';
     };
-    
-    // Used to get the fromItem's id from the draggable
-    var getIdOfDraggable = function(draggable) {
-        return draggable.attr('id').split('_')[3];
-        // Explanation (from console):
-        // ui.draggable (which is draggable here)
-        // => <img id=​"document_handle_018951038690283895_2" src=​"../​images/​icons/​circle0.png" width=​"15" height=​"15" class=​"ui-draggable">​
-        // ui.draggable.attr('id')
-        // => "document_handle_018951038690283895_2"
-        // ui.draggable.attr('id').split('_')
-        // => ["document", "handle", "018951038690283895", "2"]
-    }
     
     return ItemDrawer;
 })(Pip, jQuery);

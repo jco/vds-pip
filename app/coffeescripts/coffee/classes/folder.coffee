@@ -12,13 +12,13 @@ class Folder
   # Folder is accessible outside this class via $(f.get()), where f is an instance of Folder
   # Inside this class, use $(@get())
   # More specific ones like $(@getImage()) exist too
-  constructor: (@name) ->
+  constructor: (@name, @folder_id) ->
     # Prepare basic properties for tag
     @id = helper.getRandomNumber()
     div = "<div id=folder_#{@id} style='#{@getStyleAttributes()}'>"
     img = "<img id='folder_icon_#{@id}' src='#{IMAGE_PATH}/icons/folder.gif' />"
     label = "<span id=folder_label_#{@id}>#{@name}</span>"
-    handle = "<img id=folder_handle_#{@id} src='#{IMAGE_PATH}/icons/circle0.png' width='15' height='15' />"
+    handle = "<img id=folder_handle_#{@id}_#{@folder_id} src='#{IMAGE_PATH}/icons/circle0.png' width='15' height='15' />"
     enddiv = "</div>"
     
     @tag = div + handle + img + label + enddiv
@@ -48,7 +48,7 @@ class Folder
     return "#folder_label_#{@id}"
       
   getHandle: ->
-    return "#folder_handle_#{@id}"
+    return "#folder_handle_#{@id}_#{@folder_id}"
   
   # Sets @x and @y to passed in variables and sets the location
   # to the proper spot
