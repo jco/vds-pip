@@ -1,0 +1,13 @@
+<%#
+Authors: Jeff Cox, David Zhang
+Copyright Syracuse University
+%>
+<!--dependencies/_new; requires variable 'dependency'-->
+Do you see me?
+<%= form_for dependency do |f| %>
+	<%= f.label :upstream_item %>
+	<%= f.text_field :upstream_item %>
+
+  <%= f.label :downstream_item %>
+	<%= f.text_field :downstream_item %>
+<% end %>

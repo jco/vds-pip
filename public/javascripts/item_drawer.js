@@ -116,16 +116,6 @@ Pip.ItemDrawer = (function(P, $) {
     var documentOverlay = ItemDrawer.documentOverlay = function (doc) {
         return function (ev) {
             $.colorbox({
-                onComplete: function() {
-                    // Set click action so the create-dependency-from-tree box appears
-                    $("#from_button").click(function() { // WHY ISN'T THIS WORKING?
-                        alert("anything!"); // nope...
-                        $("#pane").toggle();
-                    });
-                    
-                    // // Set dblclick for document - opens an overlay
-                    // $(icon.getImage()).dblclick(documentOverlay(item));
-                },
                 href: P.documentPath(doc), // this brings us to the documents#show action
                 iframe: true,
                 innerWidth: 720,
@@ -133,22 +123,6 @@ Pip.ItemDrawer = (function(P, $) {
             });
         };
     };
-
-    // A function that, when called, returns another function that pops up an overlay
-    // for creating a dependency from a tree menu
-    // Used in documentOverlay
-    // var createDepFromTreeOverlay = ItemDrawer.createDepFromTreeOverlay = function (item) {
-    //     return function (ev) {
-    //         $.colorbox({
-    //             iframe: true,
-    //             innerWidth: 500,
-    //             height: 400,
-    //             onComplete: function() {
-    //                 
-    //             }
-    //         });
-    //     };
-    // };
 
     var setJsonCoords = function (item, coords) {
         item.coords = coords;

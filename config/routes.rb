@@ -28,11 +28,13 @@ VdsPip::Application.routes.draw do
     resources :versions, :only => [:new, :create]
   end
 
-  resources :dependencies, :only => [:create]
+  resources :dependencies, :only => :create # [ :new, :create ]
 
   resources :versions, :only => :show
 
   resources :locations, :only => :update # only for ajax call in item_drawer.js
+
+  # match 'create_dependency_from' => 'dependencies#new'
 
   match 'api/:action' => 'api#:action'
 

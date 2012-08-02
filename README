@@ -2,7 +2,8 @@
 
 See the "history of vds-pip" doc file for background on everything that's happened here.
 
-Now: jquery dialog in dialog.coffee, show.html
+Just done: dialog appears, grabs _new form
+Now: choose collection_select or token input or check boxes, make form
 
 make 2 buttons, "from" and "to", in documents/show so you can create dependencies in there
 need tree in secondary pane

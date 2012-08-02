@@ -66,7 +66,7 @@ var Pip = Pip || {};
             P.container = document.getElementById(P.data.containerId);
             
             // Create the canvas
-            P.paper = Raphael(P.container, '100%', '500px');//http://jsfiddle.net/6x4bR/
+            P.paper = Raphael(P.container, '100%', '500px'); // http://jsfiddle.net/6x4bR/
             $("svg").css('position','absolute');
             
             // GLOBAL VARIABLE!!!

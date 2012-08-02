@@ -15,7 +15,7 @@ var Pip = Pip || {};
 (function(P) {
     var ProjectDrawer = {};
 
-    // Draws the tree/pane type view for the project
+    // Draws the tree/pane view for the project
     // Called in application.js
     // Uses jquery - this sets up the ul, etc.
     ProjectDrawer.drawProject = function (project) {
@@ -69,7 +69,6 @@ var Pip = Pip || {};
 
         container.appendChild(li);
     };
-
 
     P.ProjectDrawer = ProjectDrawer;
 })(Pip);
