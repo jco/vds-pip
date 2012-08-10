@@ -10,8 +10,9 @@ Copyright Syracuse University
 	<%= stylesheet_link_tag :all, :recursive => true %>
 	<%= javascript_include_tag "lib/jquery-1.7.2.min","lib/jquery-ui-1.8.22.custom.min","tokeninput/jquery.tokeninput","tokeninput/jquery_token_input" %>
 	<!--include coffee files-->
-	<%= javascript_include_tag "coffee/global", "coffee/misc/dialog", "coffee/classes/private/drawing",
-	"coffee/classes/helper", "coffee/classes/folder", "coffee/classes/document" %>
+	<%= javascript_include_tag "coffee/global", 
+	"coffee/classes/private/drawing", "coffee/classes/helper", 
+	"coffee/classes/folder", "coffee/classes/document", "coffee/classes/tree_drawer" %>
 	<%= csrf_meta_tag %>
 </head>
 <body>
@@ -29,7 +30,6 @@ Copyright Syracuse University
 
 	<%= yield %>
 
-	<!--link stopped working... <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/1.5.2/raphael-min.js"></script>-->
 	<script src="/javascripts/lib/raphael-min.js"></script>
 	
 	<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js"></script>-->
@@ -41,17 +41,20 @@ Copyright Syracuse University
 	
 	<script src="/javascripts/arrow_drawer.js"></script> 
 	<script src="/javascripts/constants.js"></script> 
-	<script src="/javascripts/dependency_drawer.js"></script> 
-	<!--<script src="/javascripts/drawing.js"></script> -->
+	<script src="/javascripts/dependency_drawer.js"></script>
+	
 	<script src="/javascripts/in_place.js"></script> 
 	<script src="/javascripts/item_drawer.js"></script> 
 	
 	<script src="/javascripts/lib/jquery-simpleTreeMenu-1.1.0.js"></script> 
-	<script src="/javascripts/lib/jquery.colorbox.js"></script> 
+	<script src="/javascripts/lib/jquery.colorbox-min.js"></script>
+	<script src="/javascripts/lib/jquery.bpopup-0.7.0.min.js"></script>
 	
 	<script src="/javascripts/model.js"></script> 
 	<script src="/javascripts/pip.js"></script> 
-	<script src="/javascripts/project_drawer.js"></script> 
+	
+	<!--<script src="/javascripts/project_drawer.js"></script> replaced by coffee version-->
+	
 	<script src="/javascripts/utils.js"></script> 
 	<script src="/javascripts/indexer.js"></script>
 	<script src="/javascripts/routes.js"></script>

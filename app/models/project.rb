@@ -26,6 +26,18 @@ class Project < ActiveRecord::Base
     end
   end
 
+  # Documents and folders within this project
+  def items
+    items = [ ]
+    self.documents.each do |doc|
+      items << doc
+    end
+    self.folders.each do |folder|
+      items << folder
+    end
+    return items
+  end
+
   def tasks
     stages.map { |stage| stage.tasks }.flatten
   end

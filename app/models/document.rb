@@ -7,28 +7,37 @@ class Document < ActiveRecord::Base
   include Linkable
   self.include_root_in_json = false
   STATUSES = %w(up_to_date being_worked_on not_updated)
-
+  attr_accessor :creating_FROM_dependency # a way to pass arbitrary form data for creating dependencies in _form
+  attr_accessor :email
+  
+  # Relationships
   belongs_to :folder
   belongs_to :project
+  belongs_to :task
+  has_many :locations, :dependent => :destroy
+  has_many :versions, :dependent => :destroy, :order => 'created_at DESC'
+  has_many :downstream_dependencies, :as => :upstream_item, :class_name => "Dependency", :dependent => :destroy
+  has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
+  
+  accepts_nested_attributes_for :versions
+  # accepts_nested_attributes_for :upstream_dependencies, :allow_destroy => true#,
+  #   # :reject_if => lambda { |a| a[:email].blank?} # prevent submission of blank
+  
+  # Validations
   validate :exactly_one_parent_reference_defined
+  validate :has_at_least_one_version
+  validates_inclusion_of :status, :in => STATUSES
+    
+  # Hooks
+  after_initialize :init
+  after_update :mark_downstream_items_not_updated!, :if => Proc.new { |document| document.status_changed? && document.status == "not_updated" }
+  after_create :create_location_objects
+  
   def exactly_one_parent_reference_defined
     unless folder_id.nil? ^ project_id.nil?
       errors[:base] << "Exactly one parent reference must be defined."
     end
   end
-
-  belongs_to :task
-  has_many :locations, :dependent => :destroy
-
-  has_many :versions, :dependent => :destroy, :order => 'created_at DESC'
-  validate :has_at_least_one_version
-  accepts_nested_attributes_for :versions
-  has_many :downstream_dependencies, :as => :upstream_item, :class_name => "Dependency", :dependent => :destroy
-  has_many :upstream_dependencies, :as => :downstream_item, :class_name => "Dependency", :dependent => :destroy
-  validates_inclusion_of :status, :in => STATUSES
-  after_initialize :init
-  after_update :mark_downstream_items_not_updated!, :if => Proc.new { |document| document.status_changed? && document.status == "not_updated" }
-  after_create :create_location_objects
   
   def create_location_objects
     User.all.each { |u|

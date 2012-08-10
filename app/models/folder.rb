@@ -103,9 +103,6 @@ class Folder < ActiveRecord::Base
   end
   
   def coords
-    puts '-----------------------------------------'
-    puts "self.location: #{self.location.nil?}"
-    puts '-----------------------------------------'
     return [self.location.x, self.location.y]
   end
 

@@ -33,15 +33,9 @@ class DocumentsController < ApplicationController
     @document = Document.find(params[:id])
     respond_to do |format|
       if @document.update_attributes(params[:document])
-        puts '-----------------------------------------'
-        puts "good"
-        puts '-----------------------------------------'
         format.json { render :json => nil, :status => :ok }
         format.html { redirect_to(@document, :notice => 'Document was successfully updated.') }
       else
-        puts '-----------------------------------------'
-        puts "bad"
-        puts '-----------------------------------------'
         format.json { render :json => @document.errors, :status => :unprocessable_entity }
       end
     end

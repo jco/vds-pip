@@ -9,7 +9,11 @@ Pip.ItemDrawer = (function(P, $) {
     var ItemDrawer = {};
 
     // Draws an item (which can be a folder or a document)
-    ItemDrawer.drawItem = function(item) { // for each item (e.g., folder) on screen
+    ItemDrawer.drawItem = function(item) { // for each item (e.g., folder) on screen; container is the project or folder we're in
+      // if (!_.include(P.current_container.folders, item) && 
+      //       !_.include(P.current_container.documents, item) ) // http://documentcloud.github.com/underscore/#include
+      //   return; // don't draw items that aren't in the current container
+      
       var icon;
       if (kind(item) == 'document') {
         icon = new Document(item.name, item.id); // Document is defined in coffee/
@@ -35,7 +39,7 @@ Pip.ItemDrawer = (function(P, $) {
         
         // Set dblclick for folder
         $(icon.getImage()).dblclick(function (ev) { // look at raphael docs to check for these methods
-            location = P.folderPath(item); // redirect - this works
+            location = P.folderPath(item); // redirect - this works. "location" is the common browser object in JS.
         });
         
         // Set draggable's stop event for dependency drawing on the handle - other options in folder.coffee
@@ -78,7 +82,7 @@ Pip.ItemDrawer = (function(P, $) {
       $(icon.get()).droppable({
         // Actually assigns the event listeners for creating arrows/dependencies
         // assignArrowDrawingListeners({handle: handle, dropZone: icon, item: item});
-        drop: function(event, ui) {            
+        drop: function(event, ui) {
             // ui.draggable - current draggable element, something like <img id=​"document_handle_018951038690283895_2" src=​"../​images/​icons/​circle0.png" width=​"15" height=​"15" class=​"ui-draggable">​
             fromItem = P.index[getKeyFromDraggable(ui.draggable)] // Main idea: get something like this: fromItem = P.index['document_1']
             toItem = item; // Because "droppable" is saying, "If you drop on _this_ item, take some action"
@@ -88,7 +92,7 @@ Pip.ItemDrawer = (function(P, $) {
     };
 
     // Used in dependency drawing to get the key for P.index[ ] so it's like P.index['folder_2']
-    // Returns somethign like 'folder_2' or 'document_1'
+    // Returns something like 'folder_2' or 'document_1'
     var getKeyFromDraggable = function(draggable) {
         return getItemNameFromDraggable(draggable) + '_' + getIdOfDraggable(draggable)
     }
@@ -96,6 +100,7 @@ Pip.ItemDrawer = (function(P, $) {
     // Used to get the fromItem's name ('document' or 'folder') from the draggable
     var getItemNameFromDraggable = function(draggable) {
         // draggable might be <img id=​"document_handle_018951038690283895_2" src=​"../​images/​icons/​circle0.png" width=​"15" height=​"15" class=​"ui-draggable">​
+        // the huge random number is just a random number for making the id unique. It's different from tree_drawer's #, which is the actual id.
         return draggable.attr('id').split('_')[0];
     }
 
@@ -111,15 +116,25 @@ Pip.ItemDrawer = (function(P, $) {
         // => ["document", "handle", "018951038690283895", "2"]
     }
 
-    // A function that, when called, returns another function that pops up the correct overlay.
-    // Used in drawItem().
+    // A function that, when called, returns another function that pops up the correct overlay
+    // Used in drawItem()
     var documentOverlay = ItemDrawer.documentOverlay = function (doc) {
         return function (ev) {
+            // 1. Colorbox method
             $.colorbox({
-                href: P.documentPath(doc), // this brings us to the documents#show action
+                href: P.documentPath(doc), // returns e.g. /documents/27; this brings us to the documents#show action
                 iframe: true,
                 innerWidth: 720,
-                height: 500
+                height: 500,
+                onComplete: function(){
+                    // Whatever runs in here happens too early, before the first popup's html is ready
+                    // Or maybe everything here can't access stuff in href passed above.
+                    // Maybe just use separate drag in original interface?
+                    // alert("In onComplete");
+                    // treeDrawer.drawDepCreationTree(P.project, 'dependency_creation_tree');
+                    // var value = $("#document_name").html();
+                    // alert("value: "+value);
+                }
             });
         };
     };

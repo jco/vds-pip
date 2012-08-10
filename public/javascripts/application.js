@@ -27,6 +27,7 @@ var Pip = Pip || {};
           'task',
           'folder',
           'document',
+          'project',
           ['task', 'document'],
           ['folder', 'document'],
           ['project', 'document']
@@ -53,10 +54,17 @@ var Pip = Pip || {};
           // P.index["document-6"] to get the reference.
           
           if (P.data.project) {
+            // Prepare the project variable
             P.project = new P.Model.Project(P.data.project);
             P.index = {};
             P.Indexer.buildIndex(P.project, P.index);
-            P.ProjectDrawer.drawProject(P.project); // draws the side pane
+            
+            // GLOBAL VARIABLES
+            treeDrawer = new TreeDrawer(P); // TreeDrawer is defined in coffee/
+            // dialog = new Dialog(P, treeDrawer); // Dialog is defined in coffee/
+            
+            // Draw the side pane tree
+            treeDrawer.drawSidePaneTree(P.project, 'pane'); // used to be P.ProjectDrawer.drawSidePaneTree(P.project, 'pane');
           }
 
           // set up the container
@@ -69,7 +77,7 @@ var Pip = Pip || {};
             P.paper = Raphael(P.container, '100%', '500px'); // http://jsfiddle.net/6x4bR/
             $("svg").css('position','absolute');
             
-            // GLOBAL VARIABLE!!!
+            // GLOBAL VARIABLE
             helper = new Helper(); // Defined in app/coffeescripts
             helper.setCanvas(P.paper);
             
@@ -99,7 +107,10 @@ var Pip = Pip || {};
 
     // Draw all the folders and documents of this container (container is a folder or project)
     var drawItemsFor = function (container) {
-      container.folders.concat(container.documents).forEach(P.ItemDrawer.drawItem);
+        // container is either project or folder
+        // only draw items for items immediately within that project or folder
+        P.current_container = container
+        container.folders.concat(container.documents).forEach(P.ItemDrawer.drawItem);
     };
 
     // This gets called on a dblclick. Responsible for making the "create document" overlay

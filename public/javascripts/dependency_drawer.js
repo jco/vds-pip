@@ -46,6 +46,7 @@ var Pip = Pip || {};
           //reloadDependencies();
         }
       });
+      alert("Dependency created");
     };
 
     // Ask the server for an up-to-date list of dependencies that are contained within this folder.
@@ -67,8 +68,17 @@ var Pip = Pip || {};
     var drawDependency = function(dep) {
         var upstreamItem = P.index[dep[0]];
         var downstreamItem = P.index[dep[1]];
-        // alert("upstream: "+upstreamItem.id+"; "+upstreamItem.location_id);//+" | downstream: "+downstreamItem);
-        P.ArrowDrawer.addArrows('global', [[arrowEndpoint(upstreamItem), arrowEndpoint(downstreamItem)]]);
+        // only draw items for items immediately within that project or folder
+        if (bothItemsExistInCurrentContainer(upstreamItem, downstreamItem))
+            P.ArrowDrawer.addArrows('global', [[arrowEndpoint(upstreamItem), arrowEndpoint(downstreamItem)]]);
+        
+    };
+    
+    var bothItemsExistInCurrentContainer = function(upstreamItem, downstreamItem) {
+        // The _ allows easy include? testing. http://documentcloud.github.com/underscore/#include
+        var upstreamItemIncluded = _.include(P.current_container.folders, upstreamItem) || _.include(P.current_container.documents, upstreamItem)
+        var downstreamItemIncluded = _.include(P.current_container.folders, downstreamItem) || _.include(P.current_container.documents, downstreamItem)
+        return upstreamItemIncluded && downstreamItemIncluded
     };
     
     var arrowEndpoint = function(item) {

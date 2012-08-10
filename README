@@ -2,15 +2,14 @@
 
 See the "history of vds-pip" doc file for background on everything that's happened here.
 
-Just done: dialog appears, grabs _new form
-Now: choose collection_select or token input or check boxes, make form
+Just done: dependency creation by dragging from side pane tree
+made sure proper deps shown in folder/project.
+allowed dependency deletion via documents/show popup
 
-make 2 buttons, "from" and "to", in documents/show so you can create dependencies in there
-need tree in secondary pane
-
-fix this --> why does document in folder not work across users? why "only parent reference should be defined"?
+Now: dependency deletion between 2 folders depending on each other?
 
 --
+
 
 Old thoughts: 
 

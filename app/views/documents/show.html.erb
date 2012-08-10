@@ -5,7 +5,8 @@ Copyright Syracuse University
 <!--This is what you see when you double-click on a document-->
 <%= div_for @document do %>
   <h1>
-  <%= image_tag(@document.icon_path, :class => "main-icon") %><input data-in-place-edit="true" id="document_name" name="document[name]" size="30" type="text" value="<%= @document.name %>" /></h1>
+  	<%= image_tag(@document.icon_path, :class => "main-icon") %><input data-in-place-edit="true" id="document_name" name="document[name]" size="30" type="text" value="<%= @document.name %>" />
+	</h1>
   <div class="info">
 		<!--Basic information-->
     <div class="basic-info">
@@ -30,26 +31,18 @@ Copyright Syracuse University
 	      <tr>
 	        <td>From</td>
 	        <td><%= dep.upstream_item.name %></td>
-	      </tr><!--I get this. This is not hard.-->
+					<td><%= link_to "X", dep, :method=>:delete, :remote => true, :class=>'x_button' %></td>
+	      </tr>
 	    <% end %>
 	    <% @document.downstream_dependencies.each do |dep| %>
 	      <tr>
 	        <td>To</td>
 	        <td><%= dep.downstream_item.name %></td>
-	      </tr><!--I get this. This is not hard.-->
+					<td><%= link_to "X", dep, :method=>:delete, :remote => true, :class=>'x_button' %></td>
+	      </tr>
 	    <% end %>
 		</table>
-
-		<!--Dialog-->
-		<div id="dialog_area">
-			<a href="javascript:void(0)" id="from_button">From</a>
-			<div id="from_dialog">
-				<%= render :partial => "dependencies/new", :locals => { :dependency => Dependency.new(:downstream_item=>@document) } %>
-			</div>
-			
-			<div id="pane" style="display:none"></div>
-		</div>
-
+	
 		<!--Versions-->
     <table class="versions">
       <caption>All versions:</caption>
@@ -85,3 +78,10 @@ Copyright Syracuse University
     </ul>
   </div>
 <% end %>
+
+<script type="text/javascript">
+$(".x_button").click(function() {
+	$(this).css('display','none');
+	alert('Dependency removed');
+});
+</script>
