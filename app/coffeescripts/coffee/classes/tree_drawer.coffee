@@ -46,10 +46,6 @@ class TreeDrawer
     
     span.appendChild icon
     
-    # Get the item name
-    name = document.createTextNode(item.name)
-    span.appendChild name
-    
     # Prepare image that will be draggable (for creating dependencies)
     # Temporary: Creating deps b/w folders is DISABLED
     if item.type == 'document'# || item.type == 'folder' # don't make draggable for project
@@ -68,6 +64,10 @@ class TreeDrawer
       # so I set the draggable functionality at the end of the drawSidePaneTree method.
       
       span.appendChild handle_html
+    
+    # Get the item name
+    name = document.createTextNode(item.name)
+    span.appendChild name
     
     li.appendChild span
     

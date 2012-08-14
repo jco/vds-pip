@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Tue, 14 Aug 2012 03:13:53 GMT from
+/* DO NOT MODIFY. This file was compiled Tue, 14 Aug 2012 14:23:32 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/tree_drawer.coffee
  */
 
@@ -43,8 +43,6 @@
       icon.src = P.iconFor(item);
       icon.width = icon.height = P.SMALL_ICON_SIZE;
       span.appendChild(icon);
-      name = document.createTextNode(item.name);
-      span.appendChild(name);
       if (item.type === 'document') {
         handle_id = "" + item.type + "_handle_blank_" + item.id;
         handle_html = document.createElement("img");
@@ -55,6 +53,8 @@
         handle_html.setAttribute("height", '15');
         span.appendChild(handle_html);
       }
+      name = document.createTextNode(item.name);
+      span.appendChild(name);
       li.appendChild(span);
       if (item instanceof P.Model.Document) {
         span.addEventListener("dblclick", P.ItemDrawer.documentOverlay(item), false);
