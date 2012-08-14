@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Tue, 31 Jul 2012 13:36:27 GMT from
+/* DO NOT MODIFY. This file was compiled Tue, 14 Aug 2012 03:11:10 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/folder.coffee
  */
 
@@ -22,7 +22,7 @@
       label = "<span id=folder_label_" + this.id + ">" + this.name + "</span>";
       handle = "<img id=folder_handle_" + this.id + "_" + this.folder_id + " src='" + IMAGE_PATH + "/icons/circle0.png' width='15' height='15' />";
       enddiv = "</div>";
-      this.tag = div + handle + img + label + enddiv;
+      this.tag = div + img + label + enddiv;
       $("#container").append(this.tag);
       this.x = 0;
       this.y = 0;

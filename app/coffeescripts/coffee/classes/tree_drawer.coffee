@@ -51,7 +51,8 @@ class TreeDrawer
     span.appendChild name
     
     # Prepare image that will be draggable (for creating dependencies)
-    if item.type == 'document' || item.type == 'folder' # don't make draggable for project
+    # Temporary: Creating deps b/w folders is DISABLED
+    if item.type == 'document'# || item.type == 'folder' # don't make draggable for project
       handle_id = "#{item.type}_handle_blank_#{item.id}" # e.g., "document_handle_blank_2". 
         # item_drawer.js grabs 'document' and '2' from this. ('blank' is a filler so item_drawer's functions can be reused)
     

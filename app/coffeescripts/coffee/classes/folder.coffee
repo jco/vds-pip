@@ -21,7 +21,9 @@ class Folder
     handle = "<img id=folder_handle_#{@id}_#{@folder_id} src='#{IMAGE_PATH}/icons/circle0.png' width='15' height='15' />"
     enddiv = "</div>"
     
-    @tag = div + handle + img + label + enddiv
+    @tag = div + img + label + enddiv 
+      # Creating deps b/w folders is DISABLED by excluding 'handle'
+      # to enable, use this: @tag = div + handle + img + label + enddiv
     $("#container").append(@tag)
     
     # Set coordinates

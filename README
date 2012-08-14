@@ -1,15 +1,14 @@
 *This branch has coffeescript incorporated into existing JS, and has started significant database changes.
 
-See the "history of vds-pip" doc file for background on everything that's happened here.
+See the "history of vds-pip" doc file for background on everything that's happened in this project.
 
-Just done: dependency creation by dragging from side pane tree
-made sure proper deps shown in folder/project.
+Just done:
 allowed dependency deletion via documents/show popup
+disabled creating deps b/w folders
 
-Now: dependency deletion between 2 folders depending on each other?
+Now: clean up for future developer
 
 --
-
 
 Old thoughts: 
 

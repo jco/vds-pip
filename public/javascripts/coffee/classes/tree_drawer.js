@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Fri, 10 Aug 2012 18:27:42 GMT from
+/* DO NOT MODIFY. This file was compiled Tue, 14 Aug 2012 03:13:53 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/tree_drawer.coffee
  */
 
@@ -45,7 +45,7 @@
       span.appendChild(icon);
       name = document.createTextNode(item.name);
       span.appendChild(name);
-      if (item.type === 'document' || item.type === 'folder') {
+      if (item.type === 'document') {
         handle_id = "" + item.type + "_handle_blank_" + item.id;
         handle_html = document.createElement("img");
         handle_html.setAttribute("id", handle_id);
