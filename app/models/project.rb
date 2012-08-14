@@ -19,6 +19,7 @@ class Project < ActiveRecord::Base
   has_many :memberships
   has_many :users, :through => :memberships
   after_create :create_memberships_for_site_admins
+  # after_create :create_default_folders
 
   def create_memberships_for_site_admins
     User.where(:role=>'site_admin').each do |u|

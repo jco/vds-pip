@@ -8,8 +8,6 @@ class Task < ActiveRecord::Base
   self.include_root_in_json = false
   belongs_to :parent_task, :class_name => "Task"
   has_many :sub_tasks, :class_name => "Task", :foreign_key => :parent_task_id
-  # belongs_to :stage
-  # belongs_to :factor
   belongs_to :project
   has_one :factor # exactly one, always
   has_one :stage # exactly one, always
@@ -18,6 +16,12 @@ class Task < ActiveRecord::Base
   has_many :folders
   has_many :documents # a task should always have folders; a document can only exist in a folder, so this is off
   validate :uniqueness
+
+  after_create :create_folder
+  
+  def create_folder
+    Folder.create!(:name=>self.name, :project_id=>Project.all[0].id)
+  end
 
   def uniqueness
     if Task.exists?(:name => name, :stage_id => stage_id, :factor_id => factor_id) || Task.exists?(:name => name, :parent_task_id => parent_task_id)
