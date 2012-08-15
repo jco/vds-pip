@@ -18,7 +18,7 @@ class DocumentsController < ApplicationController
 
   # POST /folders/1/documents OR /tasks/1/documents
   def create
-    @parent = get_parent_from_params
+    @parent = get_parent_from_params # parent is either folder or project; see application_controller
     @document = @parent.documents.build(params[:document])
     if @document.save
       redirect_to(@document, :notice => 'Document was successfully created.')

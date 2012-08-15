@@ -25,6 +25,9 @@ gem 'json' # dependency if ruby 1.8
 
 # gem 'composite_primary_keys' # https://github.com/drnic/composite_primary_keys
 
+gem 'execjs'
+gem 'therubyracer'
+
 group :development do
   gem "rails-erd" # generating entity relationship diagrams
 end

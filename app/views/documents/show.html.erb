@@ -14,9 +14,17 @@ Copyright Syracuse University
       <p class="description"><%= @document.description %></p>
       <% end %>
       <ul class="metadata">
-      <li>Task: <%= @document.task || "(none)" %>
-      <li>Stage: <%= @document.stage || "(none)" %>
-      <li>Factor: <%= @document.factor || "(none)" %>
+	
+			<% if @document.task.nil? %>
+	      <li>Task: <%= "(none)" %>
+	      <li>Stage: <%= "(none)" %>
+	      <li>Factor: <%= "(none)" %>
+			<% else %>
+			  <li>Task: <%= @document.task.name %>
+	      <li>Stage: <%= @document.task.stage.name %>
+	      <li>Factor: <%= @document.task.factor.name %>
+			<% end %>
+	
       <li>Actors: [to be implemented]</li>
       </ul>
     </div>

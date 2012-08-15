@@ -51,14 +51,14 @@ protected
 
   def get_parent_from_params
     if params[:folder_id]
-      Folder.find(params[:folder_id])
+      return Folder.find(params[:folder_id]) # also set task_id
     elsif params[:project_id]
-      Project.find(params[:project_id])
+      return Project.find(params[:project_id])
     else
       raise "No parent given"
     end
   end
-
+  
   # def current_user_session
   #   return @current_user_session if defined?(@current_user_session)
   #   @current_user_session = UserSession.find

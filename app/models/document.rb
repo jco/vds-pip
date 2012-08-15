@@ -24,6 +24,7 @@ class Document < ActiveRecord::Base
   #   # :reject_if => lambda { |a| a[:email].blank?} # prevent submission of blank
   
   # Validations
+  # validates_presence_of :folder_id, :task_id
   validate :exactly_one_parent_reference_defined
   validate :has_at_least_one_version
   validates_inclusion_of :status, :in => STATUSES
@@ -31,7 +32,7 @@ class Document < ActiveRecord::Base
   # Hooks
   after_initialize :init
   after_update :mark_downstream_items_not_updated!, :if => Proc.new { |document| document.status_changed? && document.status == "not_updated" }
-  after_create :create_location_objects
+  after_create :create_location_objects, :set_task_id
   
   def exactly_one_parent_reference_defined
     unless folder_id.nil? ^ project_id.nil?
@@ -117,4 +118,19 @@ class Document < ActiveRecord::Base
       :location_id => location.id
     }
   end
+  
+  private
+    def set_task_id
+      if self.folder_id
+        self.update_attribute(:task_id, get_task_from_folder(self.folder_id))
+      end
+    end
+    
+    def get_task_from_folder(folder_id)
+      folder = Folder.find(folder_id)
+      while folder.task_id.nil? && folder.project_id.nil?
+        folder = Folder.find(folder.parent_folder.id)
+      end
+      return folder.task_id
+    end
 end

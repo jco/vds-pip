@@ -7,9 +7,10 @@ class Stage < ActiveRecord::Base
   self.include_root_in_json = false
   # belongs_to :project
   # acts_as_list :scope => :project
-  # has_many :tasks
   
-  # belongs_to :task
+  has_many :tasks
+  
+  validates_presence_of :name
   
   def serializable_hash(options = nil)
     {

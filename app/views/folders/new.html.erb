@@ -18,9 +18,9 @@ Copyright Syracuse University
     </div>
   <% end %>
 
-	<%= f.label :task_id %>
-	<%= collection_select :folder, :task_id, Task.all, :id, :name, { :prompt => "No task" } %>
-	<%#= collection_select :restaurant, :organization_id, Organization.all, :id, :name, { :prompt => "[Select organization]" } %>
+	<!--no longer needed; this is the select field for tasks, which we want to hide so it defaults to nil task-->
+	<%#= f.label :task_id %>
+	<%#= collection_select :folder, :task_id, Task.all, :id, :name, { :prompt => "No task" } %>
 
   <div class="field">
     <%= f.label :name %><br />

@@ -64,17 +64,16 @@ Membership.find_or_create_by_user_id_and_project_id(user3.id, project3.id)
 # This area not working b/c of recent db changes. Clarify what factors and stages are before making them.
 # Stages
 stages = [
-  "Project assessment",
-  "Set targets",
-  "Meet targets",
-  "Confirm targets",
-  "Implement targets",
-  "Feedback"
+  "Assess",
+  "Define",
+  "Design",
+  "Implement",
+  "Monitor"
 ]
 
 # Factors
 factors = [
-  "Site and climate response",
+  "Site and climate",
   "Form and massing",
   "External enclosure including roof",
   "Internal configurations",
@@ -95,16 +94,20 @@ factors.each { |f| Factor.find_or_create_by_name(f) }
 task1 = Task.find_or_create_by_name("Sample task A", :stage_id => Stage.find_by_name(stages[0]).id, 
         :factor_id => Factor.find_by_name(factors[0]).id,
         :project_id => project1.id)
+task2 = Task.find_or_create_by_name("Sample task B", :stage_id => Stage.find_by_name(stages[0]).id, 
+        :factor_id => Factor.find_by_name(factors[0]).id,
+        :parent_task_id => task1.id)
+
 
 # Folders
-if Folder.count == 0
-  Folder.create!(:name=>"folder 1",:project_id=>Project.all[0].id, :task_id => task1.id)
-  Folder.create!(:name=>"folder 2",:parent_folder_id=>Folder.find_by_name('folder 1').id)
-  Folder.create!(:name=>"folder 3",:project_id=>Project.all[0].id)
-  puts '---created folders'
-else
-  puts '---folders not created'
-end
+# if Folder.count == 0
+#   Folder.create!(:name=>"folder 1",:project_id=>Project.all[0].id, :task_id => task1.id)
+#   Folder.create!(:name=>"folder 2",:parent_folder_id=>Folder.find_by_name('folder 1').id)
+#   Folder.create!(:name=>"folder 3",:project_id=>Project.all[0].id)
+#   puts '---created folders'
+# else
+#   puts '---folders not created'
+# end
 
 # Documents - bleh, need to specify version
 # if Document.count == 0
