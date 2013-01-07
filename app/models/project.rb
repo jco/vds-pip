@@ -6,10 +6,9 @@
 class Project < ActiveRecord::Base
   include Container
   self.include_root_in_json = false
-  # remove commented...
-  # has_many :stages, :order => :position
-  # has_many :factors
-  # has_many :memberships
+
+  attr_accessible :name, :x, :y
+
   has_many :tasks
   
   # These are only the top-level docs and folders.
@@ -72,28 +71,32 @@ class Project < ActiveRecord::Base
       task_count = 0 
       VdsPip::Application::STAGES.each do |stage_name| 
         # Stage folders
+        session[:x],session[:y] = "0","0"
         f = Folder.create!(:name => stage_name, :project_id => self.id)
         VdsPip::Application::FACTORS.each do |factor_name| 
           # Factor folders
           f2 = Folder.create!(:name => factor_name, :parent_folder_id => f.id)
+
           # Task folders
-          puts '-----------------------------------------'
-          puts "stage count: #{stage_count}"
-          puts "factor count: #{factor_count}"
-          puts "value: " + myhash["#{stage_count},#{factor_count}"].to_s
-          puts '-----------------------------------------'
+          # puts '-----------------------------------------'
+          # puts "stage count: #{stage_count}"
+          # puts "factor count: #{factor_count}"
+          # puts "value: " + myhash["#{stage_count},#{factor_count}"].to_s
+          # puts '-----------------------------------------'
           if myhash["#{stage_count},#{factor_count}"] # we don't know all the tasks yet, so sometimes you get myhash["4,6"]=nil since we don't know how many tasks there are
             myhash["#{stage_count},#{factor_count}"].times {
-              puts "task folder name: #{VdsPip::Application::TASKS[task_count]}"
               Folder.create!(:name=>VdsPip::Application::TASKS[task_count], :parent_folder_id => f2.id)
               task_count+=1
             }
           end
           factor_count+=1
         end
+
         factor_count = 0 # reset factor count with each new stage
         stage_count+=1
       end
+
+
     end
   
     def create_memberships_for_site_admins

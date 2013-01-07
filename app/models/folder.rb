@@ -32,18 +32,29 @@ class Folder < ActiveRecord::Base
   def create_location_objects
     User.all.each { |u|
       if u.is_member_of?(self.project)
-        # considering iterating through the user's folder locations
-        # locs = Location.all.select { |loc| loc.user_id == u.id && loc.folder_id && loc.folder_id == self.id}
-        # x,y = 0,0
-        # locs.each { |loc|
-        #   if loc.x<=x<=loc.x+50 && loc.y<=y<=loc.y+50 ???
-        # }
-        # puts '-----------------------------------------'
-        # puts "folder locs: #{locs.inspect}"
-        # puts '-----------------------------------------'
-        Location.create!(:folder_id => id, :user_id => u.id, :x => grab_x_loc, :y=>grab_y_loc)
+        Location.create!(:folder_id => id, :user_id => u.id, :x => session[:x].to_i, :y=>session[:y].to_i)
       end
     }
+
+    # Adjust location
+    session[:x] = "#{15+session[:x].to_i}"
+    session[:y] = "#{15+session[:x].to_i}"
+    # self.project.update_attribute(:x, self.project.x+15)
+    # self.project.update_attribute(:y, self.project.y+15)
+
+    # # reset to zero if at screen size
+    if session[:x].to_i >= 600
+      session[:x] = "0"
+    end
+    if session[:y] >= 400
+      session[:y] = "0"
+    end
+    # if self.project.x >= 600
+    #   self.project.update_attribute(:x, 0)
+    # end
+    # if self.project.y >= 400
+    #   self.project.update_attribute(:y, 0)
+    # end
   end
   
   # after_save callback. Sets the contents to have the same status as itself.

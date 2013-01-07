@@ -1,4 +1,4 @@
-/* DO NOT MODIFY. This file was compiled Tue, 14 Aug 2012 03:11:10 GMT from
+/* DO NOT MODIFY. This file was compiled Mon, 07 Jan 2013 19:27:34 GMT from
  * /Users/daze/Documents/Workspace/Rails/vds-pip/app/coffeescripts/coffee/classes/folder.coffee
  */
 
