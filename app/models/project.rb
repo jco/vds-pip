@@ -71,7 +71,8 @@ class Project < ActiveRecord::Base
       task_count = 0 
       VdsPip::Application::STAGES.each do |stage_name| 
         # Stage folders
-        session[:x],session[:y] = "0","0"
+        self.update_attribute(:x, 0)
+        self.update_attribute(:y, 0)
         f = Folder.create!(:name => stage_name, :project_id => self.id)
         VdsPip::Application::FACTORS.each do |factor_name| 
           # Factor folders
