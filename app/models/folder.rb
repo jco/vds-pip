@@ -30,9 +30,11 @@ class Folder < ActiveRecord::Base
   after_create :create_location_objects
   
   def create_location_objects
+    # LATER
+    next_x = 0; next_y = 0;
     User.all.each { |u|
       if u.is_member_of?(self.project)
-        Location.create!(:folder_id => id, :user_id => u.id)
+        Location.create!(:folder_id => id, :user_id => u.id, :x => grab_x_location, :y=>grab_y_location)
       end
     }
   end

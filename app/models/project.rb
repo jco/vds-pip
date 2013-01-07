@@ -53,8 +53,6 @@ class Project < ActiveRecord::Base
   
   private
     def create_stage_factor_task_folders
-      VdsPip::Application::STAGES
-      VdsPip::Application::FACTORS
       # Task folder creation prep - see the flow chart (4x3 diagram as of 1/7/13)
       # Basically, the hash "0,0" maps to 3 since there are 3 tasks in the Stage: 'Assess' & Factor: 'Site & Climate' intersection.
       # "0,1" -> 2 (col 0, row 1 has 2 tasks based on the diagram)
@@ -69,25 +67,25 @@ class Project < ActiveRecord::Base
         # Stage: Design
         "2,0"=>2, "2,1"=>2, "2,2"=>2, "2,3"=>2
       }
-      stage_count = 0
-      factor_count = 0
-      task_count = 0
-      Stage.all.each do |stage| 
+      stage_count = 0 # to iterate over stages
+      factor_count = 0 # ''' factors
+      task_count = 0 
+      VdsPip::Application::STAGES.each do |stage_name| 
         # Stage folders
-        f = Folder.create!(:name => stage.name, :project_id => self.id)
-        Factor.all.each do |factor| 
+        f = Folder.create!(:name => stage_name, :project_id => self.id)
+        VdsPip::Application::FACTORS.each do |factor_name| 
           # Factor folders
-          f2 = Folder.create!(:name => factor.name, :parent_folder_id => f.id)
+          f2 = Folder.create!(:name => factor_name, :parent_folder_id => f.id)
+          # Task folders
           puts '-----------------------------------------'
           puts "stage count: #{stage_count}"
           puts "factor count: #{factor_count}"
-          puts "str: " + "#{stage_count},#{factor_count}"
-          puts "hash value: " + "#{myhash["#{stage_count},#{factor_count}"]}"
+          puts "value: " + myhash["#{stage_count},#{factor_count}"].to_s
           puts '-----------------------------------------'
-          # Task folders
           if myhash["#{stage_count},#{factor_count}"] # we don't know all the tasks yet, so sometimes you get myhash["4,6"]=nil since we don't know how many tasks there are
             myhash["#{stage_count},#{factor_count}"].times {
-              Folder.find_or_create_by_name(VdsPip::Application::TASKS[task_count], :parent_folder_id => f2.id)
+              puts "task folder name: #{VdsPip::Application::TASKS[task_count]}"
+              Folder.create!(:name=>VdsPip::Application::TASKS[task_count], :parent_folder_id => f2.id)
               task_count+=1
             }
           end

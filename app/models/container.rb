@@ -17,4 +17,14 @@ module Container
     end
   end
 
+  # A way to decide the x and y coordinates of a container.
+  # Used only in folder.rb create_location_objects
+  # This is a rudimentary implementation that randomly chooses a value between 0 and 100.
+  def grab_x_location
+    rand 100
+  end
+
+  def grab_y_location
+    rand 100
+  end
 end

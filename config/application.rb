@@ -15,6 +15,8 @@ module VdsPip
   class Application < Rails::Application
     # Personal global variables
     # Accessible elsewhere via VdsPip::Application::STAGES
+
+    # Order should match the flow chart
     STAGES = [
       "Assess",
       "Define",
@@ -23,13 +25,14 @@ module VdsPip
       "Monitor"
     ]
 
+    # Order should match the flow chart
     FACTORS = [
       "Site and climate",
-      "Form and massing",
-      "External enclosure including roof",
       "Internal configurations",
+      "External enclosure including roof",
       "Environmental systems",
       "Energy and water",
+      "Form and massing",
       "Material use"
     ]
 
