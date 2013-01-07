@@ -1,3 +1,4 @@
+
 /*
  * Authors: Jeff Cox, David Zhang
  * Copyright Syracuse University
@@ -13,7 +14,7 @@
 #pane {
   position:relative;
   float: left;
-  background: #AAA;
+  background: white; /* #AAA; */
   width: 20%;
   height: 500px;
 }
