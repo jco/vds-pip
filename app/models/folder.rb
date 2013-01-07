@@ -37,8 +37,8 @@ class Folder < ActiveRecord::Base
     }
 
     # Adjust location
-    self.project.update_attribute(:x, self.project.x+15)
-    self.project.update_attribute(:y, self.project.y+15)
+    self.project.update_attribute(:x, self.project.x+10)
+    self.project.update_attribute(:y, self.project.y+10)
 
     # # reset to zero if at screen size
     if self.project.x >= 600
