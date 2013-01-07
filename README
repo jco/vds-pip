@@ -1,3 +1,8 @@
+See README_FOR_APP for details on the actual application.
+This document describes thoughts from the developer.
+
+--
+
 *This branch has coffeescript incorporated into existing JS, and has started significant database changes.
 
 See the "history of vds-pip" doc file for background on everything that's happened in this project.
@@ -5,8 +10,9 @@ See the "history of vds-pip" doc file for background on everything that's happen
 Just done:
 allowed dependency deletion via documents/show popup
 disabled creating deps b/w folders
+specific names for some stages, tasks, factors, auto folder creation on project creation
+	added constant fields for stages, factors, tasks in config/application.rb
 
-Now: clean up for future developer
 
 --
 

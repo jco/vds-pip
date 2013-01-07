@@ -61,26 +61,16 @@ Membership.find_or_create_by_user_id_and_project_id(user1.id, project1.id)
 Membership.find_or_create_by_user_id_and_project_id(user2.id, project2.id)
 Membership.find_or_create_by_user_id_and_project_id(user3.id, project3.id)
 
-# This area not working b/c of recent db changes. Clarify what factors and stages are before making them.
+## See config/application.rb for full listing of stages, factors, and tasks.
+
 # Stages
-stages = [
-  "Assess",
-  "Define",
-  "Design",
-  "Implement",
-  "Monitor"
-]
+stages = VdsPip::Application::STAGES
 
 # Factors
-factors = [
-  "Site and climate",
-  "Form and massing",
-  "External enclosure including roof",
-  "Internal configurations",
-  "Environmental systems",
-  "Energy and water",
-  "Material use"
-]
+factors = VdsPip::Application::FACTORS
+
+# Tasks - not used
+# tasks = = VdsPip::Application::TASKS 
 
 # Link stages and projects
 # stages.each { |s| Stage.create!(:name => s) }#find_or_create_by_name(s) }
@@ -91,12 +81,13 @@ stages.each { |s| Stage.find_or_create_by_name(s) }
 factors.each { |f| Factor.find_or_create_by_name(f) }
 
 # Tasks
-task1 = Task.find_or_create_by_name("Sample task A", :stage_id => Stage.find_by_name(stages[0]).id, 
-        :factor_id => Factor.find_by_name(factors[0]).id,
-        :project_id => project1.id)
-task2 = Task.find_or_create_by_name("Sample task B", :stage_id => Stage.find_by_name(stages[0]).id, 
-        :factor_id => Factor.find_by_name(factors[0]).id,
-        :parent_task_id => task1.id)
+# examples - this works
+# task1 = Task.find_or_create_by_name("Sample task A", :stage_id => Stage.find_by_name(stages[0]).id, 
+#         :factor_id => Factor.find_by_name(factors[0]).id,
+#         :project_id => project1.id)
+# task2 = Task.find_or_create_by_name("Sample task B", :stage_id => Stage.find_by_name(stages[0]).id, 
+#         :factor_id => Factor.find_by_name(factors[0]).id,
+#         :parent_task_id => task1.id)
 
 
 # Folders

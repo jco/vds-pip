@@ -19,7 +19,8 @@ class Project < ActiveRecord::Base
   has_many :memberships
   has_many :users, :through => :memberships
   after_create :create_memberships_for_site_admins
-  after_create :create_proper_tasks
+  # after_create :create_proper_tasks
+  after_create :create_stage_factor_task_folders
 
   # Documents and folders within this project
   def items
@@ -51,18 +52,50 @@ class Project < ActiveRecord::Base
   end
   
   private
-    def create_proper_tasks
-      # Do something to create the tasks you want
-      # Ex:
-      task1 = Task.find_or_create_by_name("Task 1", :stage_id => Stage.find_by_name("Assess").id, 
-              :factor_id => Factor.find_by_name("Site and climate").id,
-              :project_id => self.id)
-      task2 = Task.find_or_create_by_name("Task 2", :stage_id => Stage.find_by_name("Assess").id, 
-              :factor_id => Factor.find_by_name("Site and climate").id,
-              :parent_task_id => task1.id)
-      task3 = Task.find_or_create_by_name("Task 3", :stage_id => Stage.find_by_name("Assess").id, 
-              :factor_id => Factor.find_by_name("Site and climate").id,
-              :project_id => self.id)
+    def create_stage_factor_task_folders
+      VdsPip::Application::STAGES
+      VdsPip::Application::FACTORS
+      # Task folder creation prep - see the flow chart (4x3 diagram as of 1/7/13)
+      # Basically, the hash "0,0" maps to 3 since there are 3 tasks in the Stage: 'Assess' & Factor: 'Site & Climate' intersection.
+      # "0,1" -> 2 (col 0, row 1 has 2 tasks based on the diagram)
+      # We only need the size to determine the TASK_NAMES to choose from since we sequentially go through and increment a counter.
+      # So, if you look at the flowchart you had, you went down the column "Assess", and counted 3 in the first box, 2 in the next, etc.
+      # Fill in rest once we know the values.
+      myhash = {
+        # Stage: Assess
+        "0,0"=>3, "0,1"=>2, "0,2"=>2, "0,3"=>1, #"0,4"=>? once we know what it is
+        # Stage: Define
+        "1,0"=>2, "1,1"=>3, "1,2"=>2, "1,3"=>1, #"1,4"=>? once we know what it is
+        # Stage: Design
+        "2,0"=>2, "2,1"=>2, "2,2"=>2, "2,3"=>2
+      }
+      stage_count = 0
+      factor_count = 0
+      task_count = 0
+      Stage.all.each do |stage| 
+        # Stage folders
+        f = Folder.create!(:name => stage.name, :project_id => self.id)
+        Factor.all.each do |factor| 
+          # Factor folders
+          f2 = Folder.create!(:name => factor.name, :parent_folder_id => f.id)
+          puts '-----------------------------------------'
+          puts "stage count: #{stage_count}"
+          puts "factor count: #{factor_count}"
+          puts "str: " + "#{stage_count},#{factor_count}"
+          puts "hash value: " + "#{myhash["#{stage_count},#{factor_count}"]}"
+          puts '-----------------------------------------'
+          # Task folders
+          if myhash["#{stage_count},#{factor_count}"] # we don't know all the tasks yet, so sometimes you get myhash["4,6"]=nil since we don't know how many tasks there are
+            myhash["#{stage_count},#{factor_count}"].times {
+              Folder.find_or_create_by_name(VdsPip::Application::TASKS[task_count], :parent_folder_id => f2.id)
+              task_count+=1
+            }
+          end
+          factor_count+=1
+        end
+        factor_count = 0 # reset factor count with each new stage
+        stage_count+=1
+      end
     end
   
     def create_memberships_for_site_admins

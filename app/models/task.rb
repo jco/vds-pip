@@ -21,7 +21,7 @@ class Task < ActiveRecord::Base
   validate :exactly_one_parent_reference_defined
   validates_presence_of :stage_id, :factor_id
   
-  after_create :create_folder
+  after_create :create_folder # do we still want this?
   
   def uniqueness
     if Task.exists?(:name => name, :stage_id => stage_id, :factor_id => factor_id) || Task.exists?(:name => name, :parent_task_id => parent_task_id)

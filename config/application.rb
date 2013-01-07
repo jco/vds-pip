@@ -13,6 +13,70 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 module VdsPip
   class Application < Rails::Application
+    # Personal global variables
+    # Accessible elsewhere via VdsPip::Application::STAGES
+    STAGES = [
+      "Assess",
+      "Define",
+      "Design",
+      "Implement",
+      "Monitor"
+    ]
+
+    FACTORS = [
+      "Site and climate",
+      "Form and massing",
+      "External enclosure including roof",
+      "Internal configurations",
+      "Environmental systems",
+      "Energy and water",
+      "Material use"
+    ]
+
+    # Task data organized by Stages > Factors.
+    # The order is important! Make sure tasks are grouped by factors, and then more broadly by stages.
+    # project.rb uses a hash and counter and assumes the ordering of this is correct.
+    TASKS = [ 
+      # Stage: Assess
+      "Identify Sites",
+      "Assess Logistics & Urban Context",
+      "Assess Environment",
+
+      "Assess Program Type",
+      "Assess Interior Design Scheme",
+
+      "Assess Enclosure Opportunities",
+      "Assess Enclosure Opportunities' Feasibility",
+
+      "Assess Environmental System Needs & Resources",
+
+      # Stage: Define
+      "Define Site Development Strategies",
+      "Define Site Development Goals",
+
+      "Define Circulation Strategies",
+      "Define Program Chart",
+      "Define Interior Design Scheme Goals & Strategies",
+
+      "Define Enclosure Strategies",
+      "Define Performance Goals",
+
+      "Define Environmental Systems Goals & Strategies",
+
+      # Stage: Design
+      "Design Landscape",
+      "Analyze Impact on Performance",
+
+      "Design Internal Configurations",
+      "Outline Material/Finishing, Furniture/Equipment & Lighting Specifications",
+
+      "Develop Enclosure Drawings & Specifications",
+      "Analyze Impact on Performance",
+
+      "Design Environmental Systems",
+      "Analyze Impact on Performance"
+    ]
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
