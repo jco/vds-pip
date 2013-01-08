@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   def folders
   end
 

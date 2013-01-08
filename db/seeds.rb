@@ -7,6 +7,13 @@
 # A big thing where you might run into issues here is validations set in the models/.
 # If something isn't getting created, it's possible that a model validation isn't passing.
 
+# Projects
+project1 = Project.find_or_create_by_name('Test project 1')
+project2 = Project.find_or_create_by_name('Test project 2')
+project3 = Project.find_or_create_by_name('Test project 3')
+project4 = Project.find_or_create_by_name('Test project 4')
+project5 = Project.find_or_create_by_name('Test project 5')
+
 # Site admins
 admin1 = User.find_or_create_by_email('admin1@example.com', :password => 'admin') do |u|
   u.role = 'site_admin'
@@ -40,15 +47,7 @@ user3 = User.find_or_create_by_email('user3@example.com', :password => 'admin') 
   u.role = 'normal_user'
 end
 
-# Projects
-project1 = Project.find_or_create_by_name('Test project 1')
-project2 = Project.find_or_create_by_name('Test project 2')
-project3 = Project.find_or_create_by_name('Test project 3')
-project4 = Project.find_or_create_by_name('Test project 4')
-project5 = Project.find_or_create_by_name('Test project 5')
-
-# Memberships - note that site admins can control all projects & so don't need any THIS IS THE PROBLEM FOR LOCATIONS
-
+# Memberships - note that site admins can control all projects & so don't need any
 # non-site admins:
 Membership.find_or_create_by_user_id_and_project_id(pm1.id, project1.id)
 Membership.find_or_create_by_user_id_and_project_id(pm1.id, project2.id)
