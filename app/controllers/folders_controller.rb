@@ -34,13 +34,19 @@ class FoldersController < ApplicationController
     end
   end
 
+  def edit
+    @folder = Folder.find(params[:id])
+  end
+
   # PUT /folders/1
   def update
     @folder = Folder.find(params[:id])
     if @folder.update_attributes(params[:folder])
-      render(:json => nil, :status => :ok)
+      # render(:json => nil, :status => :ok)
+      redirect_to(@folder, :notice => 'Folder was successfully updated.')
     else
-      render(:json => @folder.errors, :status => :unprocessable_entity)
+      # render(:json => @folder.errors, :status => :unprocessable_entity)
+      render :action => "edit"
     end
   end
 end
