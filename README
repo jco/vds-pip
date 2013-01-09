@@ -3,8 +3,6 @@ This document describes thoughts from the developer.
 
 --
 
-*This branch has coffeescript incorporated into existing JS, and has started significant database changes.
-
 See the "history of vds-pip" doc file for background on everything that's happened in this project.
 
 Just done:
@@ -12,13 +10,8 @@ allowed dependency deletion via documents/show popup
 disabled creating deps b/w folders
 specific names for some stages, tasks, factors, auto folder creation on project creation
 	added constant fields for stages, factors, tasks in config/application.rb
+added membership.rb's after_create
 
-branch: locs-for-new-users: 
-This branch has an incomplete attempt at figuring out why 
-some user's get a null x and y coordinates for their folders/docs' locations.
-I think it has to do with needing after_create in membership.rb for creating locations.
-There is something rudimentary there now.
-Also, I changed the order of creation for the top two - users created after projects, now.
 --
 
 Old thoughts: 
