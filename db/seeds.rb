@@ -10,55 +10,55 @@
 # Projects
 project1 = Project.find_or_create_by_name('Test project 1')
 project2 = Project.find_or_create_by_name('Test project 2')
-project3 = Project.find_or_create_by_name('Test project 3')
-project4 = Project.find_or_create_by_name('Test project 4')
-project5 = Project.find_or_create_by_name('Test project 5')
+# project3 = Project.find_or_create_by_name('Test project 3')
+# project4 = Project.find_or_create_by_name('Test project 4')
+# project5 = Project.find_or_create_by_name('Test project 5')
 
 # Site admins
 admin1 = User.find_or_create_by_email('admin1@example.com', :password => 'admin') do |u|
   u.role = 'site_admin'
 end
-admin2 = User.find_or_create_by_email('admin2@example.com', :password => 'admin') do |u|
-  u.role = 'site_admin'
-end
-admin3 = User.find_or_create_by_email('admin3@example.com', :password => 'admin') do |u|
-  u.role = 'site_admin'
-end
+# admin2 = User.find_or_create_by_email('admin2@example.com', :password => 'admin') do |u|
+#   u.role = 'site_admin'
+# end
+# admin3 = User.find_or_create_by_email('admin3@example.com', :password => 'admin') do |u|
+#   u.role = 'site_admin'
+# end
 
 # Project managers
-pm1 = User.find_or_create_by_email('pm1@example.com', :password => 'admin') do |u|
-  u.role = 'project_manager'
-end
-pm2 = User.find_or_create_by_email('pm2@example.com', :password => 'admin') do |u|
-  u.role = 'project_manager'
-end
-pm3 = User.find_or_create_by_email('pm3@example.com', :password => 'admin') do |u|
-  u.role = 'project_manager'
-end
+# pm1 = User.find_or_create_by_email('pm1@example.com', :password => 'admin') do |u|
+#   u.role = 'project_manager'
+# end
+# pm2 = User.find_or_create_by_email('pm2@example.com', :password => 'admin') do |u|
+#   u.role = 'project_manager'
+# end
+# pm3 = User.find_or_create_by_email('pm3@example.com', :password => 'admin') do |u|
+#   u.role = 'project_manager'
+# end
 
 # Normal users
-user1 = User.find_or_create_by_email('user1@example.com', :password => 'admin') do |u|
-  u.role = 'normal_user'
-end
-user2 = User.find_or_create_by_email('user2@example.com', :password => 'admin') do |u|
-  u.role = 'normal_user'
-end
-user3 = User.find_or_create_by_email('user3@example.com', :password => 'admin') do |u|
-  u.role = 'normal_user'
-end
+# user1 = User.find_or_create_by_email('user1@example.com', :password => 'admin') do |u|
+#   u.role = 'normal_user'
+# end
+# user2 = User.find_or_create_by_email('user2@example.com', :password => 'admin') do |u|
+#   u.role = 'normal_user'
+# end
+# user3 = User.find_or_create_by_email('user3@example.com', :password => 'admin') do |u|
+#   u.role = 'normal_user'
+# end
 
 # Memberships - note that site admins can control all projects & so don't need any
 # non-site admins:
-Membership.find_or_create_by_user_id_and_project_id(pm1.id, project1.id)
-Membership.find_or_create_by_user_id_and_project_id(pm1.id, project2.id)
-Membership.find_or_create_by_user_id_and_project_id(pm2.id, project3.id)
-Membership.find_or_create_by_user_id_and_project_id(pm2.id, project5.id)
-Membership.find_or_create_by_user_id_and_project_id(pm3.id, project3.id)
-Membership.find_or_create_by_user_id_and_project_id(pm3.id, project4.id)
+# Membership.find_or_create_by_user_id_and_project_id(pm1.id, project1.id)
+# Membership.find_or_create_by_user_id_and_project_id(pm1.id, project2.id)
+# Membership.find_or_create_by_user_id_and_project_id(pm2.id, project3.id)
+# Membership.find_or_create_by_user_id_and_project_id(pm2.id, project5.id)
+# Membership.find_or_create_by_user_id_and_project_id(pm3.id, project3.id)
+# Membership.find_or_create_by_user_id_and_project_id(pm3.id, project4.id)
 
-Membership.find_or_create_by_user_id_and_project_id(user1.id, project1.id)
-Membership.find_or_create_by_user_id_and_project_id(user2.id, project2.id)
-Membership.find_or_create_by_user_id_and_project_id(user3.id, project3.id)
+# Membership.find_or_create_by_user_id_and_project_id(user1.id, project1.id)
+# Membership.find_or_create_by_user_id_and_project_id(user2.id, project2.id)
+# Membership.find_or_create_by_user_id_and_project_id(user3.id, project3.id)
 
 ## See config/application.rb for full listing of stages, factors, and tasks.
 
